@@ -21,10 +21,25 @@ import java.util.Iterator;
  */
 public interface SimulationUpdater extends Iterator {
 
+	/**
+	 * next state getter
+	 * @return byte array state
+	 */
 	byte[] nextState();
 
+	/**
+	 * Setter for state
+	 * @param state byte array state
+	 * @param depth depth value
+	 * @param node the node object
+	 */
 	void setState(byte[] state, int depth, Object node);
-	
+
+	/**
+	 * Clone function
+	 * @param state byte array state
+	 * @return SimulationUpdater
+	 */
 	SimulationUpdater cloneForState(byte[] state);
 	
 }

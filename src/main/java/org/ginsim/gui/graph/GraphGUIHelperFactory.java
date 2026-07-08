@@ -18,11 +18,7 @@ import org.ginsim.core.graph.Graph;
  * 
  * 
  * @author Lionel Spinelli
- *
- * @param <V>
- * @param <E>
  */
-
 public class GraphGUIHelperFactory {
 	
 	// The factory singleton

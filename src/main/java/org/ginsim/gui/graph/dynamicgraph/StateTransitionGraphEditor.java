@@ -85,7 +85,9 @@ public class StateTransitionGraphEditor extends JPanel implements TextProperty, 
 	public GraphEventCascade graphChanged(DynamicGraph g, GraphChangeType type, Object data) {
 		switch (type) {
 		case NODEADDED:
+            refresh();
 		case NODEREMOVED:
+            refresh();
 		case NODEUPDATED:
 			refresh();
 		}

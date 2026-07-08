@@ -55,9 +55,19 @@ import javax.swing.tree.TreePath;
  */
 
 public abstract class AbstractTreeTableModel implements TreeTableModel {
-    protected Object root;     
+    /**
+     * Object roo attribute
+     */
+    protected Object root;
+    /**
+     * EventListenerList listenerList attribute
+     */
     protected EventListenerList listenerList = new EventListenerList();
-  
+
+    /**
+     * Setting the root value
+     * @param root the root value
+     */
     public AbstractTreeTableModel(Object root) {
         this.root = root; 
     }
@@ -66,18 +76,32 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
     // Default implementations for methods in the TreeModel interface. 
     //
 
+    /**
+     * getter of object root
+     * @return the root number
+     */
     public Object getRoot() {
         return root;
     }
 
+    /**
+     * Test if node setting
+     * @param node the node object
+     * @return boolean if setting
+     */
     public boolean isLeaf(Object node) {
         return getChildCount(node) == 0; 
     }
 
     public void valueForPathChanged(TreePath path, Object newValue) {}
 
-    // This is not called in the JTree's default mode: use a naive implementation. 
-    public int getIndexOfChild(Object parent, Object child) {
+    /**
+     * his is not called in the JTree's default mode: use a naive implementation.
+     * @param child  the child
+     * @param parent the parent
+     * @return the index of child
+     */
+     public int getIndexOfChild(Object parent, Object child) {
         for (int i = 0; i < getChildCount(parent); i++) {
 		    if (getChild(parent, i).equals(child)) { 
 		        return i; 
@@ -94,11 +118,16 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
         listenerList.remove(TreeModelListener.class, l);
     }
 
-    /*
+    /**
      * Notify all listeners that have registered interest for
      * notification on this event type.  The event instance 
      * is lazily created using the parameters passed into 
      * the fire method.
+     *
+     * @param children the child object
+     * @param path the path file
+     * @param childIndices array of child indices
+     * @param source the source object
      * @see EventListenerList
      */
     protected void fireTreeNodesChanged(Object source, Object[] path, 
@@ -121,11 +150,15 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
         }
     }
 
-    /*
+    /**
      * Notify all listeners that have registered interest for
      * notification on this event type.  The event instance 
      * is lazily created using the parameters passed into 
      * the fire method.
+     * @param source source object
+     * @param childIndices array of child indices
+     * @param path path value
+     * @param children child object
      * @see EventListenerList
      */
     protected void fireTreeNodesInserted(Object source, Object[] path, 
@@ -148,12 +181,16 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
         }
     }
 
-    /*
+    /**
      * Notify all listeners that have registered interest for
      * notification on this event type.  The event instance 
      * is lazily created using the parameters passed into 
      * the fire method.
      * @see EventListenerList
+     * @param children child object
+     * @param path path value
+     * @param childIndices child indice array
+     * @param source source object
      */
     protected void fireTreeNodesRemoved(Object source, Object[] path, 
                                         int[] childIndices, 
@@ -175,12 +212,16 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
         }
     }
 
-    /*
+    /**
      * Notify all listeners that have registered interest for
      * notification on this event type.  The event instance 
      * is lazily created using the parameters passed into 
      * the fire method.
      * @see EventListenerList
+     * @param children child object
+     * @param path path value
+     * @param childIndices child indice array
+     * @param source source object
      */
     protected void fireTreeStructureChanged(Object source, Object[] path, 
                                         int[] childIndices, 
@@ -202,20 +243,31 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
         }
     }
 
-    //
-    // Default implementations for methods in the TreeTableModel interface. 
-    //
-
+    /**
+    * Default implementations for methods in the TreeTableModel interface.
+    * @param column the column indice
+    * @return the class  itself
+     */
     public Class getColumnClass(int column) { return Object.class; }
 
-   /** By default, make the column with the Tree in it the only editable one. 
+   /**
+    * By default, make the column with the Tree in it the only editable one.
     *  Making this column editable causes the JTable to forward mouse 
-    *  and keyboard events in the Tree column to the underlying JTree. 
+    *  and keyboard events in the Tree column to the underlying JTree.
+    * @param column column indice
+    * @param node the node object
+    * @return boolean test is celleeditable
     */ 
     public boolean isCellEditable(Object node, int column) { 
          return getColumnClass(column) == TreeTableModel.class; 
     }
 
+    /**
+     * GSetter
+     * @param aValue object to set
+     * @param node node to set
+     * @param column column indice
+     */
     public void setValueAt(Object aValue, Object node, int column) {}
 
 

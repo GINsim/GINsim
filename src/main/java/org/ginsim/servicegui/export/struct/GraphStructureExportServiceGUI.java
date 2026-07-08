@@ -20,6 +20,8 @@ import org.ginsim.core.service.ServiceStatus;
 import org.ginsim.service.export.struct.GraphStructureExportService;
 import org.kohsuke.MetaInfServices;
 
+import static org.ginsim.gui.service.ServiceGUI.W_EXPORT_GRAPH;
+
 
 /**
  * Export service to struct format
@@ -46,7 +48,7 @@ public class GraphStructureExportServiceGUI extends AbstractServiceGUI {
 
 	@Override
 	public int getInitialWeight() {
-		return W_EXPORT_GENERIC + 10;
+		return W_EXPORT_GRAPH + 1 ;//W_EXPORT_GENERIC + 10;
 	}
 }
 

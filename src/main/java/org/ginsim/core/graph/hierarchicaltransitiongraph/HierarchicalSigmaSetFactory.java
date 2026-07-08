@@ -5,6 +5,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
+ * HierarchicalSigmaSetFactory class
  * @author Duncan Berenguier
  */
 public class HierarchicalSigmaSetFactory {

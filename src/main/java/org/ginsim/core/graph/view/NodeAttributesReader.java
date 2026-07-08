@@ -8,6 +8,7 @@ import org.ginsim.core.graph.view.style.NodeStyle;
 
 /**
  * extract from graph graphic info on a node.
+ * @param <V> the vertex
  */
 public interface NodeAttributesReader<V> extends AttributesReader {
 

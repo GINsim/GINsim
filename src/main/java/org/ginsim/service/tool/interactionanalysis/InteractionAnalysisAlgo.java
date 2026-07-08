@@ -40,7 +40,8 @@ public class InteractionAnalysisAlgo {
 	/**
 	 * Search all the non functional interactions in the graph 'g' and do some actions on them depending on the options (opt_*).
 	 * 
-	 * For each vertices, scan the reduced Omdd representation of the node logical function to know which vertices are effective (<=>present). If an edge source vertex incoming on this vertex is not in the Omdd, then its non functional.
+	 * For each vertices, scan the reduced Omdd representation of the node logical function to know which vertices are effective
+	 * (= present). If an edge source vertex incoming on this vertex is not in the Omdd, then its non functional.
 	 * 
 	 * @param regGraph the graph where to search the non functional interactions.
 	 * @param mutant the mutant definition

@@ -19,10 +19,9 @@ public class HTGSimulationQueueSCC implements HTGSimulationQueueItem {
 	
 	/**
 	 * Simple constructor.
-	 * @param stateRestriction
-	 * @param index
-	 * @param low_index
-	 * @param updater
+	 * @param index  index value
+	 * @param low_index  low index value
+	 * @param scc  HierarchicalNode
 	 */
 	public HTGSimulationQueueSCC(HierarchicalNode scc, int index, int low_index) {
 		this.setSCC(scc);

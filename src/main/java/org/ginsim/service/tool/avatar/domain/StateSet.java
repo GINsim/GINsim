@@ -226,7 +226,7 @@ public class StateSet extends AbstractStateSet {
 	
 	/**
 	 * Removes a given state from the state-set
-	 * @param v the state to be removed from the state-set
+	 * @param s the state to be removed from the state-set
 	 */
 	public void remove(State s) {
 		states.remove(s.key);

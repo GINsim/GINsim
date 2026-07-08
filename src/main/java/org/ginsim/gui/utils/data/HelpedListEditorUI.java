@@ -1,6 +1,7 @@
 package org.ginsim.gui.utils.data;
 
 /**
+ * helper HelpedListEditorUI  class
  * @author Aurelien Naldi
  */
 public class HelpedListEditorUI implements ObjectPropertyEditorUI {

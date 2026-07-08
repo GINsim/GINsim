@@ -23,7 +23,7 @@ import org.kohsuke.MetaInfServices;
 
 @MetaInfServices(ServiceGUI.class)
 @GUIFor(LocalGraphService.class)
-@ServiceStatus(EStatus.RELEASED)
+@ServiceStatus(EStatus.DEVELOPMENT)
 public class LocalGraphServiceGUI extends AbstractServiceGUI {
 
 	@Override
@@ -44,7 +44,7 @@ public class LocalGraphServiceGUI extends AbstractServiceGUI {
 
 	@Override
 	public int getInitialWeight() {
-		return W_GRAPH_COLORIZE + 30;
+		return W_GRAPH_COLORIZE + 40;
 	}
 
 	class LocalGraphAction extends GenericGraphAction {
@@ -70,4 +70,3 @@ public class LocalGraphServiceGUI extends AbstractServiceGUI {
 		}
 	}
 }
-

@@ -36,7 +36,7 @@ public class InteractionAnalysisServiceGUI extends AbstractServiceGUI {
 
 	@Override
 	public int getInitialWeight() {
-		return W_TOOLS_MAIN+70;
+		return W_TOOLS_MAIN + 6;
 	}
 
 	class InteractionAnalysisAction<G extends Graph<?, ?>> extends ToolAction {

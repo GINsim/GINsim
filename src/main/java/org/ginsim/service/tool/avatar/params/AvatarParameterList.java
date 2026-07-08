@@ -29,7 +29,9 @@ public class AvatarParameterList extends NamedList<AvatarParameters> implements 
     private final NamedStatesHandler imanager;
 
     /**
-     * @param graph
+	 * Constructor
+     * @param graph a graph
+	 * @param param  parameter AvatarParameters
      */
     public AvatarParameterList(Graph<RegulatoryNode,RegulatoryMultiEdge> graph, AvatarParameters param) {
         this.graph = (RegulatoryGraph) graph;

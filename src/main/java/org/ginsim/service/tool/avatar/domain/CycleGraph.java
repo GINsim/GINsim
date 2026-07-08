@@ -47,7 +47,7 @@ public class CycleGraph {
     
     /**
      * Computes the exit probabilities associated with the given state
-     * @param key identifier of the state to compute the exit probabilities
+     * @param state of the state to compute the exit probabilities
      * @param approxDepth the maximum depth of the search (if no exit is found up to this depth, exploration continues without revisiting paths)
      * @return the exit probabilities associated with the given state
      */

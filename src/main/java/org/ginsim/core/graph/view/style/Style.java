@@ -39,10 +39,23 @@ public interface Style {
 	 */
 	void setProperty(StyleProperty prop, Object value);
 
+	/**
+	 * Name getter
+	 * @return string name
+	 */
 	String getName();
 
+	/**
+	 * Name setter
+	 * @param name string name
+	 */
 	void setName(String name);
-	
+
+	/**
+	 * Getter parent
+	 * @param property style property
+	 * @return object parent  style property
+	 */
 	Object getParentProperty(StyleProperty property);
 
     /**
@@ -54,9 +67,13 @@ public interface Style {
     
     /**
      * Copy properties from an existing style.
-     * @param source
+     * @param source style source
      */
     void copy(Style source);
-    
-    Style getParent();
+
+	/**
+	 * Reteur the parent style
+	 * @return style object
+	 */
+	Style getParent();
 }

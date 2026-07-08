@@ -7,5 +7,9 @@ package org.ginsim.commongui;
  */
 public interface SavingGUI {
 
+    /**
+     * Save function
+     * @return boolean if saved
+     */
     boolean save();
 }

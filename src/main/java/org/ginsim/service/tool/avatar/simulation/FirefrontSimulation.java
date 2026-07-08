@@ -88,6 +88,7 @@ public class FirefrontSimulation extends Simulation {
 		String revisit = null;
 
 		for (; k <= maxDepth && F.totalProbability() > beta; k++) {
+			checkPause();
 			// for(State s : F.getStates())
 			// toPrint.append(AvatarUtils.toString(s.state)+",");
 			// toPrint.append("\n");

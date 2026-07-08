@@ -9,7 +9,9 @@ import org.kohsuke.MetaInfServices;
 
 /**
  * Factory for the SCC graph.
- *
+ * @param <E> the edge
+ * @param <V> the vertex
+ * @param <G> the graph
  * @author Aurelien Naldi
  */
 @MetaInfServices( GraphFactory.class)

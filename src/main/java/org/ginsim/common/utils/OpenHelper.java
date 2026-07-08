@@ -10,8 +10,8 @@ public interface OpenHelper {
 	/**
 	 * Open a link.
 	 * 
-	 * @param proto
-	 * @param value
+	 * @param proto proto string
+	 * @param value string value
 	 * @return true if the link could be opened, false otherwise.
 	 */
 	public boolean open(String proto, String value);
@@ -21,16 +21,16 @@ public interface OpenHelper {
 	 * Most handlers do not need to do anything here,
 	 * some may want to populate a database (bibliography for example)
 	 * 
-	 * @param proto
-	 * @param value
+	 * @param proto proto string
+	 * @param value string value
 	 */
 	public void add(String proto, String value);
 	
 	/**
 	 * Create a standard link for this protocol-based link.
 	 * 
-	 * @param proto
-	 * @param value
+	 * @param proto proto string
+	 * @param value string value
 	 * @return a link that can be managed with the system "open" command.
 	 */
 	public String getLink(String proto, String value);

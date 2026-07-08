@@ -25,12 +25,12 @@ import org.ginsim.core.graph.regulatorygraph.RegulatoryNode;
  * 
  * Use the following structure :
  * Map{
- *   target :=> List[
+ *   target :=&gt; List[
  *                SourceItem(source, level, reportItem(List[pathItem, pathItem, ....]), reportItem(List[pathItem, pathItem, ....]), ....),
  *                SourceItem(source, level, reportItem(List[pathItem, pathItem, ....]), reportItem(List[pathItem, pathItem, ....]), ....),
  *                SourceItem(source, level, reportItem(List[pathItem, pathItem, ....]), reportItem(List[pathItem, pathItem, ....]), ....)
  *              ],
- *   target :=> List[
+ *   target :=&gt; List[
  *                SourceItem(source, level, reportItem(List[pathItem, pathItem, ....]), reportItem(List[pathItem, pathItem, ....]), ....),
  *                SourceItem(source, level, reportItem(List[pathItem, pathItem, ....]), reportItem(List[pathItem, pathItem, ....]), ....),
  *                SourceItem(source, level, reportItem(List[pathItem, pathItem, ....]), reportItem(List[pathItem, pathItem, ....]), ....)

@@ -15,12 +15,19 @@ import org.ginsim.core.graph.regulatorygraph.logicalfunction.graphictree.TreeEle
 import org.ginsim.core.graph.regulatorygraph.logicalfunction.graphictree.TreeExpression;
 import org.ginsim.core.graph.regulatorygraph.logicalfunction.graphictree.TreeValue;
 
-
+/**
+ * class BooleanFunctionTreeEditor
+ */
 public class BooleanFunctionTreeEditor extends DefaultTreeCellEditor {
   private BooleanFunctionTreePanel p = null;
-	private PanelFactory panelFactory;
+  private PanelFactory panelFactory;
 
-  public BooleanFunctionTreeEditor(JTree tree, DefaultTreeCellRenderer renderer) {
+	/**
+	 * Constructor
+	 * @param tree a JTree
+	 * @param renderer a  DefaultTreeCellRenderer
+	 */
+	public BooleanFunctionTreeEditor(JTree tree, DefaultTreeCellRenderer renderer) {
     super(tree, renderer);
 		panelFactory = ((BooleanFunctionTreeRenderer)renderer).getPanelFactory();
   }

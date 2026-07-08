@@ -17,4 +17,5 @@ public class BoolsimFormatService extends FormatSupportService<BoolSimFormat> {
 	public BoolsimFormatService() {
 		super(new BoolSimFormat());
 	}
+
 }

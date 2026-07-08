@@ -20,22 +20,38 @@ public class AnchorSelector extends JButton implements MouseListener {
 
 	private EdgeAnchor anchor = null;
 	private final EdgeRoutingPanel routing;
-	
+
+	/**
+	 * Constructor
+	 * @param routing object EdgeRoutingPanel
+	 */
 	public AnchorSelector(EdgeRoutingPanel routing) {
 		super("A");
 		this.routing = routing;
 		addMouseListener(this);
 	}
 
+	/**
+	 * Setter for  EdgeAnchor
+	 * @param edgeAnchor object  EdgeAnchor
+	 */
 	public synchronized void setAnchor(EdgeAnchor edgeAnchor) {
 		this.anchor = edgeAnchor;
 		repaint();
 	}
-	
+
+	/**
+	 * Getter Edge anchor
+	 * @return  EdgeAnchor object
+	 */
 	public EdgeAnchor getAnchor() {
 		return anchor;
 	}
-	
+
+	/**
+	 * Paint component
+	 * @param g the <code>Graphics</code> object to protect
+	 */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);       
 

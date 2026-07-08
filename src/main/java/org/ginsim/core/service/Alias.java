@@ -11,13 +11,18 @@ import java.lang.annotation.Target;
  * 
  * @author Aurelien Naldi
  */
-
 @Documented
 @Target(ElementType.TYPE)
 @Retention( RetentionPolicy.RUNTIME)
 public @interface Alias {
-
+	/**
+	 * String NOALIAS definition
+	 */
 	public static final String NOALIAS = "";
-	
+
+	/**
+	 * getter default value
+	 * @return the default value NOALIAS
+	 */
 	String value() default NOALIAS;
 }

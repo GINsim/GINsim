@@ -2,10 +2,10 @@
 
 GINsim is a software tool for the design and analysis of qualitative dynamical models
 of biological interaction networks.
-For more info see http://ginsim.org
+For more info see https://ginsim.github.io/
 
 
-## Build and Install
+## Build and I nstall
 
 GINsim uses maven: ```mvn package``` will compile it and prepare a jar
 (executable Java archive) as well as dependancies into the ```target``` folder.
@@ -17,7 +17,7 @@ To use it outside of the build dir, copy the jar and the lib folder or use
 
 Run GINsim using with ```java -jar GINsim.jar``` command.
 
-User documentation is available on the [GINsim website](http://doc.ginsim.org/).
+User documentation is available on the [GINsim website](https://ginsim.github.io/doc/).
 
 Generate javadoc (in the "target/site" folder) using "mvn javadoc:javadoc".
 	

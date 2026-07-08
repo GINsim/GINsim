@@ -14,8 +14,8 @@ import org.ginsim.gui.shell.editpanel.SelectionType;
  * @author Aurelien Naldi
  * @author Duncan Berenguier
  *
- * @param <V>
- * @param <E>
+ * @param <V>  vertex
+ * @param <E> edge
  */
 public class GraphSelection<V, E extends Edge<V>> {
 

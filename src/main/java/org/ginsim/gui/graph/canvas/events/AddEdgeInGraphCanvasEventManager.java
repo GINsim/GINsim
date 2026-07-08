@@ -10,12 +10,19 @@ import org.ginsim.gui.graph.AddEdgeAction;
 import org.ginsim.gui.graph.EditAction;
 import org.ginsim.gui.graph.canvas.GraphCanvasRenderer;
 
+/**
+ * class AddEdgeInGraphCanvasEventManager
+ */
 public class AddEdgeInGraphCanvasEventManager extends AbstractHelpCanvasEventManager {
 
 	private Object start = null;
 	private boolean dragged = false;
 	private Point p1, p2;
-	
+
+	/**
+	 * Constructor
+	 * @param renderer input GraphCanvasRenderer
+	 */
 	public AddEdgeInGraphCanvasEventManager(GraphCanvasRenderer renderer) {
 		super(renderer);
 	}

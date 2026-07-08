@@ -79,7 +79,6 @@ public class CytoscapeEncoder {
 			if (name.length() == 0) {
 				name = vertex.getId(); //if it isn't defined, set to id
 			}
-			
 			Integer node_id = new Integer(current_index_of_node_id++); //Current cytoscape ID
 			gs2cyt_Ids.put(vertex.getId(), node_id);//Put the new ID into the map
 			

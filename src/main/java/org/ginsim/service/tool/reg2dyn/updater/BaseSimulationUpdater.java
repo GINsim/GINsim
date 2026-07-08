@@ -26,27 +26,65 @@ import org.ginsim.service.tool.reg2dyn.priorityclass.PrioritySetDefinition;
  */
 abstract public class BaseSimulationUpdater implements SimulationUpdater {
 
-	
+
+	/**
+	 * final int length
+	 */
 	protected final int length;
+	/**
+	 * byte[] cur_state
+	 */
 	protected byte[] cur_state;
+	/**
+	 * byte[] next
+	 */
 	protected byte[] next = null;
+	/**
+	 *  int depth
+	 */
 	protected int depth;
+	/**
+	 * Object node
+	 */
 	protected Object node;
+	/**
+	 * boolean multiple
+	 */
 	protected boolean multiple;
-	
+	/**
+	 *  ModelHelper modelHelper
+	 */
 	protected ModelHelper modelHelper;
 
+	/**
+	 * Constructor
+	 * @param model the logical model
+	 */
 	public BaseSimulationUpdater(LogicalModel model) {
 		this(new ModelHelper(model));
 	}
+
+	/**
+	 * Constructor
+	 * @param helper moel helper
+	 */
 	public BaseSimulationUpdater(ModelHelper helper) {
 		modelHelper = helper;
 		this.length = modelHelper.size();
 	}
 
+	/**
+	 * Thest if hasnext
+	 * @return boolean if has next
+	 */
 	public boolean hasNext() {
 		return next != null;
 	}
+
+	/**
+	 * next method
+	 * @return next object
+	 */
 	public Object next() {
 		if (next == null) {
 			throw new NoSuchElementException();
@@ -56,20 +94,28 @@ abstract public class BaseSimulationUpdater implements SimulationUpdater {
 		doBuildNext();
 		return ret;
 	}
-    public byte[] nextState() {
+
+	/**
+	 * Get next state
+	 * @return byte array for state
+	 */
+	public byte[] nextState() {
         byte[] ret = next;
         doBuildNext();
         return ret;
     }
-	
+
+	/**
+	 * Remove function
+	 */
 	public void remove() {
 	}
 
 	/**
 	 * set the state which should be used as basis.
-	 * @param node 
-	 * @param depth 
-	 * @param state
+	 * @param node  the node
+	 * @param depth  the depth
+	 * @param state the state
 	 */
 	public void setState(byte[] state, int depth, Object node) {
 		this.cur_state = state;
@@ -78,12 +124,28 @@ abstract public class BaseSimulationUpdater implements SimulationUpdater {
 		multiple = false;
 		doSetState();
 	}
-	
+
+	/**
+	 * Do
+	 */
 	abstract protected void doSetState();
+
+	/**
+	 * build next
+	 */
 	abstract protected void doBuildNext();
-	
+
+	/**
+	 * Clone function
+	 * @return a clone SimulationUpdater
+	 */
 	abstract protected SimulationUpdater doClone();
-	
+
+	/**
+	 * Clone function
+	 * @param state byte array state
+	 * @return SimulationUpdater cloned
+	 */
 	public SimulationUpdater cloneForState(byte[] state) {
 		SimulationUpdater updater = doClone();
 		updater.setState(state, 0, null);
@@ -93,23 +155,39 @@ abstract public class BaseSimulationUpdater implements SimulationUpdater {
 	/**
 	 * get change step for a gene
 	 *
-	 * @param initState
+	 * @param initState the init states
 	 * @param i index of the gene to test
 	 * @return the direction in which the gene want to change: 0 for no change, 1 for increase and -1 for decrease
 	 */
 	protected int nodeChange(byte[] initState, int i) {
 		return modelHelper.nodeChange(initState, i);
 	}
-	
-    static public SimulationUpdater getAsynchronousInstance(LogicalModel model) {
+
+	/**
+	 * Getter AsynchronousInstance
+	 * @param model logical model
+	 * @return SimulationUpdater
+	 */
+	static public SimulationUpdater getAsynchronousInstance(LogicalModel model) {
 		return new AsynchronousSimulationUpdater(model);
     }
-    
-    static public SimulationUpdater getSynchronousInstance(LogicalModel model) {
+
+	/**
+	 * Getter SynchronousInstance
+	 * @param model logical model
+	 * @return SimulationUpdater
+	 */
+	static public SimulationUpdater getSynchronousInstance(LogicalModel model) {
 		return new SynchronousSimulationUpdater(model);
     }
-    
-    static public SimulationUpdater getInstance(LogicalModel model, PrioritySetDefinition pcdef) {
+
+	/**
+	 * Instance getter
+	 * @param model the logical model
+	 * @param pcdef the  PrioritySetDefinition
+	 * @return SimulationUpdater
+	 */
+	static public SimulationUpdater getInstance(LogicalModel model, PrioritySetDefinition pcdef) {
 		if (pcdef.size() < 2) {
 			PriorityClass pc = (PriorityClass)pcdef.get(0);
 			if (pc.getMode() == PriorityClass.SYNCHRONOUS) {

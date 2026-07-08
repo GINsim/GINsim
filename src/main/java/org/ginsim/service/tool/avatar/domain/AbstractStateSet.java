@@ -20,11 +20,21 @@ public abstract class AbstractStateSet {
 	 * @return true if the given state is contained in the state-set
 	 */
 	public abstract boolean contains(State s);
+
+	/**
+	 * get the size
+	 * @return the size
+	 */
 	public abstract int size();
+
+	/**
+	 * getter og keys collection
+	 * @return collection of keys
+	 */
 	public abstract Collection<String> getKeys();
 	
 	/**
-	 * Returns the unique identifier of the state-set<br>
+	 * Returns the unique identifier of the state-set
 	 * If two state-sets have the same states they share the same key
 	 * @return the unique identifier of the state-set
 	 */
@@ -32,6 +42,10 @@ public abstract class AbstractStateSet {
 		return key;
 	}
 
+	/**
+	 * dsetter the key value
+	 * @param _key the key value
+	 */
 	public void setKey(String _key){
 		key = _key;
 	}

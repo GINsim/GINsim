@@ -58,8 +58,8 @@ public class SimulationConstraint {
 	}
 
 	/**
-	 * Indicates if the space is valid for computation (not null & non empty)
-	 * @return true if the space is valid for computation (not null & non empty)
+	 * Indicates if the space is valid for computation (not null and non empty)
+	 * @return true if the space is valid for computation (not null and non empty)
 	 */
 	public boolean isValid() {
 		return space != null && space.getSizeOrUpdate() > 0;

@@ -16,7 +16,7 @@ public abstract class Notification implements TimeoutObject, Comparable {
 
     /**
      * 
-     * @param graph the Graph the notification is associated to 
+     * @param topic the Graph the notification is associated to
      * @param message the message of the notification
      * @param type the type of the notification. See constants on Notification class.
      */

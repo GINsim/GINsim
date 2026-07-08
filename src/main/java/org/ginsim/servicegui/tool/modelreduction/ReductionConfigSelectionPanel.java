@@ -15,6 +15,7 @@ import org.ginsim.service.tool.modelreduction.ReductionConfig;
 import org.ginsim.service.tool.modelreduction.ReductionConfigManager;
 import org.ginsim.service.tool.modelreduction.ReductionHolder;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class ReductionConfigSelectionPanel extends ListSelectionPanel<ReductionC
 
 	private final RegulatoryGraph graph;
     private final ReductionHolder holder;
+
+	//private JCheckBox cb_simplify = null;
 
 	public ReductionConfigSelectionPanel(StackDialog dialog, RegulatoryGraph graph, ReductionHolder holder) {
 		super(dialog, "Select a reduction");
@@ -36,6 +39,9 @@ public class ReductionConfigSelectionPanel extends ListSelectionPanel<ReductionC
 
         initialize("Select a reduction", true);
 	}
+
+	//public void setCBSimplify(JCheckBox cb_simplify) {
+	//	this.cb_simplify = cb_simplify;}
 	
 	@Override
 	public void configure() {
@@ -49,6 +55,13 @@ public class ReductionConfigSelectionPanel extends ListSelectionPanel<ReductionC
 	
 	public void setSelected(ReductionConfig r) {
 		holder.setReduction(r);
+       // if (r != null){
+		//	if (this.cb_simplify != null) {
+		//		this.cb_simplify.setSelected(false);
+		//		this.cb_simplify.repaint();
+		//	}
+		//}
+		 dialog.repaint();
 	}
 
 	@Override

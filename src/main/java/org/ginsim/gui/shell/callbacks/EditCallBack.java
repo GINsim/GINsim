@@ -32,8 +32,8 @@ public class EditCallBack {
 	/**
 	 * Create and populate an Edit menu
 	 * 
-	 * @param gui a graph
-	 * @return
+	 * @param menu the menu
+	 * @param gui  gui with a graph
 	 */
 	public static void addEditEntries(JMenu menu, GraphGUI<?, ?, ?> gui) {
 		if (gui.canCopyPaste()) {

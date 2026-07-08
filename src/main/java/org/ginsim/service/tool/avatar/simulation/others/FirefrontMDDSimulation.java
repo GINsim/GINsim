@@ -35,10 +35,9 @@ public class FirefrontMDDSimulation extends FirefrontSimulation {
 
 	/**
 	 * Instantiates a Firefront simulation based on a logical model
-	 * 
-	 * @param _model
-	 *            a stateful logical model possibly defining a set of initial states
-	 *            and oracles
+	 *
+	 *  a stateful logical model possibly defining a set of initial states
+	 *  and oracles
 	 */
 	public FirefrontMDDSimulation() {
 	}

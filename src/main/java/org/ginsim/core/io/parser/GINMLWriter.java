@@ -24,9 +24,9 @@ import org.ginsim.core.graph.view.style.StyleManager;
  * 
  * @author Aurelien Naldi
  *
- * @param <G>
- * @param <V>
- * @param <E>
+ * @param <G>  the graph
+ * @param <V>  the vertex
+ * @param <E> the edge
  */
 public class GINMLWriter<G extends Graph<V,E>, V,E extends Edge<V>> {
 

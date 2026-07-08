@@ -8,18 +8,25 @@ import org.colomoto.biolqm.tool.trapspaces.TrapSpaceList;
 public class TrapSpaceTableModel extends AbstractTableModel {
 
 	TrapSpaceList solutions = null;
-	
-	void setSolutions(TrapSpaceList solutions) {
+
+	public void setSolutions(TrapSpaceList solutions) {
 		this.solutions = solutions;
 		fireTableStructureChanged();
 	}
-	
+
+	public byte[] getState(int sel) {
+		if (sel < 0 || solutions == null | sel > solutions.size()) {
+			return null;
+		}
+		return solutions.get(sel).pattern;
+	}
+
 	@Override
 	public int getRowCount() {
 		if (solutions == null) {
 			return 0;
 		}
-		
+
 		return solutions.size();
 	}
 
@@ -28,8 +35,8 @@ public class TrapSpaceTableModel extends AbstractTableModel {
 		if (solutions == null) {
 			return 0;
 		}
-		
-		return solutions.getNVars()+1;
+
+		return solutions.getNVars() + 1;
 	}
 
 	@Override
@@ -38,14 +45,14 @@ public class TrapSpaceTableModel extends AbstractTableModel {
 		if (columnIndex == 0) {
 			return "";
 		}
-		
-		byte v = t.pattern[columnIndex-1];
-		
+
+		byte v = t.pattern[columnIndex - 1];
+
 		if (v < 0) {
 			return "*";
 		}
-		
-		return ""+v;
+
+		return "" + v;
 	}
 
 	@Override
@@ -58,7 +65,7 @@ public class TrapSpaceTableModel extends AbstractTableModel {
 			return null;
 		}
 
-		return solutions.nodes[column-1].toString();
+		return solutions.nodes[column - 1].toString();
 	}
 
 }

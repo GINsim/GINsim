@@ -19,8 +19,7 @@ public class AvaMatrix {
 	/**
 	 * Inverts a matrix using La4J library
 	 * 
-	 * @param matrix
-	 *            the matrix to be inverted
+	 * @param matrix the matrix to be inverted
 	 * @return the inverted matrix
 	 */
 	public static double[][] inverseLa4J(double[][] matrix) {

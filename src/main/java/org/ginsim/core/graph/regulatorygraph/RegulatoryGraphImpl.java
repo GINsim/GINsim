@@ -29,7 +29,7 @@ import org.ginsim.core.graph.view.NodeAttributesReader;
 import org.ginsim.core.io.parser.GINMLWriter;
 import org.ginsim.core.notification.NotificationManager;
 import org.ginsim.core.notification.resolvable.NotificationResolution;
-import org.json.JSONObject;
+import org.ginsim.core.graph.GraphFactory;
 
 /**
  * Implementation of the RegulatoryGraph interface.
@@ -47,9 +47,8 @@ public final class RegulatoryGraphImpl  extends AbstractGraph<RegulatoryNode, Re
     private List<byte[]> initialStates = null;
     private List<List<byte[]>> oracles = null;
 
-    private boolean use_name = false;
-    
-    private AnnotationModule annotationModule;
+    private boolean use_name_test = false;
+    private  boolean use_name = true;
 
     /**
      * Create a new Regulatory graph
@@ -64,7 +63,7 @@ public final class RegulatoryGraphImpl  extends AbstractGraph<RegulatoryNode, Re
 			e.printStackTrace();
 		}
     }
-    
+
     @Override
     public List<RegulatoryNode> getNodeOrder() {
     	return nodeOrder;
@@ -154,7 +153,7 @@ public final class RegulatoryGraphImpl  extends AbstractGraph<RegulatoryNode, Re
 
     @Override
     public String getDisplayName(RegulatoryNode node) {
-        if (use_name) {
+        if (use_name_test) {
             return node.getDisplayName();
         }
         return node.getId();
@@ -377,7 +376,6 @@ public final class RegulatoryGraphImpl  extends AbstractGraph<RegulatoryNode, Re
 
     @Override
     public Graph getSubgraph(Collection<RegulatoryNode> v_vertex, Collection<RegulatoryMultiEdge> v_edges) {
-
         RegulatoryGraph copiedGraph = GSGraphManager.getInstance().getNewGraph();
         NodeAttributesReader vReader = getNodeAttributeReader();
         NodeAttributesReader cvreader = copiedGraph.getNodeAttributeReader();
@@ -433,12 +431,22 @@ public final class RegulatoryGraphImpl  extends AbstractGraph<RegulatoryNode, Re
 
         List regOrder = regGraph.getNodeOrder();
         List dynOrder = dynGraph.getNodeOrder();
-        if (regOrder == null || dynOrder == null || regOrder.size() != dynOrder.size()) {
+        int ext = 0;
+        if (dynGraph.getExtraNodes() != null) {
+            ext = dynGraph.getExtraNodes().size();
+        }
+        if (regOrder == null || dynOrder == null || regOrder.size() != dynOrder.size() + ext ) {
             return false;
         }
 
-        for (int i=0 ; i<regOrder.size() ; i++) {
-            if (!dynOrder.get(i).equals( regOrder.get(i))) {
+        for (int i=0 ; i<dynOrder.size() ; i++) {
+            boolean flagOrder = false;
+            for (int j=0; j<regOrder.size(); j++) {
+               if (dynOrder.get(i).equals( regOrder.get(j))){
+                    flagOrder = true;
+               }
+            }
+            if (!flagOrder) {
                 return false;
             }
         }
@@ -724,4 +732,38 @@ public final class RegulatoryGraphImpl  extends AbstractGraph<RegulatoryNode, Re
 	public boolean hasOracles() {
 		return oracles != null;
 	}
+
+    public int getNextid(){
+        return nextid;
+    }
+
+    public void setInitialStates(List<byte[]> initialStates){
+        this.initialStates = initialStates;
+    }
+    public void setUseNameTest(boolean use_name_test){
+        this.use_name_test = use_name_test;
+    }
+    public void setUseName(boolean use_name){
+        this.use_name = use_name;
+    }
+
+    public List<byte[]>  getInitialStates() {
+        return initialStates;
+    }
+
+    /**
+     *
+     * @return boolean value
+     */
+    public boolean getUseNameTest(){
+        return use_name_test;
+    }
+    public boolean getUseName(){
+        return use_name;
+    }
+
+    public void setNextid(int nextid){
+        this.nextid = nextid;
+    }
+
 }

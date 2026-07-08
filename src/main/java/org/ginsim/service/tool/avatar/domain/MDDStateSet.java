@@ -246,7 +246,7 @@ public class MDDStateSet extends AbstractStateSet {
 	
 	/**
 	 * Sums the probability of all of the internal states
-	 * @return
+	 * @return  the total number
 	 */
 	public double totalProbability() {
 		double sum = 0;
@@ -256,7 +256,7 @@ public class MDDStateSet extends AbstractStateSet {
 	
 	/**
 	 * Removes a given state from the state-set
-	 * @param v the state to be removed from the state-set
+	 * @param s the state to be removed from the state-set
 	 */
 	public void remove(State s) {
 		int mddNode1 = mdd.not(mdd.nodeFromState(s.state,1));

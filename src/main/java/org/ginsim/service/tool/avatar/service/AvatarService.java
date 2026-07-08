@@ -19,7 +19,7 @@ public class AvatarService implements Service {
 	 * @param args the arguments for the simulation
 	 * @param algorithm the selected type of simulation
 	 * @return the discovered attractors, their reachability, and remaining contextual information from the simulation
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	public static Result run(String[] args, EnumAlgorithm algorithm) throws Exception {
 		switch(algorithm){

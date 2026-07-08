@@ -79,9 +79,9 @@ public class Colorizer {
 
 	/**
 	 * Call doColorize() if the graph is not already colored, undoColorize() otherwise.
-	 * Return the new status of the colorization (true => the graph is colored)
+	 * Return the new status of the colorization (true =&gt; the graph is colored)
 	 * @param graph
-	 * @return the new status of the colorization (true => the graph is colored)
+	 * @return the new status of the colorization (true =&gt; the graph is colored)
 	 */
 	public boolean toggleColorize(Graph<?, ?> graph) {
 		if (isColored) {

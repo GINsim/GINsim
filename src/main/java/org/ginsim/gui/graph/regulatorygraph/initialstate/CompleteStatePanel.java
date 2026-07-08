@@ -102,10 +102,9 @@ public class CompleteStatePanel extends InitialStatePanel {
 
 	/**
 	 * Updates the information on the state panel
-	 * 
-	 * @param currentParameter
-	 *            the named store with the states to be updated
-	 * @return
+	 *
+	 * the named store with the states to be updated
+	 * @return the NamedStateList  object
 	 */
 	public NamedStateList getOracles() {
 		return oraclesPanel.getSelectedStateList(false);

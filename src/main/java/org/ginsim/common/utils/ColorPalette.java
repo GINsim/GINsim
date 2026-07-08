@@ -202,7 +202,7 @@ public class ColorPalette {
 	
 	/**
 	 * Convert a 8-bit Color into a CSS-like string (without the #).<br>
-	 * <i>Exemple : Color(255,127,0) -> "FF7F00"</i>
+	 * <i>Exemple : Color(255,127,0) -&gt; "FF7F00"</i>
 	 * 
 	 * @param color the color to convert.
 	 * @return String a string representation.

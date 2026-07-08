@@ -9,7 +9,7 @@ import java.util.Set;
  * 
  * @author Aurelien Naldi
  *
- * @param <T>
+ * @param <T>  element T
  */
 public class ArraySet<T> extends ArrayList<T> implements Set<T> {
 

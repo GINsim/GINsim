@@ -32,7 +32,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
-
+import javax.swing.SwingWorker;
+import javax.swing.SwingUtilities;
 import org.colomoto.biolqm.StatefulLogicalModel;
 import org.ginsim.common.application.LogManager;
 import org.ginsim.commongui.dialog.GUIMessageUtils;
@@ -66,25 +67,25 @@ public class AvatarResults {
 	private File memFile, logFile, resFile, csvFile;
 	private JButton brun, stop;
 
+	private SwingWorker<Result, Void> simulationWorker;
+
 	/**
 	 * Creates the necessary context to run a simulation and display its results
 	 * 
-	 * @param _sim
-	 *            the simulation
-	 * @param _progress
-	 *            the component for posting updates during the execution of a
-	 *            simulation
-	 * @param _parent
-	 *            the parent panel
-	 * @param _quiet
-	 *            whether detailed logs are to be printed (default: true)
-	 * @param _model
-	 *            the stateful logical model possibly defining a set of initial
-	 *            states and oracles
-	 * @param _memFile
-	 *            the directory or file to save plots
-	 * @param _logFile
-	 *            the file to print logs
+	 * @param _sim      the simulation
+	 * @param _progress the component for posting updates during the execution of a
+	 *                  simulation
+	 * @param _parent   he parent panel
+	 * @param _quiet    whether detailed logs are to be printed (default: true)
+	 * @param _model    the stateful logical model possibly defining a set of
+	 *                  initial
+	 *                  states and oracles
+	 * @param _memFile  the directory or file to save plots
+	 * @param _logFile  the file to print logs
+	 * @param _brun     button
+	 * @param _csvFile  cvs file
+	 * @param _resFile  resultat file
+	 * @param _stop     button stop
 	 */
 	public AvatarResults(Simulation _sim, JTextArea _progress, final AvatarConfigFrame _parent, boolean _quiet,
 			final StatefulLogicalModel _model, File _memFile, File _logFile, File _resFile, File _csvFile,
@@ -102,18 +103,25 @@ public class AvatarResults {
 		stop = _stop;
 	}
 
-	/**
-	 * Executes the instantiated simulation and displays its results
-	 */
 	public void runAvatarResults() {
 		try {
 			sim.setComponents(progress);
-			Thread t1 = new Thread(new Runnable() {
+
+			// Crée le SwingWorker
+			simulationWorker = new SwingWorker<Result, Void>() {
 				@Override
-				public void run() {
+				protected Result doInBackground() throws Exception {
+					return sim.run();
+				}
+
+				@Override
+				protected void done() {
 					try {
-						Result res = sim.run();
-						if (res != null) {
+						if (isCancelled()) {
+							progress.append("Simulation was interrupted!\n");
+							progress.append("Re-run from the beginning \n");
+						} else {
+							Result res = get();
 							progress.append("Simulation successfully computed!\n");
 
 							if (parent.getPerturbation() != null)
@@ -122,49 +130,62 @@ public class AvatarResults {
 								res.reduction = parent.getReduction().toString();
 
 							showOutputFrame(res);
-						} else {
-							progress.append("Simulation was interrupted!\n");
-							stop.setEnabled(false);
-							brun.setEnabled(true);
-							System.gc();
-							System.runFinalization();
 						}
 					} catch (Exception e) {
-						String fileErrorMessage = e.getMessage();
-						if (fileErrorMessage == null) {
-							e.printStackTrace();
-						} else if (!fileErrorMessage.contains("FireFront requests")) {
-							fileErrorMessage = "Unfortunately we were not able to finish your request.<br>Exception while running the algorithm.<br><em>Reason:</em> "
-									+ fileErrorMessage;
-							e.printStackTrace();
+						String msg = (e.getMessage() != null) ? e.getMessage()
+								: "Unknown error occurred while running the algorithm.";
+
+						if (!msg.contains("FireFront requests")) {
+							msg = "Unfortunately, we were not able to finish your request.<br>Exception while running the algorithm.<br><em>Reason:</em> "
+									+ msg;
 						}
-						// errorDisplay(fileErrorMessage, e);
-						GUIMessageUtils.openErrorDialog(fileErrorMessage);
-						stop.setEnabled(false);
-						brun.setEnabled(true);
+
+						GUIMessageUtils.openErrorDialog(msg);
+						// e.printStackTrace();
 					}
+
+					stop.setEnabled(false);
+					brun.setEnabled(true);
 				}
-			});
-			t1.start();
+			};
+
+			simulationWorker.execute(); // Démarre le thread de fond
+			stop.setEnabled(true);
+			brun.setEnabled(false);
+
 		} catch (Exception e) {
-			String fileErrorMessage = "Unfortunately we were not able to finish your request.<br><em>Reason:</em> Exception while running the algorithm.";
-			errorDisplay(fileErrorMessage, e);
+			errorDisplay(
+					"Unfortunately we were not able to finish your request.<br><em>Reason:</em> Exception while running the algorithm.",
+					e);
 			stop.setEnabled(false);
 			brun.setEnabled(true);
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Kill function
+	 */
+	public void togglePause() {
+		if (simulationWorker != null && !simulationWorker.isDone()) {
+			boolean isPaused = sim.isPaused();
+			sim.setPaused(!isPaused);
+		}
+		stop.setText((sim.isPaused()) ? "Continue" : "Pause");
 	}
 
 	public void kill(boolean dialog) {
 		sim.exit();
+		if (simulationWorker != null && !simulationWorker.isDone()) {
+			simulationWorker.cancel(true);
+		}
 	}
 
 	/**
 	 * Creates the graphical display of the results from an executed simulation
 	 * (called after finishing 'runAvatarResults')
 	 * 
-	 * @param res
-	 *            the results to be displayed
+	 * @param res the results to be displayed
 	 */
 	public void showOutputFrame(final Result res) {
 		stop.setEnabled(false);
@@ -502,11 +523,10 @@ public class AvatarResults {
 	 * Displays a message of error whenever a simulation is not successfully
 	 * executed
 	 * 
-	 * @param errorMessage
-	 *            the message to be display
-	 * @param e
-	 *            the exception whose stack trace is to be printed in the log of
-	 *            ginsim
+	 * @param errorMessage the message to be display
+	 * @param e            the exception whose stack trace is to be printed in the
+	 *                     log of
+	 *                     ginsim
 	 */
 	public static void errorDisplay(String errorMessage, Exception e) {
 		JTextPane output = new JTextPane();

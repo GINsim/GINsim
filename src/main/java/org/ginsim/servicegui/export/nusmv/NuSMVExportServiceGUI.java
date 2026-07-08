@@ -44,7 +44,7 @@ public class NuSMVExportServiceGUI extends AbstractServiceGUI {
 
 	@Override
 	public int getInitialWeight() {
-		return W_EXPORT_SPECIFIC + 30;
+		return W_EXPORT_GENERIC + 1;
 	}
 }
 

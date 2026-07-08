@@ -43,13 +43,10 @@ public abstract class ImportAction extends BaseAction {
 	}
 
 	/**
-	 * 
-	 * @param name
-	 *            Entry to insert in the menu
-	 * @param icon
-	 *            icon image for menu and toolbar
-	 * @param tooltip
-	 *            Long description of the action
+	 * Constructor
+	 * @param name Entry to insert in the menu
+	 * @param icon icon image for menu and toolbar
+	 * @param tooltip Long description of the action
 	 * @param accelerator
 	 *            the keyboard bytecut
 	 */
@@ -63,9 +60,6 @@ public abstract class ImportAction extends BaseAction {
 	/**
 	 * The action was launched, select a file and if all
 	 * went fine, call the import service gui
-	 * 
-	 * @param config
-	 * @throws GsException
 	 */
 	public void selectFile() {
 		String filename = FileSelectionHelper.selectOpenFilename(null,

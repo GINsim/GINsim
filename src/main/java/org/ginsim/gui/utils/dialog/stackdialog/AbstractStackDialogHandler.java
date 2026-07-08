@@ -6,11 +6,18 @@ import javax.swing.JPanel;
 
 import org.ginsim.commongui.dialog.DefaultDialogSize;
 
-
+/**
+ * class AbstractStackDialogHandler extends JPanel
+ */
 abstract public class AbstractStackDialogHandler extends JPanel implements StackDialogHandler {
-
+	/**
+	 * HandledStackDialog stack attribute
+	 */
 	protected HandledStackDialog stack;
 
+	/**
+	 *  init method
+	 */
 	abstract protected void init();
 	
 	@Override

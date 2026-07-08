@@ -86,7 +86,7 @@ public abstract class TreeBuilderFromMDD extends TreeBuilder {
 
 			last_real = 0;
 			for (int j = lastLevel+1 ; j < max_depth ; j++) { //For all the missing genes
-				if (realDetph[j] != -2) {
+				if (realDepth[j] != -2) {
 					parents = addChildren(j, mult, parents, childIndex, currentWidthPerDepth, ereader);
 					mult = widthPerDepth[j];
 					last_real = j;
@@ -113,7 +113,7 @@ public abstract class TreeBuilderFromMDD extends TreeBuilder {
 		last_real = 0;
 		List<TreeNode> skippedParents = parents;
 		for (int j = lastLevel+1 ; j < var.order ; j++) { //For all the missing genes
-			if (realDetph[j] != -2) {
+			if (realDepth[j] != -2) {
 				skippedParents = addChildren(j, mult, skippedParents, childIndex, currentWidthPerDepth, ereader);
 				mult = widthPerDepth[j];
 				last_real = j;
@@ -163,7 +163,7 @@ public abstract class TreeBuilderFromMDD extends TreeBuilder {
         if (var == null) {
             return ;
         }
-        realDetph[var.order] = -1;
+        realDepth[var.order] = -1;
         for (int i = 0 ; i < var.nbval ; i++) {
             _initRealDepth(ddmanager.getChild(o,i));
         }

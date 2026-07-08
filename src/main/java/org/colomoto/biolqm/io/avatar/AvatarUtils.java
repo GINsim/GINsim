@@ -13,8 +13,10 @@ import java.util.List;
  */
 public final class AvatarUtils {
 
+	/**
+	 * final static int DEC_PLACES = 4;
+	 */
 	public final static int DEC_PLACES = 4;
-
 	/**
 	 * Creates a state (int array) where components are initialized as -1
 	 * 
@@ -46,8 +48,7 @@ public final class AvatarUtils {
 	/**
 	 * Creates an identity node array (e.g. [0,1,2,3..,n])
 	 * 
-	 * @param nstates
-	 *            the number of components
+	 * @param nstates the number of components
 	 * @return the identity node array
 	 */
 	public static int[] getIdentityChildren(int nstates) {
@@ -60,10 +61,8 @@ public final class AvatarUtils {
 	/**
 	 * Creates a state where only a single component is initialized (others as -1)
 	 * 
-	 * @param nstates
-	 *            number of components
-	 * @param node
-	 *            the component to be initialized
+	 * @param nstates number of components
+	 * @param node the component to be initialized
 	 * @return the array with the initialize 'node' component (e.g.
 	 *         [-1,-1,..,-1,p,-1,..-1]=
 	 */
@@ -77,8 +76,7 @@ public final class AvatarUtils {
 	/**
 	 * List of states to string
 	 * 
-	 * @param list
-	 *            the list of states (byte arrays)
+	 * @param list the list of states (byte arrays)
 	 * @return a string representing a list of states
 	 */
 	public static String toString(List<byte[]> list) {
@@ -92,8 +90,7 @@ public final class AvatarUtils {
 	/**
 	 * Byte array to string
 	 * 
-	 * @param vector
-	 *            the byte array
+	 * @param vector the byte array
 	 * @return textual representation of the byte array
 	 */
 	public static String toString(byte[] vector) {
@@ -104,6 +101,11 @@ public final class AvatarUtils {
 		return result + "]";
 	}
 
+	/**
+	 * retuern open string
+	 * @param vector byte array
+	 * @return a string to open
+	 */
 	public static String toOpenString(byte[] vector) {
 		if (vector.length == 0)
 			return "";
@@ -116,8 +118,7 @@ public final class AvatarUtils {
 	/**
 	 * Integer array to string
 	 * 
-	 * @param vector
-	 *            the integer array
+	 * @param vector the integer array
 	 * @return textual representation of the integer array
 	 */
 	public static String toString(int[] vector) {
@@ -132,8 +133,7 @@ public final class AvatarUtils {
 	/**
 	 * Long array to string
 	 * 
-	 * @param vector
-	 *            the long array
+	 * @param vector the long array
 	 * @return textual representation of the long array
 	 */
 	public static String toString(long[] vector) {
@@ -148,8 +148,7 @@ public final class AvatarUtils {
 	/**
 	 * BigInteger array to string
 	 * 
-	 * @param vector
-	 *            the BigInteger array
+	 * @param vector the BigInteger array
 	 * @return textual representation of the BigInteger array
 	 */
 	public static String toString(BigInteger[] vector) {
@@ -164,8 +163,7 @@ public final class AvatarUtils {
 	/**
 	 * Double array to string
 	 * 
-	 * @param vector
-	 *            the double array
+	 * @param vector the double array
 	 * @return textual representation of the double array
 	 */
 	public static String toString(double[] vector) {
@@ -180,8 +178,7 @@ public final class AvatarUtils {
 	/**
 	 * String array to string
 	 * 
-	 * @param vector
-	 *            the String array
+	 * @param vector the String array
 	 * @return textual representation of the String array
 	 */
 	public static String toString(String[] vector) {
@@ -196,8 +193,7 @@ public final class AvatarUtils {
 	/**
 	 * Boolean array to string
 	 * 
-	 * @param vector
-	 *            the Boolean array
+	 * @param vector the Boolean array
 	 * @return textual representation of the Boolean array
 	 */
 	public static String toString(boolean[] vector) {
@@ -212,8 +208,7 @@ public final class AvatarUtils {
 	/**
 	 * Integer matrix to string
 	 * 
-	 * @param matrix
-	 *            the matrix of integers
+	 * @param matrix the matrix of integers
 	 * @return textual representation of the matrix of integers
 	 */
 	public static String toString(int[][] matrix) {
@@ -226,8 +221,7 @@ public final class AvatarUtils {
 	/**
 	 * Double matrix to string
 	 * 
-	 * @param matrix
-	 *            the matrix of doubles
+	 * @param matrix the matrix of doubles
 	 * @return textual representation of the matrix of doubles
 	 */
 	public static String toString(double[][] matrix) {
@@ -240,8 +234,7 @@ public final class AvatarUtils {
 	/**
 	 * Converts a list of integers to an array
 	 * 
-	 * @param list
-	 *            the list of integers
+	 * @param list the list of integers
 	 * @return the converted array of integers
 	 */
 	public static int[] toArray(List<Integer> list) {
@@ -254,8 +247,7 @@ public final class AvatarUtils {
 	/**
 	 * Converts an integer array to a byte array
 	 * 
-	 * @param vector
-	 *            the integer array
+	 * @param vector the integer array
 	 * @return the casted byte array
 	 */
 	public static byte[] toByteArray(int[] vector) {
@@ -264,12 +256,24 @@ public final class AvatarUtils {
 			array[i] = (byte) vector[i];
 		return array;
 	}
-	
+
+	/**
+	 * Round the double value
+	 * @param value yhr double value
+	 * @param decimalPlaces the decimal place int
+	 * @return the double value rounded
+	 */
 	public static double round(double value, int decimalPlaces) {
 	    BigDecimal bd = new BigDecimal(value);
 	    bd = bd.setScale(decimalPlaces, RoundingMode.HALF_UP);
 	    return bd.doubleValue();
 	}
+
+	/**
+	 * Round the double value
+	 * @param value the double value
+	 * @return the rounded double value
+	 */
 	public static double round(double value) {
 		return round(value, DEC_PLACES);
 	}

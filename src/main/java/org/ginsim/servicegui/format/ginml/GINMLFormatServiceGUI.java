@@ -44,7 +44,7 @@ public class GINMLFormatServiceGUI extends AbstractServiceGUI {
 
 	@Override
 	public int getInitialWeight() {
-		return W_EXPORT_SPECIFIC + 30;
+		return 4; // W_EXPORT_SPECIFIC
 	}
 }
 

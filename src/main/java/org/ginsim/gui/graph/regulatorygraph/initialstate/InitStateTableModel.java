@@ -403,9 +403,9 @@ public class InitStateTableModel extends AbstractTableModel {
 		}*/
 		RegulatoryNode node = nodeOrder.get(columnIndex-columnShift);
 		if (node.isOutput()) {
-			return "[O] "+node.getDisplayName();
+			return "[O] "+node.getId();
 		}
-		return node.getDisplayName();
+		return node.getId();
 	}
 
 	public int getColumnCount() {

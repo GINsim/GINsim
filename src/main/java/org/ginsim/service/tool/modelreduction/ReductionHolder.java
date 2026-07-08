@@ -19,7 +19,7 @@ public interface ReductionHolder extends PatternHolder {
 	
 	/**
 	 * Select a reduction.
-	 * @param reduction
+	 * @param reduction reduction config
 	 */
 	void setReduction(ReductionConfig reduction);
 }

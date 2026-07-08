@@ -9,16 +9,15 @@ import org.ginsim.core.graph.GraphChangeType;
  * 
  * @author Aurelien Naldi
  *
- * @param <G>
- * @param <V>
- * @param <E>
+ * @param <G>  the graph
+ * @param <V>  the vertex
+ * @param <E>  the edge
  */
 public interface GraphGUIListener<G extends Graph<V, E>, V, E extends Edge<V>> {
 
 	/**
 	 * The selection has changed.
-	 * 
-	 * @param gui
+	 * @param gui the gui
 	 */
 	void graphSelectionChanged(GraphGUI<G, V, E> gui);
 	
@@ -35,9 +34,9 @@ public interface GraphGUIListener<G extends Graph<V, E>, V, E extends Edge<V>> {
 	 * This method is used to forward change events (see GraphListener) to the GUI.
 	 * Listeners should react by refreshing the GUI when needed but should not change the graph.
 	 * 
-	 * @param g
-	 * @param type
-	 * @param data
+	 * @param g the graph
+	 * @param type the type
+	 * @param data  object data
 	 */
 	void graphChanged(G g, GraphChangeType type, Object data);
 

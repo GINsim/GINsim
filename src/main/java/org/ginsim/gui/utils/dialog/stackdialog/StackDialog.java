@@ -43,10 +43,11 @@ abstract public class StackDialog extends SimpleDialog {
     protected JButton bclose;
     
     /**
-     * @param graph
+     * Constructor
+     * @param graph a graph
      * @param id an id to store the windows size (will be "id.width" and "id.height")
-     * @param w
-     * @param h
+     * @param w width value
+     * @param h height value
      */
     public StackDialog(Graph<?,?> graph, String id, int w, int h) {
     	this(GUIManager.getInstance().getFrame(graph), id, w, h);
@@ -55,10 +56,11 @@ abstract public class StackDialog extends SimpleDialog {
     	this(parent, defaults.ID, defaults.width, defaults.height);
     }
     /**
-     * @param parent
+     * Constructor
+     * @param parent parent frame
      * @param id an id to store the windows size (will be "id.width" and "id.height")
-     * @param w
-     * @param h
+     * @param w value widths
+     * @param h value height
      */
     public StackDialog(Frame parent, String id, int w, int h) {
         super(parent, id, w, h);
@@ -84,7 +86,7 @@ abstract public class StackDialog extends SimpleDialog {
     
     /**
      * set the progress level, to give the user some feedback
-     * @param message
+     * @param message the message string
      */
     public void setMessage(String message) {
     	setMessage(message, 0);

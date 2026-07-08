@@ -10,7 +10,7 @@ import org.ginsim.core.graph.objectassociation.UserSupporter;
 import org.ginsim.core.graph.regulatorygraph.RegulatoryGraph;
 import org.ginsim.core.graph.regulatorygraph.RegulatoryNode;
 import org.ginsim.core.utils.data.NamedList;
-
+import org.ginsim.service.tool.modelreduction.ReductionConfig;
 
 /**
  * store all simplification parameters and offer a mean to access them.
@@ -21,7 +21,9 @@ public class ListOfReductionConfigs extends NamedList<ReductionConfig>
 
     private String s_current;
     private RegulatoryGraph graph;
-    private Set<String> outputStrippers = new HashSet<String>();
+    // private Set<String> outputStrippers = new HashSet<String>();
+
+    private boolean outputStrippers = false;
     private Set<String> fixedPropagaters = new HashSet<String>();
     private Map<String, ReductionConfig> users = new HashMap<String, ReductionConfig>();
     
@@ -55,13 +57,13 @@ public class ListOfReductionConfigs extends NamedList<ReductionConfig>
         return null;
 	}
 
-    public void setStrippingOutput(String key, boolean use) {
-        if (!use) {
-            outputStrippers.remove(key);
-        } else {
-            outputStrippers.add(key);
-        }
-    }
+   // public void setStrippingOutput(String key, boolean use) {
+ //       if (!use) {
+ //           outputStrippers.remove(key);
+  //      } else {
+   //         outputStrippers.add(key);
+   //     }
+  //  }
 
     public void setPropagateFixed(String key, boolean use) {
         if (!use) {
@@ -72,7 +74,8 @@ public class ListOfReductionConfigs extends NamedList<ReductionConfig>
     }
 
     public boolean isStrippingOutput(String key) {
-        return outputStrippers.contains(key);
+        if (this.getUsedReduction(key).getName().contains("Output")) {return true;}
+        else return false;
     }
 
     public boolean isPropagatingFixed(String key) {
@@ -81,9 +84,19 @@ public class ListOfReductionConfigs extends NamedList<ReductionConfig>
 
     public void useReduction(String key, ReductionConfig reduction) {
         if (reduction == null) {
+            //outputStrippers.remove(key);
+            fixedPropagaters.remove(key);
+            outputStrippers = false;
             users.remove(key);
+
         } else {
             users.put(key, reduction);
+            if (this.getUsedReduction(key).getName().contains("Output")){
+                outputStrippers = true;
+            }
+            else{ outputStrippers = false;}
+            // decouplage reduction output do do
+            //if(reduction.outputs)   {outputStrippers = true;}
         }
     }
 
@@ -92,8 +105,12 @@ public class ListOfReductionConfigs extends NamedList<ReductionConfig>
     }
 
 
-    public Collection<String> getOutputStrippingUsers() {
+    public boolean getOutputStrippingUsers() {
         return outputStrippers;
+    }
+
+    public void setOutputStrippers(boolean output){
+        outputStrippers = output;
     }
 
     public Collection<String> getFixedPropagationUsers() {
@@ -102,9 +119,9 @@ public class ListOfReductionConfigs extends NamedList<ReductionConfig>
 
 	@Override
 	public void update(String oldID, String newID) {
-        if (outputStrippers.remove(oldID) && newID != null) {
-            outputStrippers.add(newID);
-        }
+        //if (outputStrippers.remove(oldID) && newID != null) {
+        //    outputStrippers.add(newID);
+        //}
         if (fixedPropagaters.remove(oldID) && newID != null) {
             fixedPropagaters.add(newID);
         }
@@ -114,12 +131,21 @@ public class ListOfReductionConfigs extends NamedList<ReductionConfig>
         return graph.getNodeOrder();
     }
 
-    public int create() {
+    public boolean ifOutputIn(){
+        for (int i=this.size()-1 ; i>-1 ; i--) {
+            if (this.get(i).getName().contains("Output")) return true;}
+        return false;
+    }
+    public int create(boolean initoutput) {
         ReductionConfig cfg = new ReductionConfig();
-        cfg.setName(findUniqueName("Reduction "));
-
-        int pos = size();
+        if (initoutput){
+            cfg.setName("Output Reduction");
+        }
+        else {
+            cfg.setName(findUniqueName("Reduction "));
+        }
         add(cfg);
+        int pos = size()-1;
         return pos;
     }
 }

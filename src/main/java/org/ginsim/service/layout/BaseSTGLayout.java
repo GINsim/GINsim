@@ -45,8 +45,8 @@ public class BaseSTGLayout {
      * A value in the table is 0, if the corresponding component (according to the newNodeOrder)
      * has the same value in the two states, otherwise its the absolute difference (should be 1)
      *
-     * @param sourceNode
-     * @param targetNode
+     * @param sourceNode the source node
+     * @param targetNode the target node
      *
      * @return a list of changes between the states
      */
@@ -60,7 +60,7 @@ public class BaseSTGLayout {
 
     /**
      * Retrieve the maximal values of all components.
-     *
+     * @param nodeOrder node order list
      * @return the max levels for all components.
      */
     public byte[] getMaxValues(List<RegulatoryNode> nodeOrder) {

@@ -59,9 +59,8 @@ public class AvatarPanel extends SimulationPanel {
 
 	/**
 	 * Instantiates the context of a simulation panel
-	 * 
-	 * @param img
-	 *            icon for the help tooltip
+	 *
+	 * icon for the help tooltip
 	 */
 	public AvatarPanel() {
 		// this.setBorder(BorderFactory.createTitledBorder(EnumAlgorithm.AVATAR + "

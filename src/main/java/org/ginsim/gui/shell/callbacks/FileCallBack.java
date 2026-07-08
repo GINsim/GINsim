@@ -190,6 +190,24 @@ class OpenAction extends AbstractAction {
 		}
 		if (path != null) {
 			try {
+				// Crée un objet File avec le nom du fichier
+				File file = new File(path);
+        
+				// Vérifie si le fichier existe
+				if (file.exists()) {
+					// Récupère le répertoire parent du fichier
+					String directory = file.getParent();
+					FileSelectionHelper.setLastDirectory(directory);
+				}
+				else {
+					// @TODO traiter le cas ou le fichier n'existe pas
+				}
+			}
+			catch (Exception e) {
+				GUIMessageUtils.openErrorDialog( "STR_unableToOpen_SeeLogs");
+			}
+
+			try {
 				Graph g = GSGraphManager.getInstance().open(path);
 				if( g != null){
 					OptionStore.addRecentFile(path);

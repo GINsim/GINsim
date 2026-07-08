@@ -44,7 +44,7 @@ public abstract class CADPWriter {
 	
 	
 	/**
-	 * 
+	 * node2Gate string setter
 	 * @param node
 	 *            the regulatory node
 	 * @param moduleId
@@ -56,9 +56,8 @@ public abstract class CADPWriter {
 	}
 
 	/**
-	 * 
-	 * @param node
-	 *            the regulatory node
+	 * node2Gate
+	 * @param node the regulatory node
 	 * @return the name of the corresponding gate
 	 */
 	public static String node2Gate(RegulatoryNode node) {
@@ -66,9 +65,8 @@ public abstract class CADPWriter {
 	}
 
 	/**
-	 * 
-	 * @param node
-	 *            the regulatory node
+	 * node2StateVar
+	 * @param node the regulatory node
 	 * @return the name of the corresponding state variable
 	 */
 	public static String node2StateVar(RegulatoryNode node) {
@@ -77,14 +75,10 @@ public abstract class CADPWriter {
 
 	/**
 	 * 
-	 * @param input
-	 *            the regulatory input node
-	 * @param inputModuleIndex
-	 *            the identification of the instance where the input node is
-	 * @param proper
-	 *            the regulatory proper node
-	 * @param properModuleIndex
-	 *            the identification of the instance where the proper node is
+	 * @param input the regulatory input node
+	 * @param inputModuleIndex the identification of the instance where the input node is
+	 * @param proper the regulatory proper node
+	 * @param properModuleIndex the identification of the instance where the proper node is
 	 * @return the name of the action updating the value of the proper component
 	 *         and the mapped input node influenced by the proper componentn
 	 */
@@ -95,7 +89,7 @@ public abstract class CADPWriter {
 	}
 
 	/**
-	 * 
+	 * NumberInstances getter
 	 * @return the number of instances of the composition
 	 */
 	public int getNumberInstances() {
@@ -103,7 +97,7 @@ public abstract class CADPWriter {
 	}
 
 	/**
-	 * 
+	 * ModelName getter
 	 * @return the name of the original LRM
 	 */
 	public String getModelName() {
@@ -111,7 +105,7 @@ public abstract class CADPWriter {
 	}
 
 	/**
-	 * 
+	 * MappedInputs getter
 	 * @return a collection of mapped input nodes in the original LRM
 	 */
 	public Collection<RegulatoryNode> getMappedInputs() {
@@ -119,9 +113,8 @@ public abstract class CADPWriter {
 	}
 
 	/**
-	 * 
-	 * @param input
-	 *            a regulatory input node
+	 * ProperComponentsForInput getter
+	 * @param input a regulatory input node
 	 * @return a collection of proper components influencing the value of the
 	 *         input
 	 */
@@ -135,9 +128,8 @@ public abstract class CADPWriter {
 	}
 
 	/**
-	 * 
-	 * @param input
-	 *            a regulatory input node
+	 * IntegrationFunctionForInput getter
+	 * @param input a regulatory input node
 	 * @return the integration function associated to the input node
 	 */
 	public IntegrationFunction getIntegrationFunctionForInput(
@@ -146,7 +138,7 @@ public abstract class CADPWriter {
 	}
 
 	/**
-	 * 
+	 * ListVisible getter
 	 * @return the collection of visible components
 	 */
 	public List<RegulatoryNode> getListVisible() {
@@ -157,10 +149,8 @@ public abstract class CADPWriter {
 	 * Method determines whether modules Mi and Mj are neighbours (this relation
 	 * is not necessarily symmetrical
 	 * 
-	 * @param i
-	 *            the index of Module i (starting in 1)
-	 * @param j
-	 *            the index of Module j (starting in 1)
+	 * @param i the index of Module i (starting in 1)
+	 * @param j the index of Module j (starting in 1)
 	 * @return TRUE if they are neighbours, FALSE otherwise
 	 */
 	public boolean areNeighbours(int i, int j) {

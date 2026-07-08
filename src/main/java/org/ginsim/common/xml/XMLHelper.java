@@ -109,6 +109,9 @@ abstract public class XMLHelper extends DefaultHandler implements EntityResolver
         if (e.getMessage().startsWith("Attribute \"input\"") || e.getMessage().startsWith("Attribute \"pattern\"")) {
             return;
         }
+		if (e.getMessage().startsWith("La valeur d'attribut") && e.getMessage().endsWith("tre un nom.")) {
+			return;
+		}
         
         addWarning(e);
 	}
@@ -203,7 +206,8 @@ abstract public class XMLHelper extends DefaultHandler implements EntityResolver
 			xr.setContentHandler(this);
 			xr.setEntityResolver(this);
 			xr.setErrorHandler(this);
-			xr.parse(new InputSource(new InputStreamReader(is, "UTF-8")));
+			InputStreamReader input =  new InputStreamReader(is, "UTF-8");
+			xr.parse(new InputSource(input));
 		} catch (FileNotFoundException e) {
 			throw new GsException( "File not found : " + e.getLocalizedMessage(), e);
 		} catch (IOException e) {

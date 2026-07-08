@@ -9,7 +9,15 @@ import java.util.Map;
  */
 public interface NamedStateStore {
 
+    /**
+     * Getter of initial states
+     * @return map of initial states
+     */
     Map getInitialState();
 
+    /**
+     * Getter of input staes
+     * @return map of input states
+     */
     Map getInputState();
 }

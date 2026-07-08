@@ -11,16 +11,15 @@ import org.colomoto.biolqm.NodeInfo;
 import org.colomoto.mddlib.MDDManager;
 import org.colomoto.mddlib.MDDManagerFactory;
 import org.colomoto.mddlib.MDDVariableFactory;
-import org.ginsim.core.graph.AbstractDerivedGraph;
+import org.colomoto.mddlib.PathSearcher;
 import org.ginsim.core.graph.Graph;
 import org.ginsim.core.graph.GraphChangeType;
 import org.ginsim.core.graph.GraphEventCascade;
 import org.ginsim.core.graph.dynamicgraph.TransitionGraphImpl;
 import org.ginsim.core.graph.regulatorygraph.RegulatoryGraph;
-import org.ginsim.core.graph.regulatorygraph.RegulatoryMultiEdge;
-import org.ginsim.core.graph.regulatorygraph.RegulatoryNode;
 import org.ginsim.core.io.parser.GINMLWriter;
-
+import org.ginsim.service.tool.modelreduction.ReductionConfig;
+import org.ginsim.service.tool.reg2dyn.SimulationStrategy;
 /**
  * Implementation of the HTG interface
  *
@@ -29,6 +28,7 @@ import org.ginsim.core.io.parser.GINMLWriter;
 public class HierarchicalTransitionGraphImpl extends TransitionGraphImpl<HierarchicalNode, DecisionOnEdge> implements HierarchicalTransitionGraph {
 
 	public static final String GRAPH_ZIP_NAME = "hierarchicalTransitionGraph.ginml";
+	public static final String GRAPH_ZIP_NAME_SCC = "sccGraph.ginml";
 	
 	private List<NodeInfo> nodeOrder = new ArrayList<NodeInfo>();
 
@@ -38,11 +38,15 @@ public class HierarchicalTransitionGraphImpl extends TransitionGraphImpl<Hierarc
 	 * Mode is either SCC or HTG depending if we group the transients component by their atteignability of attractors.
 	 */
 	private boolean transientCompaction;
-	
+
+	private ReductionConfig reduction = null;
+
 	/**
-	 * An array indicating for each node in the nodeOrder their count of childs. (ie. their max value)
+	 * An array indicating for each node in the nodeOrder their count of children. (ie. their max value)
 	 */
 	private byte[] childsCount = null;
+
+	private SimulationStrategy _strategy = SimulationStrategy.STG;
 	
 	
 /* **************** CONSTRUCTORS ************/	
@@ -75,6 +79,17 @@ public class HierarchicalTransitionGraphImpl extends TransitionGraphImpl<Hierarc
 	}
 
 	/**
+	 * set reduction ReductionConfig if htg is making from reduction
+	 */
+     public void setReduction(ReductionConfig reduction){
+		 this.reduction = reduction;
+	 }
+
+	 public ReductionConfig getReduction(){
+		 return this.reduction;
+	 }
+
+	 /**
 	 * Return the node order as a List of NodeInfo
 	 * 
 	 * @return the node order as a List of NodeInfo
@@ -118,7 +133,10 @@ public class HierarchicalTransitionGraphImpl extends TransitionGraphImpl<Hierarc
         ddmanager = MDDManagerFactory.getManager(vbuilder, 10);
 	}
 
-
+	/**
+	 * Set the reduction boolean value if this htg is comes from a reduction calculation
+	 * @param true or false
+	 */
 /* **************** EDITION OF VERTEX AND EDGE ************/	
 
 	/**
@@ -148,6 +166,9 @@ public class HierarchicalTransitionGraphImpl extends TransitionGraphImpl<Hierarc
 		
 	@Override
 	public String getGraphZipName(){
+		if (getSimulationStrategy() == SimulationStrategy.SCCG) {
+			return GRAPH_ZIP_NAME_SCC;
+		}
 		return GRAPH_ZIP_NAME;
 	}
 
@@ -297,5 +318,38 @@ public class HierarchicalTransitionGraphImpl extends TransitionGraphImpl<Hierarc
 
     public StatesSet createStateSet() {
         return new StatesSet(ddmanager, getChildsCount());
+    }
+
+
+	public void setSimulationStrategy(SimulationStrategy strategy) {
+		_strategy = strategy;
+	}
+	public SimulationStrategy getSimulationStrategy() {
+		return _strategy;
+	}
+	
+    public String getExtraValueInterval(byte[] state, int idx) {
+		PathSearcher searcher = new PathSearcher(super.ddmanager);
+		int[] path = searcher.getPath();
+		searcher.setNode(super.extraFunctions[0]);
+
+		int min = Integer.MAX_VALUE, max = -1;
+		nextp: for (int l : searcher) { // for each MDD path
+			for (int i = 0; i < path.length; i++) { // for each level / component
+				if (path[i] != -1 && state[i] != -1 && path[i] != state[i]) {
+					// path incompatible with state[]
+					continue nextp;
+				}
+			}
+			if (l > max) max = l;
+			if (l < min) min = l;
+		}
+		
+		if (min == 0 && max == super.extraNodes.get(idx).getMax()) {
+			return "*";
+		} else if (min == max) {
+			return "" + min;
+		} 
+		return min + "-" + max;
     }
 }

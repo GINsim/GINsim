@@ -39,7 +39,6 @@ import org.ginsim.core.graph.regulatorygraph.namedstates.NamedStatesManager;
 import org.ginsim.core.graph.regulatorygraph.perturbation.ListOfPerturbations;
 import org.ginsim.core.graph.regulatorygraph.perturbation.PerturbationManager;
 import org.ginsim.gui.graph.regulatorygraph.initialstate.CompleteStatePanel;
-import org.ginsim.gui.graph.regulatorygraph.perturbation.PerturbationSelectionPanel;
 import org.ginsim.service.tool.avatar.params.AvatarParameterList;
 import org.ginsim.service.tool.avatar.params.AvatarParameters;
 import org.ginsim.service.tool.avatar.params.AvatarParametersManager;
@@ -55,7 +54,6 @@ import org.ginsim.servicegui.tool.avatar.algopanels.SimulationPanel;
 import org.ginsim.servicegui.tool.avatar.others.TitleToolTipPanel;
 import org.ginsim.servicegui.tool.avatar.parameters.AvaParameterEditionPanel;
 import org.ginsim.servicegui.tool.avatar.parameters.AvatarParametersHelper;
-import org.ginsim.servicegui.tool.modelreduction.ReductionSelectionPanel;
 
 /**
  * Main panel for displaying the all of the context associated with avatar
@@ -95,8 +93,11 @@ public class AvatarConfigFrame extends AvatarLogicalModelActionDialog {
 	private JPanel outputPanel;
 	private String filename;
 	private JSplitPane horizontalPanel;
+	/**
+	 * JTextArea jtaOutput
+	 */
 	public JTextArea jtaOutput = new JTextArea();
-	private JButton forceStop = new JButton("Force exit");
+	private JButton forceStop = new JButton("Pause");
 	private AvatarResults results;
 	private File memorizedFile = new File("chart.png"), logFile = new File("log.txt"),
 			resFile = new File("result.html"), csvFile = new File("result.csv");
@@ -111,12 +112,12 @@ public class AvatarConfigFrame extends AvatarLogicalModelActionDialog {
 	/**
 	 * Creates the panel with avatar-based simulations from the current graph
 	 * 
-	 * @param graph
-	 *            regulatory graph (with possibly contextual information) on which
-	 *            to apply the services
-	 * @param _parent
-	 *            pointer to the parent panel (to return upon closing the panel for
-	 *            the analysis of attractors)
+	 * @param graph   regulatory graph (with possibly contextual information) on
+	 *                which
+	 *                to apply the services
+	 * @param _parent pointer to the parent panel (to return upon closing the panel
+	 *                for
+	 *                the analysis of attractors)
 	 */
 	public AvatarConfigFrame(RegulatoryGraph graph, JFrame _parent) {
 		super(graph, _parent, ID, W, H);
@@ -134,19 +135,20 @@ public class AvatarConfigFrame extends AvatarLogicalModelActionDialog {
 		// for(byte[] istate : istates)
 		// System.out.println("IState="+AvatarUtils.toString(istate));
 
-		ListOfPerturbations pertHandler = (ListOfPerturbations) ObjectAssociationManager.getInstance().getObject(lrg, PerturbationManager.KEY, true);
-		
-        this.perturbations = (ListOfPerturbations)ObjectAssociationManager.getInstance().
-        		getObject(lrg, PerturbationManager.KEY, true);
-        this.reductions = (ListOfReductionConfigs)ObjectAssociationManager.getInstance().
-        		getObject(lrg, ReductionConfigManager.KEY, true);
-        
-        //System.out.println("initial refresh");
-        perturbationPanel.refresh();
-        reductionPanel.refresh();
-		
-		NamedStatesHandler nstatesHandler = (NamedStatesHandler) ObjectAssociationManager.getInstance().
-				getObject(lrg, NamedStatesManager.KEY, true);
+		ListOfPerturbations pertHandler = (ListOfPerturbations) ObjectAssociationManager.getInstance().getObject(lrg,
+				PerturbationManager.KEY, true);
+
+		this.perturbations = (ListOfPerturbations) ObjectAssociationManager.getInstance().getObject(lrg,
+				PerturbationManager.KEY, true);
+		this.reductions = (ListOfReductionConfigs) ObjectAssociationManager.getInstance().getObject(lrg,
+				ReductionConfigManager.KEY, true);
+
+		// System.out.println("initial refresh");
+		perturbationPanel.refresh();
+		reductionPanel.refresh();
+
+		NamedStatesHandler nstatesHandler = (NamedStatesHandler) ObjectAssociationManager.getInstance().getObject(lrg,
+				NamedStatesManager.KEY, true);
 		if (nstatesHandler.getInitialStates().size() == 0)
 			statestore = new AvatarStateStore(istates, lrg);
 		else
@@ -225,22 +227,21 @@ public class AvatarConfigFrame extends AvatarLogicalModelActionDialog {
 	/**
 	 * Updates the parameters of the simulation panel given the new context
 	 * 
-	 * @param param
-	 *            the simulation context (parameters) to use to update the fields of
-	 *            the main panel
+	 * @param param the simulation context (parameters) to use to update the fields
+	 *              of the main panel
 	 */
 	public void refresh(AvatarParameters param) {
 		mainPanel.removeAll();
 
 		/** LOAD PARAMS **/
 		AvatarParametersHelper.unload(param, this);
-		
+
 		/** A: perturbations and reductions **/
 		JPanel topPanel = new TitleToolTipPanel();
 		topPanel.setLayout(new GridBagLayout());
 
 		topPanel.setBorder(BorderFactory.createTitledBorder("Model modifications"));
-//		topPanel.setToolTipText("Applicable perturbations and reductions");
+		// topPanel.setToolTipText("Applicable perturbations and reductions");
 		ToolTipManager.sharedInstance().setInitialDelay(0);
 		GridBagConstraints c = new GridBagConstraints();
 
@@ -260,9 +261,9 @@ public class AvatarConfigFrame extends AvatarLogicalModelActionDialog {
 		// simplification checkboxes
 		c.gridx = 1;
 		c.weightx = 0;
-		topPanel.add(cb_simplify, c);
+		// topPanel.add(cb_simplify, c);
 
-		/** B: avatar-specific stuff **/		
+		/** B: avatar-specific stuff **/
 		JPanel rightPanel = new JPanel();
 		rightPanel.removeAll();
 		rightPanel.setLayout(new GridBagLayout());
@@ -389,10 +390,10 @@ public class AvatarConfigFrame extends AvatarLogicalModelActionDialog {
 		// paramPanel.setBorder(null);
 
 		/** G: Progress bar **/
-//		jtpOutput.setContentType("text/html");
-//		jtpOutput.setFont(new Font(Font.MONOSPACED, 3, 5));
+		// jtpOutput.setContentType("text/html");
+		// jtpOutput.setFont(new Font(Font.MONOSPACED, 3, 5));
 		jtaOutput.setWrapStyleWord(true);
-		((DefaultCaret)jtaOutput.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		((DefaultCaret) jtaOutput.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		JScrollPane jsp = new JScrollPane(jtaOutput);
 		jsp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		// jsp.setMaximumSize(new Dimension(getWidth(), 50));
@@ -417,7 +418,7 @@ public class AvatarConfigFrame extends AvatarLogicalModelActionDialog {
 		forceStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (results != null)
-					results.kill(true);
+					results.togglePause();
 			}
 		});
 		horizontalPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, paramPanel, outputPanel);
@@ -443,6 +444,7 @@ public class AvatarConfigFrame extends AvatarLogicalModelActionDialog {
 
 		brun.setEnabled(false);
 		forceStop.setEnabled(true);
+		forceStop.setText("Pause");
 		jtaOutput.append("Initializing simulation\n");
 		outputPanel.setVisible(true);
 		horizontalPanel.getRightComponent().setVisible(true);
@@ -527,10 +529,6 @@ public class AvatarConfigFrame extends AvatarLogicalModelActionDialog {
 				}
 				oracles.get(oracles.size() - 1).add(state);
 			}
-			// for(List<byte[]> o : oracles) System.out.println("Oracle
-			// entry:"+AvatarUtils.toString(o));
-			// FIXME ptgm this avoids consecutive runs to use previously discovered oracles
-			// ((StatefulLogicalModelImpl) model).setOracles(oracles);
 
 		} catch (Exception e) {
 			jtaOutput.setEnabled(false);
@@ -576,17 +574,12 @@ public class AvatarConfigFrame extends AvatarLogicalModelActionDialog {
 		// parent.dispose();
 	}
 
+	/**
+	 * St the current parameter
+	 * 
+	 * @param p avatar parameter
+	 */
 	public void setCurrent(AvatarParameters p) {
 		editionPanel.setCurrent(p);
 	}
 }
-
-/*
- * class ParamActionListener implements ActionListener { AvatarParameters param;
- * AvatarConfigFrame frame; RegulatoryGraph graph; public
- * ParamActionListener(AvatarParameters p, AvatarConfigFrame f, RegulatoryGraph
- * lrg){ param=p; frame=f; graph=lrg; }
- * 
- * @Override public void actionPerformed(ActionEvent arg0) { param =
- * AvatarParamDynamicUpdate.complete(param,graph); frame.refresh(param); } }
- */

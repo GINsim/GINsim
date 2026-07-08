@@ -10,8 +10,8 @@ public interface XMLize {
     /**
      * write the XML representation of this object to a file
      * 
-     * @param out
-     * @throws IOException
+     * @param out XMLWriter
+     * @throws IOException exception
      */
 	public void toXML(XMLWriter out) throws IOException;	
 }

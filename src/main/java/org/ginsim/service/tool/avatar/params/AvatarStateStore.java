@@ -30,7 +30,18 @@ public class AvatarStateStore implements NamedStateStore {
 	public NamedStateList oracles;
 	
 	private Map m_initStates, m_input, m_oracles;
-	public List<RegulatoryNode> nodes, inodes, allnodes;
+	/**
+	 * ListRegulatoryNode nodes,
+	 */
+	public List<RegulatoryNode> nodes,
+	/**
+	 * List RegulatoryNode inodes,
+	 */
+	inodes,
+	/**
+	 * List RegulatoryNode  allnodes
+	 */
+	allnodes;
 
 	/**
 	 * Creates a named state store given a set of states and the current graph
@@ -41,6 +52,11 @@ public class AvatarStateStore implements NamedStateStore {
 		initialize(graph);
 		populate(initialstates,null);
 	}
+
+	/**
+	 * Constructor
+	 * @param graph the graph RegulatoryGraph
+	 */
 	public AvatarStateStore(RegulatoryGraph graph) {
 		initialize(graph);
 	}
@@ -50,6 +66,7 @@ public class AvatarStateStore implements NamedStateStore {
 	 * @param initialstates list with the states of non-input components
 	 * @param initialIStates list with the states of input components
 	 * @param graph the regulatory graph
+	 * @param _oracles  states list
 	 */
 	public AvatarStateStore(List<byte[]> initialstates, List<byte[]> initialIStates, List<byte[]> _oracles, RegulatoryGraph graph) {
 		initialize(graph);
@@ -65,6 +82,8 @@ public class AvatarStateStore implements NamedStateStore {
 	 * @param istates list with the states of input components
 	 * @param inamestates list with the names of the previous states
 	 * @param graph the regulatory graph
+	 * @param _oracles states list
+	 * @param onames    list of output names
 	 */
 	public AvatarStateStore(List<byte[]> states, String[] namestates, List<byte[]> istates, String[] inamestates, List<byte[]> _oracles, String[] onames, RegulatoryGraph graph) {
 		this(states,istates,_oracles,graph);
@@ -83,7 +102,7 @@ public class AvatarStateStore implements NamedStateStore {
 	 * @param _allnodes ordered set with all components
 	 * @param _states the list of named states of non-input components
 	 * @param _istates the list of named states of input components
-	 * @param _oracles 
+	 * @param _oracles states liste
 	 */
 	public AvatarStateStore(List<RegulatoryNode> _nodes, List<RegulatoryNode> _inodes, List<RegulatoryNode> _allnodes, NamedStateList _states, NamedStateList _istates, NamedStateList _oracles) {
 		nodes = _nodes;
@@ -93,8 +112,10 @@ public class AvatarStateStore implements NamedStateStore {
 		addStateList(_states,_istates,_oracles);
 	}
 	
-	/* (non-Javadoc)
+	/**
+	 * (non-Javadoc)
 	 * @see java.lang.Object#clone()
+	 * @return cnew AvatarStateStore
 	 */
 	public AvatarStateStore clone() {
 		return new AvatarStateStore(nodes,inodes,allnodes,nstates,instates,oracles);
@@ -188,7 +209,7 @@ public class AvatarStateStore implements NamedStateStore {
 	/**
 	 * Adds an oracle as a set of named state-patterns
 	 * @param oracle the list of named oracles as a map (name and the corresponding set of state-patterns)
-	 * @return 
+	 *
 	 */
 	public void addOracle(Map<String,List<byte[]>> oracle) {
 		if(oracle==null) return;
@@ -216,7 +237,7 @@ public class AvatarStateStore implements NamedStateStore {
 	 * Adds a list of named states of common and input components
 	 * @param states the list of named states associated with non-input components
 	 * @param istates the list of named states associated with input components
-	 * @param _oracles 
+	 * @param _oracles name state list
 	 */
 	public void addStateList(NamedStateList states, NamedStateList istates, NamedStateList _oracles){
 		for(NamedState state : states){
@@ -229,7 +250,11 @@ public class AvatarStateStore implements NamedStateStore {
 		}
 		addOracle(_oracles);
 	}
-	
+
+	/**
+	 * add state list
+	 * @param _oracles states list
+	 */
 	public void addOracle(NamedStateList _oracles) {
 		if(_oracles!=null){
 			for(NamedState oracle : _oracles){
@@ -239,19 +264,27 @@ public class AvatarStateStore implements NamedStateStore {
 		}
 	}
 
-	/* (non-Javadoc)
+	/** (non-Javadoc)
+	 * Init
+	 * @return Map
 	 * @see org.ginsim.core.graph.regulatorygraph.namedstates.NamedStateStore#getInitialState()
 	 */
 	public Map getInitialState() {
 		return m_initStates;
 	}
 	
-	/* (non-Javadoc)
+	/** (non-Javadoc)
+	 * @return map of input states
 	 * @see org.ginsim.core.graph.regulatorygraph.namedstates.NamedStateStore#getInputState()
 	 */
 	public Map getInputState() {
 		return m_input;
 	}
+
+	/**
+	 * Getter
+	 * @return map of list states
+	 */
 	public Map getOracleState() {
 		return m_oracles;
 	}
@@ -275,6 +308,11 @@ public class AvatarStateStore implements NamedStateStore {
 			}
 		return names;
 	}
+
+	/**
+	 * getter of Names list
+	 * @return list of names
+	 */
 	public List<String> getOracleNames() {
 		List<String> names = new ArrayList<String>();
 		int i=0;

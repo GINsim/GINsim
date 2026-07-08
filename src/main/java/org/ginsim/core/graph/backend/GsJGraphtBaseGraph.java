@@ -24,6 +24,8 @@ import org.jgrapht.graph.DefaultGraphType;
 /**
  * a "simple" jgrapht implementation using hashmap.
  * it aims at "low" memory consumption without getting too slow.
+ * @param <E> edge
+ * @param <V> vertex
  */
 public class GsJGraphtBaseGraph<V,E extends Edge<V>> extends AbstractGraph<V, E> implements Graph<V,E>, EdgeFactory<V, E> {
 
@@ -121,6 +123,14 @@ public class GsJGraphtBaseGraph<V,E extends Edge<V>> extends AbstractGraph<V, E>
             return false;
         }
         m_vertices.put(v, new VInfo<V,E>( v, defaultNodeStyle ));
+        return true;
+    }
+
+    public boolean updateNodeColorStyleVertex(V v, NodeStyle nodeStyle) {
+        if (!m_vertices.containsKey(v)) {
+            return false;
+        }
+        m_vertices.replace(v, new VInfo<V,E>( v, nodeStyle));
         return true;
     }
 
@@ -249,7 +259,12 @@ public class GsJGraphtBaseGraph<V,E extends Edge<V>> extends AbstractGraph<V, E>
 
     @Override
     public Set<E> outgoingEdgesOf(V vertex) {
-        Set<E> l = m_vertices.get(vertex).l_outgoing;
+        // BUG FIX ISSUE #18
+        VInfo<V, E> localVertex = m_vertices.get(vertex);
+        Set<E> l = null;
+        if(localVertex != null) {
+             l = localVertex.l_outgoing;
+        }
         if (l == null) {
             return emptySet;
         }

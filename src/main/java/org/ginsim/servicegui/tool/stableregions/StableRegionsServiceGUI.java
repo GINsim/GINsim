@@ -18,9 +18,10 @@ import org.ginsim.gui.shell.actions.ToolAction;
 import org.ginsim.service.tool.stableregions.StableRegionsService;
 import org.kohsuke.MetaInfServices;
 
-@MetaInfServices(ServiceGUI.class)
-@GUIFor(StableRegionsService.class)
-@ServiceStatus(EStatus.DEVELOPMENT)
+// Pedro 2025.05.20: disabled this entry until further notice
+//@MetaInfServices(ServiceGUI.class)
+//@GUIFor(StableRegionsService.class)
+//@ServiceStatus(EStatus.DEVELOPMENT)
 public class StableRegionsServiceGUI extends AbstractServiceGUI {
 
 	@Override

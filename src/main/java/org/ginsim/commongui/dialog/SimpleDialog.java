@@ -39,11 +39,11 @@ public abstract class SimpleDialog extends JDialog {
     };
 
     /**
-     * 
-     * @param parent
+     * Construction  SimpleDialog
+     * @param parent the parent frame
      * @param id an id to store the windows size (will be "id.width" and "id.height")
-     * @param w
-     * @param h
+     * @param w number w width
+     * @param h number int height
      */
 	public SimpleDialog(Frame parent, String id, int w, int h) {
 		super(parent);
@@ -75,6 +75,9 @@ public abstract class SimpleDialog extends JDialog {
 		doClose();
 	}
 
+    /**
+     * Doing the close
+     */
 	abstract public void doClose();
 
     public void saveEvent() {

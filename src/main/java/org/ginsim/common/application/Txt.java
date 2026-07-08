@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
  * Retrieve text from resource bundles: define GUI text outside of the code.
  * 
  * NOTE: GINsim will push at least one bundle, an extension can push
- * its own bundle(s) with the <tt>push</tt> method.
+ * its own bundle(s) with the <code>push</code> method.
  */
 public class Txt {
 

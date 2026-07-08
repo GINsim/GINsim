@@ -8,7 +8,7 @@ import org.colomoto.biolqm.io.avatar.AvatarUtils;
 import org.colomoto.biolqm.tool.simulation.deterministic.DeterministicSimulation;
 import org.colomoto.biolqm.tool.simulation.deterministic.SequentialUpdater;
 
-public class AvatarSimulation extends DeterministicSimulation {
+public class AvatarSimulation extends DeterministicSimulation{
 
 	public static int MAX_STEPS = 100;
 	public HashSet<byte[]> hs;

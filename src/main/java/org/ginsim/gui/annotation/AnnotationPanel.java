@@ -77,12 +77,20 @@ public class AnnotationPanel extends JPanel
         this.add(sp, cst);
 	}
 
+    /**
+     * Edited object setter
+     * @param obj edited object
+     */
     public void setEditedObject(Object obj) {
         if (obj instanceof Annotation) {
             setAnnotation((Annotation)obj);
         }
     }
 
+    /**
+     * Annotation setter
+     * @param annotation  the annotation object
+     */
     public void setAnnotation(Annotation annotation) {
         listenChanges = false;
         currentNote = annotation;
@@ -92,8 +100,10 @@ public class AnnotationPanel extends JPanel
         listenChanges = true;
     }
 
-
-        protected void applyComment() {
+    /**
+     * apply comment function
+      */
+    protected void applyComment() {
     	if (currentNote == null) {
     		return;
     	}

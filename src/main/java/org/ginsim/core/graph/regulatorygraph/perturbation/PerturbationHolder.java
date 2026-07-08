@@ -17,7 +17,7 @@ public interface PerturbationHolder {
 	
 	/**
 	 * Select a perturbation.
-	 * @param perturbation
+	 * @param perturbation the perturbation
 	 */
 	void setPerturbation(Perturbation perturbation);
 }

@@ -20,4 +20,6 @@ public class MaBoSSExportService extends FormatSupportService<MaBoSSFormat> {
 	public MaBoSSExportService() {
 		super(new MaBoSSFormat());
 	}
+
+
 }

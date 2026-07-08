@@ -38,9 +38,8 @@ public class FirefrontPanel extends SimulationPanel {
 
 	/**
 	 * Instantiates the context of a simulation panel
-	 * 
-	 * @param img
-	 *            icon for the help tooltip
+	 *
+	 * icon for the help tooltip
 	 */
 	public FirefrontPanel() {
 		this.setBorder(BorderFactory.createTitledBorder(EnumAlgorithm.FIREFRONT + " parameters"));
@@ -88,11 +87,6 @@ public class FirefrontPanel extends SimulationPanel {
 		sim.maxExpand = (int) Double.parseDouble(maxExpandffB.getText());
 		sim.quiet = quiet;
 
-		// System.out.println("FIREFRONT\n"+"Model: "+model.getName());
-		// System.out.println("Initial states:");
-		// for(byte[] state : model.getInitialStates()) System.out.println(" "+new
-		// State(state));
-		// System.out.println("Alpha threshold:"+ alpha + "\nBeta threshold:"+beta);
 		return sim;
 	}
 

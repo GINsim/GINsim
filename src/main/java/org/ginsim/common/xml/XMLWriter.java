@@ -66,8 +66,8 @@ public class XMLWriter {
     /**
      * Create a XMLWriter with the path to a file.
      * 
-     * @param filename
-     * @throws IOException
+     * @param filename the string filename
+     * @throws IOException the io exception
      */
     public XMLWriter(String filename) throws IOException {
         this(filename, null);
@@ -76,9 +76,9 @@ public class XMLWriter {
     /**
      * Create a XMLWriter with the path to a file.
      *
-     * @param filename
-     * @param docType
-     * @throws IOException
+     * @param filename the string filename
+     * @param docType doc type value
+     * @throws IOException the io exception
      */
     public XMLWriter(String filename, String docType) throws IOException {
     	this(new FileOutputStream(filename), docType);
@@ -88,8 +88,8 @@ public class XMLWriter {
      * Create a XMLWriter with an existing Writer.
      * Warning: the writer should use the right encoding, otherwise we may get into troubles.
      *
-     * @param out
-     * @throws IOException
+     * @param out the OutputStreamWriter as out attribute
+     * @throws IOException the io exception
      */
     public XMLWriter(OutputStreamWriter out) throws IOException {
         this(out, null);
@@ -98,9 +98,9 @@ public class XMLWriter {
      * Create a XMLWriter with an existing Writer.
      * Warning: the writer should use the right encoding, otherwise we may get into troubles.
      * 
-     * @param out
-     * @param docType
-     * @throws IOException
+     * @param out the OutputStreamWriter
+     * @param docType doc type value
+     * @throws IOException the io exception
      */
     public XMLWriter(OutputStreamWriter out, String docType) throws IOException {
         this(out,docType,true);
@@ -109,8 +109,8 @@ public class XMLWriter {
      * Create a XMLWriter with an output stream.
      * It will create a Writer for this stream, using an UTF-8 encoding.
      *
-     * @param out
-     * @throws IOException
+     * @param out the OutputStream
+     * @throws IOException the io exception
      */
     public XMLWriter(OutputStream out) throws IOException {
         this(new OutputStreamWriter(out, "UTF-8"),null);
@@ -119,9 +119,9 @@ public class XMLWriter {
      * Create a XMLWriter with an output stream.
      * It will create a Writer for this stream, using an UTF-8 encoding.
      *
-     * @param out
-     * @param docType
-     * @throws IOException
+     * @param out the OutputStreamWriter
+     * @param docType doc type value
+     * @throws IOException the io exception
      */
     private XMLWriter(OutputStream out, String docType) throws IOException {
         this(new OutputStreamWriter(out, "UTF-8"),docType,true);
@@ -130,10 +130,10 @@ public class XMLWriter {
     /**
      * Create a XMLWriter with an existing Writer.
      * 
-     * @param out
-     * @param docType
-     * @param indent
-     * @throws IOException
+     * @param out the OutputStreamWriter as out attribute
+     * @param docType doc type value
+     * @param indent boolean if indent
+     * @throws IOException the io exception
      */
     private XMLWriter(OutputStreamWriter out, String docType, boolean indent) throws IOException {
         this.indent = indent;
@@ -147,7 +147,7 @@ public class XMLWriter {
 	/**
      * ask to store the next calls into a string buffer.
      * Use <code>getBuffer()</code> to stop it and get the content of the buffer.
-     * @throws IOException
+     * @throws IOException the io exception
      */
     public void toBuffer()  throws IOException {
         if (inTag) {
@@ -175,9 +175,10 @@ public class XMLWriter {
     }
     
     /**
-     * @param s
-     * @param isAttVal
-     * @throws IOException
+     * Re write string with protected characted
+     * @param s the string to write
+     * @param isAttVal boolean if Attribute value if \
+     * @throws IOException the exception
      */
     public void writeEsc (String s, boolean isAttVal) throws IOException
     {
@@ -209,8 +210,9 @@ public class XMLWriter {
     }
 
     /**
-     * @param s
-     * @throws IOException
+     * Write function
+     * @param s the string
+     * @throws IOException the exception
      */
     public void write(String s) throws IOException {
         if (buf != null) {
@@ -221,8 +223,9 @@ public class XMLWriter {
     }
     
     /**
-     * @param c
-     * @throws IOException
+     * Write function
+     * @param c the charactere
+     * @throws IOException the exception
      */
     public void write(char c) throws IOException {
         if (buf != null) {
@@ -234,8 +237,8 @@ public class XMLWriter {
     
     /**
      * open a tag in the XML output file
-     * @param name
-     * @throws IOException
+     * @param name the string name
+     * @throws IOException the exception
      */
     public void openTag(String name) throws IOException {
     	if (inTag) {
@@ -257,8 +260,8 @@ public class XMLWriter {
 
     /**
      * add (i.e. open and close) a tag without any attributes and content.
-     * @param name
-     * @throws IOException
+     * @param name the string name
+     * @throws IOException the exception
      */
     public void addTag(String name) throws IOException {
     	openTag(name);
@@ -266,10 +269,10 @@ public class XMLWriter {
     }
     /**
      * add (i.e. open and close) a tag with specified attributes and content.
-     * @param name
-     * @param attributes
-     * @param content
-     * @throws IOException
+     * @param name the name string
+     * @param attributes string array attributes
+     * @param content string content
+     * @throws IOException the exception
      */
     public void addTag(String name, String[] attributes, String content) throws IOException {
     	openTag(name, attributes);
@@ -278,9 +281,9 @@ public class XMLWriter {
     }
     /**
      * open a tag and add it the specified attributes.
-     * @param name
-     * @param attributes
-     * @throws IOException
+     * @param name the string name
+     * @param attributes string array attributes
+     * @throws IOException the exception
      */
     public void openTag(String name, String[] attributes) throws IOException {
     	openTag(name);
@@ -292,9 +295,9 @@ public class XMLWriter {
     }
     /**
      * add (i.e. open and close) a tag with specified attributes and no content.
-     * @param name
-     * @param attributes
-     * @throws IOException
+     * @param name the string name
+     * @param attributes string array attributes
+     * @throws IOException the exception
      */
     public void addTag(String name, String[] attributes) throws IOException {
     	openTag(name, attributes);
@@ -303,18 +306,18 @@ public class XMLWriter {
 
     /**
      * add (i.e. open and close) a tag with specified content and no attributes.
-     * @param tag
-     * @param content
-     * @throws IOException
+     * @param tag the tag string
+     * @param content the object c content
+     * @throws IOException the exception
      */
     public void addTagWithContent(String tag, Object content) throws IOException {
     	addTagWithContent(tag, content.toString());
     }
     /**
      * add (i.e. open and close) a tag with specified content and no attributes.
-     * @param tag
-     * @param content
-     * @throws IOException
+     * @param tag the tag string
+     * @param content the object c content
+     * @throws IOException the exception
      */
     public void addTagWithContent(String tag, String content) throws IOException {
     	openTag(tag);
@@ -325,7 +328,7 @@ public class XMLWriter {
     /**
      * close the currently opened tag.
      * depending on context it will use "/&gt; or "&lt;/name&gt;"
-     * @throws IOException
+     * @throws IOException the exception
      */
     public void closeTag() throws IOException {
         int l = v_stack.size()-1;
@@ -351,9 +354,9 @@ public class XMLWriter {
      * Add a color attribute to the opened tag.
      * The color will be encoded as #RRGGBB
      * 
-     * @param name
-     * @param color
-     * @throws IOException
+     * @param name the string name
+     * @param color the Color
+     * @throws IOException the exception
      */
     public void addAttr(String name, Color color) throws IOException {
     	addAttr(name, ColorPalette.getColorCode(color));
@@ -362,9 +365,9 @@ public class XMLWriter {
     /**
      * add an attribute to the opened tag.
      * If the tag is no-more really opened it will return silently without writing anything.
-     * @param name
-     * @param value
-     * @throws IOException
+     * @param name the string name
+     * @param value the string value
+     * @throws IOException the exception
      */
     public void addAttr(String name, String value) throws IOException {
         if (!inTag) {
@@ -381,8 +384,8 @@ public class XMLWriter {
     
     /**
      * add a "text child"
-     * @param s
-     * @throws IOException 
+     * @param s the string to add
+     * @throws IOException the exception
      */
     public void addContent(String s) throws IOException {
         if (inTag) {
@@ -394,9 +397,9 @@ public class XMLWriter {
     }
     /**
      * add a "text child", already formated: should _NOT_ be escaped
-     * @param s
+     * @param s the string to add
      * @param b if true, then the file might get indented
-     * @throws IOException 
+     * @throws IOException the exception
      */
     public void addFormatedContent(String s, boolean b) throws IOException {
     	addLongContent(s, b, false);
@@ -404,9 +407,9 @@ public class XMLWriter {
 
     /**
      * add a complex "text child", it will be enclosed into CDATA markers
-     * @param s
+     * @param s the string to add
      * @param b if true, then the file might get indented
-     * @throws IOException 
+     * @throws IOException  the exception
      */
     public void addComplexContent(String s, boolean b) throws IOException {
     	addLongContent(s, b, true);
@@ -415,10 +418,10 @@ public class XMLWriter {
     /**
      * Common implementation for formatted and complex content.
      * 
-     * @param s
-     * @param b
-     * @param cdata
-     * @throws IOException
+     * @param s the string to add
+     * @param b boolean to write EOL
+     * @param cdata boolean to write CDATA
+     * @throws IOException the exception
      */
     private void addLongContent(String s, boolean b, boolean cdata) throws IOException {
         if (inTag) {
@@ -440,7 +443,7 @@ public class XMLWriter {
     /**
      * Close the writer: all open tags and the underlying outputstream.
      * 
-     * @throws IOException
+     * @throws IOException the exception
      */
     public void close() throws IOException {
     	while (v_stack.size() > 0) {

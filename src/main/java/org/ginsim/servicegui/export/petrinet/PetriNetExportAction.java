@@ -32,7 +32,6 @@ public class PetriNetExportAction extends ExportAction<RegulatoryGraph> implemen
 	static final String PNFORMAT = "export.petriNet.defaultFormat";
 
 	private final PetriNetFormat format;
-	private final AbstractPNEncoder encoder;
 	private LogicalModel model = null;
 	Map m_init = null;
 	Map m_input = null;
@@ -40,10 +39,15 @@ public class PetriNetExportAction extends ExportAction<RegulatoryGraph> implemen
 	public PetriNetExportAction(RegulatoryGraph graph, PetriNetFormat format) {
 		super(graph, "STR_PetriNet_"+format.getID(), "STR_PetriNet_"+format.getID()+"_descr", null);
 		this.format = format;
-		this.encoder = format.getExporter(model);
 	}
 
 	protected void doExport( String filename) {
+		if (model == null) {
+			LogManager.error("Unable to export Petri net: missing logical model");
+			return;
+		}
+
+		AbstractPNEncoder encoder = format.getExporter(model);
 
 		encoder.setDestination(filename);
 

@@ -3,15 +3,15 @@
 	<Project>
 		<name>GINsim</name>
 		<description>A computer tool for the modeling and simulation of regulatory networks</description>
-		<homepage rdf:resource="http://www.ginsim.org"/>
+		<homepage rdf:resource="https://ginsim.github.io"/>
 		<logo>banner.png</logo>
 		<license rdf:resource="http://usefulinc.com/doap/licenses/gpl">GPL</license>
-		<version>2.9</version>
+		<version>3.1</version>
 <!--
     <created>2008-01-21</created>
-    <bug-database rdf:resource="http://www.ginsim.org" />
-    <mailing-list rdf:resource="http://www.ginsim.org" />
-    <download-page rdf:resource="http://www.ginsim.org" />
+    <bug-database rdf:resource="https://ginsim.github.io" />
+    <mailing-list rdf:resource="https://ginsim.github.io" />
+    <download-page rdf:resource="https://ginsim.github.io" />
     <programming-language>Java</programming-language>
 -->
 <!--	CREDITS		-->
@@ -19,20 +19,20 @@
 		<maintainer>
 			<foaf:Person>
 				<foaf:name>Claudine Chaouiya</foaf:name>
-				<foaf:mbox rdf:resource="mailto:chaouiya@tagc.univ-mrs.fr"/>
+        <foaf:mbox rdf:resource="mailto:claudine.chaouiya@univ-amu.fr"/>
 				<foaf:made>Project coordination</foaf:made>
 			</foaf:Person>
 		</maintainer>
 		<maintainer>
 			<foaf:Person>
-				<foaf:name>Nuno Mendes</foaf:name>
-				<foaf:mbox rdf:resource="mailto:ndm@igc.gulbenkian.pt"/>
-				<foaf:made>Software development</foaf:made>
+				<foaf:name>Denis Thieffry</foaf:name>
+        <foaf:mbox rdf:resource="mailto:denis.thieffry@bio.ens.psl.eu"/>
+				<foaf:made>Project coordination</foaf:made>
 			</foaf:Person>
 		</maintainer>
 		<maintainer>
 			<foaf:Person>
-				<foaf:name>Pedro Tiago Monteiro</foaf:name>
+				<foaf:name>Pedro T. Monteiro</foaf:name>
 				<foaf:mbox rdf:resource="mailto:Pedro.Tiago.Monteiro@tecnico.ulisboa.pt"/>
 				<foaf:made>Software development</foaf:made>
 			</foaf:Person>
@@ -44,21 +44,23 @@
 				<foaf:made>Development and biological applications</foaf:made>
 			</foaf:Person>
 		</maintainer>
-		<maintainer>
+<!-- ... -->
+<!-- previous contributors -->
+<!-- ... -->
+		<helper>
+			<foaf:Person>
+				<foaf:name>Dominique Benielli</foaf:name>
+        <foaf:mbox rdf:resource="https://github.com/dbenielli"/>
+				<foaf:made>Software development</foaf:made>
+			</foaf:Person>
+		</helper>
+		<helper>
 			<foaf:Person>
 				<foaf:name>Lionel Spinelli</foaf:name>
 				<foaf:mbox rdf:resource="mailto:lionel.spinelli@gmail.com"/>
 				<foaf:made>Software development</foaf:made>
 			</foaf:Person>
-		</maintainer>
-		<maintainer>
-			<foaf:Person>
-				<foaf:name>Denis Thieffry</foaf:name>
-				<foaf:mbox rdf:resource="mailto:thieffry@tagc.univ-mrs.fr"/>
-				<foaf:made>Project coordination</foaf:made>
-			</foaf:Person>
-		</maintainer>
-<!-- previous contributors -->
+		</helper>
 		<helper>
 			<foaf:Person>
 				<foaf:name>Duncan Berenguier</foaf:name>
@@ -77,6 +79,13 @@
 				<foaf:name>Adrien Faur&#xE9;</foaf:name>
 				<foaf:mbox rdf:resource="mailto:faure@tagc.univ-mrs.fr"/>
 				<foaf:made>Biological applications</foaf:made>
+			</foaf:Person>
+		</helper>
+		<helper>
+			<foaf:Person>
+				<foaf:name>Nuno Mendes</foaf:name>
+				<foaf:mbox rdf:resource="mailto:ndm@igc.gulbenkian.pt"/>
+				<foaf:made>Software development</foaf:made>
 			</foaf:Person>
 		</helper>
 		<helper>

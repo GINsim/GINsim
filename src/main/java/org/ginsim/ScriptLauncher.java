@@ -181,9 +181,9 @@ public class ScriptLauncher {
 	/**
 	 * Open a graph from a file.
 	 *
-	 * @param filename
+	 * @param filename the string filename
 	 * @return the parsed graph
-	 * @throws GsException
+	 * @throws GsException the graph exception
 	 */
 	public Graph<?, ?> load(String filename) throws GsException {
 		File file = new File(filename);
@@ -195,7 +195,10 @@ public class ScriptLauncher {
 	}
 
 	/**
+	 * Open
 	 * @deprecated see {@link #load(String)}
+	 * @param filename  the string filename
+	 * @throws GsException the exception graph
 	 */
 	@Deprecated
 	public Graph<?, ?> open(String filename) throws GsException {
@@ -255,9 +258,9 @@ public class ScriptLauncher {
 	/**
 	 * Get or create associated data.
 	 * 
-	 * @param g
-	 * @param key
-	 * @param create
+	 * @param g the graph
+	 * @param key the key string
+	 * @param create boolean if creation
 	 * @return the associated object, created if needed or null if the key is invalid
 	 */
 	public Object associated(Graph<?,?> g, String key, boolean create) {
@@ -267,8 +270,8 @@ public class ScriptLauncher {
 	/**
 	 * Create a report file, this creates the file and DocumentWriter, don't forget to close it.
 	 * 
-	 * @param path
-	 * @param properties
+	 * @param path the string path values
+	 * @param properties map string of properties
 	 * @return a new DocumentWriter
 	 */
 	public DocumentWriter createReport(String path, Map<String, String> properties) {
@@ -428,7 +431,11 @@ public class ScriptLauncher {
         }
 		return javadocbase+"/?"+scl;
 	}
-	
+
+	/**
+	 * Instancite a new BasicProgressListener
+	 * @return a BasicProgressListener
+	 */
 	public BasicProgressListener progressListener() {
 		return new BasicProgressListener();
 	}

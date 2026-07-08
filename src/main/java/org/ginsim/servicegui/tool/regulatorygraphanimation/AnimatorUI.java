@@ -36,8 +36,9 @@ public class AnimatorUI extends JDialog {
     private JButton bGP = null;
 
     /**
-     * @param frame
-     * @param animator
+     * Constructor
+     * @param frame a frame
+     * @param animator a RegulatoryAnimator
      */
     public AnimatorUI(JFrame frame, RegulatoryAnimator animator) {
         super(frame);
@@ -104,8 +105,8 @@ public class AnimatorUI extends JDialog {
             contentPane.add(getscrollPane(), cons_table);
             contentPane.add(getBRewind(), cons_rewind);
             contentPane.add(getBPlay(), cons_play);
-            contentPane.add(getBClose(), cons_close);
             contentPane.add(getBGP(), cons_gp);
+            contentPane.add(getBClose(), cons_close);
         }
         return contentPane;
     }
@@ -126,7 +127,8 @@ public class AnimatorUI extends JDialog {
     }
     private JButton getBClose() {
         if (bClose == null) {
-            bClose = new JButton("X");
+            bClose = new JButton("Close");
+            bClose.setToolTipText("Close Animate dialog");
             bClose.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     close();
@@ -138,6 +140,7 @@ public class AnimatorUI extends JDialog {
     private JButton getBGP() {
         if (bGP == null) {
             bGP = new JButton("gnuplot");
+            bGP.setToolTipText("Export to gnuplot selected path from STG");
             bGP.setToolTipText(Txt.t("STR_gnuplot_descr"));
             bGP.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -150,6 +153,7 @@ public class AnimatorUI extends JDialog {
     private JButton getBPlay() {
         if (bPlay == null) {
             bPlay = new JButton("|>");
+            bPlay.setToolTipText("Animate LRG with selected path from STG");
             bPlay.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     play();
@@ -161,6 +165,7 @@ public class AnimatorUI extends JDialog {
     private JButton getBRewind() {
         if (bRewind == null) {
             bRewind = new JButton("<<");
+            bRewind.setToolTipText("Prune future states from selected state in path");
             bRewind.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     rewind();
@@ -169,27 +174,39 @@ public class AnimatorUI extends JDialog {
         }
         return bRewind;
     }
-    
+
+    /**
+     * Close function
+     */
     protected void close() {
         pathModel.endAnim();
         this.setVisible(false);
     }
-    
+
+    /**
+     * play function
+     */
     protected void play() {
         pathModel.playPath(pathList.getSelectedIndex());
     }
-    
+
+    /**
+     * Rewind function
+     */
     protected void rewind() {
         pathModel.revertPath(pathList.getSelectedIndex());
     }
 
+    /**
+     * gnuplot function
+     */
     protected void gnuplot() {
         pathModel.saveGnuPlotPath();
     }
     
     /**
      * choose the selected item in the path list.
-     * @param i
+     * @param i indice
      */
     public void setSelected(int i) {
        pathList.setSelectedIndex(i);
@@ -205,7 +222,7 @@ public class AnimatorUI extends JDialog {
 
     /**
      * inform the user that the animator is ready to play.
-     * (with a play like button: "|>")
+     * (with a play like button: "|&gt;")
      */
     public void ready2play() {
         bPlay.setText("|>");

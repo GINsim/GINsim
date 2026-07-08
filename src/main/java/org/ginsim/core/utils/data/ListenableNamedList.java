@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * ListenableNamedList
+ * @param <T>  named  object
  * @author Aurelien Naldi
  */
 public class ListenableNamedList<T extends NamedObject> extends NamedList<T> {

@@ -29,5 +29,9 @@ public class TruthTableFormatServiceGUI extends
 	public TruthTableFormatServiceGUI() {
 		super("Truth table", SERVICE, FORMAT);
 	}
+	@Override
+	public int getInitialWeight() {
+		return 5;
+	}
 
 }

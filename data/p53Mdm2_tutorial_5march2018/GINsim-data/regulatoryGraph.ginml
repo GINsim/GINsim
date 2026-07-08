@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE gxl SYSTEM "http://ginsim.org/GINML_2_2.dtd">
+<gxl xmlns:xlink="http://www.w3.org/1999/xlink">
+  <graph class="regulatory" id="tutorial_p53Mdm2" nodeorder="p53 Mdm2cyt Mdm2nuc DNAdam">
+    <nodestyle background="#ffffff" foreground="#000000" text="#000000" shape="RECTANGLE" width="80" height="30" properties="intermediate:#ffff00 active:#ffc800"/>
+    <nodestyle name="Node style" background="#ccccff"/>
+    <nodestyle name="Node style 2" background="#ffffcc"/>
+    <nodestyle name="Node style 3" background="#ffcccc"/>
+    <edgestyle color="#000000" pattern="SIMPLE" line_width="2" properties="positive:#00c800 negative:#c80000 dual:#0000c8"/>
+    <node id="p53" maxvalue="2">
+      <value val="2">
+        <exp str="!Mdm2nuc"/>
+      </value>
+      <annotation>
+        <linklist>
+          <link xlink:href="pmid:16455486"/>
+          <link xlink:href="pmid:9153395"/>
+          <link xlink:href="pmid:10723139"/>
+          <link xlink:href="pmid:8529093"/>
+          <link xlink:href="pmid:17170761"/>
+          <link xlink:href="pmid:1535557"/>
+          <link xlink:href="pmid:8479525"/>
+          <link xlink:href="pmid:15242646"/>
+          <link xlink:href="pmid:14707283"/>
+        </linklist>
+        <comment>Ternary component (0, 1, 2) deonting p53 activity.
+
+Nuclear Mdm2 inhibits the activity of p53 by accelerating its degradation through ubiquitination [1,2,3] and by blocking its transcriptional activity [4,5,6,7,8]
+
+Mdm2-mediated p53 ubiquitination takes place in the nucleus in a complex with the p300/CREB- binding protein (CBP) transcriptional coactivator proteins, serving as a scaffolding [9].</comment>
+      </annotation>
+      <nodevisualsetting x="84" y="41" style="Node style"/>
+    </node>
+    <node id="Mdm2cyt" maxvalue="2">
+      <value val="2">
+        <exp str="p53"/>
+      </value>
+      <value val="1">
+        <exp str="!p53"/>
+      </value>
+      <annotation>
+        <linklist>
+          <link xlink:href="hugo:6973"/>
+          <link xlink:href="pmid:23973961"/>
+          <link xlink:href="pmid:10688649"/>
+          <link xlink:href="pmid:8440237"/>
+          <link xlink:href="pmid:10065155"/>
+        </linklist>
+        <comment>Mdm2cyt = cytoplasmic Mdm2
+
+Multileveled component (0, 1, 2).
+
+Mdm2 gene has a p53-independant basal expression [2,3].
+
+p53 upregulates the level of cytoplasmic Mdm2 by activating the transcription of gene Mdm2 [4,5].
+
+We assume that cytoplasmic Mdm2 is activated by high levels of p53.</comment>
+      </annotation>
+      <nodevisualsetting x="84" y="211" style="Node style 2"/>
+    </node>
+    <node id="Mdm2nuc" maxvalue="1">
+      <value val="1">
+        <exp str="Mdm2cyt:2 | (Mdm2cyt:1 &amp; !p53 &amp; !DNAdam)"/>
+      </value>
+      <annotation>
+        <linklist>
+          <link xlink:href="hugo:6973"/>
+          <link xlink:href="pmid:11850850"/>
+          <link xlink:href="pmid:12217521"/>
+          <link xlink:href="pmid:11545734"/>
+          <link xlink:href="pmid:15029243"/>
+          <link xlink:href="pmid:15684615"/>
+          <link xlink:href="pmid:15725723"/>
+        </linklist>
+        <comment>Mdm2nuc = nuclear Mdm2
+
+p53 down-regulates the level of nuclear Mdm2 by inhibiting Mdm2 nuclear translocation through inactivation of the kinase Akt [2,3,4].
+
+DNA damage has a negative influence on the level of Mdm2, by accelerating its degradation through ATM-mediated phosphorylation and auto-ubiquitination [5,6]. 
+
+Following Ciliberto et al. model [7], we assume that DNA damage accelerates only the degradation of nuclear Mdm2.
+
+We assume that nuclear Mdm2 is inhibited by low levels of p53.
+</comment>
+      </annotation>
+      <nodevisualsetting x="309" y="211" style="Node style 2"/>
+    </node>
+    <node id="DNAdam" maxvalue="1">
+      <value val="1">
+        <exp str="DNAdam &amp; !p53"/>
+      </value>
+      <annotation>
+        <linklist>
+          <link xlink:href="pmid:12967652"/>
+          <link xlink:href="pmid:16543940"/>
+          <link xlink:href="pmid:10716425"/>
+          <link xlink:href="pmid:10359074"/>
+        </linklist>
+        <comment>Component representing DNA damage
+
+High levels of p53 promote damage repair by inducing the synthesis of DNA repair proteins [1,2,3,4].
+</comment>
+      </annotation>
+      <nodevisualsetting x="309" y="40" style="Node style 3"/>
+    </node>
+    <edge id="DNAdam:DNAdam" from="DNAdam" to="DNAdam" minvalue="1" sign="positive">
+      <edgevisualsetting anchor="NE" style=""/>
+    </edge>
+    <edge id="DNAdam:Mdm2nuc" from="DNAdam" to="Mdm2nuc" minvalue="1" sign="negative">
+      <annotation>
+        <linklist>
+          <link xlink:href="pmid:15029243"/>
+          <link xlink:href="pmid:15684615"/>
+          <link xlink:href="pmid:15725723"/>
+        </linklist>
+      </annotation>
+      <edgevisualsetting anchor="NE" style=""/>
+    </edge>
+    <edge id="Mdm2cyt:Mdm2nuc" from="Mdm2cyt" to="Mdm2nuc" effects="1:positive 2:positive">
+      <annotation>
+        <comment>Translocation of Mdm2 into the nucleus</comment>
+      </annotation>
+      <edgevisualsetting anchor="NE" style=""/>
+    </edge>
+    <edge id="p53:DNAdam" from="p53" to="DNAdam" minvalue="2" sign="negative">
+      <annotation>
+        <linklist>
+          <link xlink:href="pmid:12967652"/>
+          <link xlink:href="pmid:16543940"/>
+          <link xlink:href="pmid:10716425"/>
+          <link xlink:href="pmid:10359074"/>
+        </linklist>
+      </annotation>
+      <edgevisualsetting anchor="NE" style=""/>
+    </edge>
+    <edge id="p53:Mdm2nuc" from="p53" to="Mdm2nuc" minvalue="1" sign="negative">
+      <annotation>
+        <linklist>
+          <link xlink:href="pmid:11850850"/>
+          <link xlink:href="pmid:12217521"/>
+          <link xlink:href="pmid:11545734"/>
+        </linklist>
+      </annotation>
+      <edgevisualsetting points="287,157 328,182" anchor="NE" style=""/>
+    </edge>
+    <edge id="p53:Mdm2cyt" from="p53" to="Mdm2cyt" minvalue="2" sign="positive">
+      <annotation>
+        <linklist>
+          <link xlink:href="pmid:8440237"/>
+          <link xlink:href="pmid:10065155"/>
+        </linklist>
+      </annotation>
+      <edgevisualsetting anchor="NE" style=""/>
+    </edge>
+    <edge id="Mdm2nuc:p53" from="Mdm2nuc" to="p53" minvalue="1" sign="negative">
+      <annotation>
+        <linklist>
+          <link xlink:href="pmid:16455486"/>
+          <link xlink:href="pmid:9153395"/>
+          <link xlink:href="pmid:10723139"/>
+          <link xlink:href="pmid:8529093"/>
+          <link xlink:href="pmid:17170761"/>
+          <link xlink:href="pmid:1535557"/>
+          <link xlink:href="pmid:8479525"/>
+          <link xlink:href="pmid:15242646"/>
+          <link xlink:href="pmid:14707283"/>
+        </linklist>
+      </annotation>
+      <edgevisualsetting points="152,106" anchor="NE" style=""/>
+    </edge>
+    <annotation>
+      <linklist>
+        <link xlink:href="pmid:19233211"/>
+      </linklist>
+      <comment>This model is an adapted version of the logical model of the p53-mdm2 network described in Fig. 5a of Abou-Jaoudé et al. [1].
+
+The regulatory graph describes the interactions between protein p53, the ubiquitin ligase Mdm2 in its nuclear and cytoplasmic forms, and DNA damage. It relies on  biological data taken from literature.
+
+In short, the nuclear component of Mdm2 down-regulates the level of active p53. This occurs both by accelerating p53 degradation through ubiquitination and by blocking the transcriptional activity of p53.
+
+Protein p53 plays a dual role. It activates the expression of Mdm2 thereby up-regulating the level of cytoplasmic Mdm2, and down-regulates the level of nuclear Mdm2 by inhibiting Mdm2 nuclear translocation through inactivation of the kinase Akt.
+
+DNA damage has a negative influence on the level of nuclear Mdm2, by accelerating its degradation through ATM-mediated phosphorylation and auto-ubiquitination. 
+
+Damage-induced Mdm2 destabilization enables p53 to accumulate and remain active.
+
+Finally, high levels of p53 promote damage repair by inducing the synthesis of DNA repair proteins.</comment>
+    </annotation>
+  </graph>
+</gxl>

@@ -355,9 +355,12 @@ public class GSGraphManager {
                     		ze = f.getEntry( AbstractGraph.ZIP_PREFIX + ReducedGraphImpl.GRAPH_ZIP_NAME);
                         	if (ze == null) {
                         		ze = f.getEntry( AbstractGraph.ZIP_PREFIX + HierarchicalTransitionGraphImpl.GRAPH_ZIP_NAME);
-	                        	if (ze == null) {
-	                        		throw new GsException( GsException.GRAVITY_ERROR, "Unable to find a known main zip entry");
-	                        	}
+								if (ze == null) {
+									ze = f.getEntry( AbstractGraph.ZIP_PREFIX + HierarchicalTransitionGraphImpl.GRAPH_ZIP_NAME_SCC);
+									if (ze == null) {
+										throw new GsException( GsException.GRAVITY_ERROR, "Unable to find a known main zip entry");
+									}
+								}
                         	}
                     	}
                 	}

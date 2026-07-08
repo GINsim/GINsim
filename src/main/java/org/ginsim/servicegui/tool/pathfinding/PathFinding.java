@@ -20,10 +20,9 @@ public class PathFinding extends Thread {
 	 * The graphManager is used to find the outgoingEdges from a node.
 	 * The resultHandler is informed of the progression during the run() and of the results when the run() is finish.
 	 * 
-	 * @param resultHandler
-	 * @param graphManager
-	 * @param start a node
-	 * @param end a node
+	 * @param resultHandler  the result handler
+	 * @param graph the graph
+	 * @param search  a node
 	 */
 	public PathFinding(ResultHandler resultHandler, Graph graph, List<Object> search) {
 		this.resultHandler = resultHandler;

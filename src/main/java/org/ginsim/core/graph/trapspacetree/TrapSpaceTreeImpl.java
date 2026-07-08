@@ -13,7 +13,7 @@ import org.ginsim.core.graph.regulatorygraph.RegulatoryMultiEdge;
 import org.ginsim.core.graph.regulatorygraph.RegulatoryNode;
 
 /**
- * 
+ * class TrapSpaceTreeImpl
  * @author Aurelien Naldi
  */
 public class TrapSpaceTreeImpl extends AbstractDerivedGraph<TrapSpaceNode, TrapSpaceInclusion, RegulatoryGraph, RegulatoryNode, RegulatoryMultiEdge>

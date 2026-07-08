@@ -37,7 +37,7 @@ public abstract class Frame extends JFrame {
 	
 	/**
 	 * Set the title of the frame
-	 * 
+	 * @param saved  boolean for saved yes or no
 	 * @param graph the graph the frame is currently opening
 	 */
 	public void setFrameTitle( Graph graph, boolean saved){
@@ -56,5 +56,8 @@ public abstract class Frame extends JFrame {
 		setTitle( title);
 	}
 
+	/**
+	 *  close function
+	 */
 	abstract public void close();
 }

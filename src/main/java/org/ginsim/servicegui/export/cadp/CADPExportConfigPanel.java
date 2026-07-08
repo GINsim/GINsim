@@ -471,6 +471,10 @@ public class CADPExportConfigPanel extends AbstractStackDialogHandler implements
 
 	}
 
+	/**
+	 * ReducedCompatibleStableStates
+	 * @return list of ReducedCompatibleStableStates
+	 */
 	public List<List<byte[]>> getReducedCompatibleStableStates() {
 		return getReducedSetCompatibleStableStates(this.visibleComponentsPanel
 				.getSelectedNodes());

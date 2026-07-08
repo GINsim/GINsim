@@ -16,7 +16,10 @@ import org.ginsim.core.graph.objectassociation.ObjectAssociationManager;
  * @author Aurelien Naldi
  */
 public class AnnotationLink {
-	
+
+	/**
+	 * helper as Map
+	 */
 	protected static Map m_helper = new HashMap();
 	static {
 		HttpHelper.setup();
@@ -31,9 +34,20 @@ public class AnnotationLink {
 	String proto;
 	String value;
 
+	/**
+	 * Constructor
+	 * @param s string of annotation link
+	 * @param graph the graph
+	 */
 	public AnnotationLink(String s, Graph graph) {
 		setText(s, graph);
 	}
+
+	/**
+	 * Setter for text
+	 * @param s string of annotation link
+	 * @param graph the graph
+	 */
 	public void setText(String s, Graph graph){
 		String[] ts = s.split(":", 2);
 		if (ts.length == 1) {
@@ -52,6 +66,10 @@ public class AnnotationLink {
 			}
 		}
 	}
+
+	/**
+	 * Open function
+	 */
 	public void open() {
 		if (getHelper() != null) {
 			getHelper().open(proto, value);
@@ -60,7 +78,11 @@ public class AnnotationLink {
 		// no helper, use a generic open call
 		OpenUtils.open(proto, value);
 	}
-	
+
+	/**
+	 * To string function
+	 * @return a description string
+	 */
 	public String toString() {
 		if (proto == null || proto.equals("")) {
 			return value;
@@ -68,16 +90,34 @@ public class AnnotationLink {
 		return proto+":"+value;
 	}
 
+	/**
+	 * Reteur helper
+	 * @return OpenHelper threath
+	 */
 	public OpenHelper getHelper() {
 		return helper;
 	}
+
+	/**
+	 * Proto getter
+	 * @return string of proto
+	 */
 	public String getProto() {
 		return proto;
 	}
+
+	/**
+	 * Getter value
+	 * @return value as string
+	 */
 	public String getValue() {
 		return value;
 	}
-	
+
+	/**
+	 * Link getter
+	 * @return link as string
+	 */
 	public String getLink() {
 		if (getHelper() != null) {
 			return getHelper().getLink(proto, value);
@@ -85,7 +125,12 @@ public class AnnotationLink {
 
 		return OpenUtils.getLink(proto, value);
 	}
-	
+
+	/**
+	 * CTest equality of link
+	 * @param o object to compare
+	 * @return boolean if equal
+	 */
 	public boolean equals(Object o) {
 		return toString().equals(o.toString());
 	}

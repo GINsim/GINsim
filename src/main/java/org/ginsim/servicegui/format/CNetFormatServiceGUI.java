@@ -21,10 +21,15 @@ import org.kohsuke.MetaInfServices;
 public class CNetFormatServiceGUI extends FormatSupportServiceGUI<CNetFormatService> {
 
 	private static CNetFormatService SERVICE = GSServiceManager.getService(CNetFormatService.class);
-	private static FileFormatDescription FORMAT = new FileFormatDescription("CNET", "cnet");
+	private static FileFormatDescription FORMAT = new FileFormatDescription("CNET (bns tool)", "cnet");
 	
 	public CNetFormatServiceGUI() {
-		super("CNET", SERVICE, FORMAT);
+		super("Others/CNET (bns tool)", SERVICE, FORMAT);
+	}
+
+	@Override
+	public int getInitialWeight() {
+		return 7;//W_EXPORT_SPECIFIC + 40
 	}
 	
 }

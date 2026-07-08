@@ -2,6 +2,7 @@ package org.ginsim.core.utils.data;
 
 public interface NamedObject {
     /**
+     * Name getter
      * @return the name of this object
      */
     public String getName();

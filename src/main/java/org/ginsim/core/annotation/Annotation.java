@@ -28,26 +28,55 @@ public class Annotation extends ArrayList<AnnotationLink> implements XMLize, Lis
 		comment = "";
 	}
 
-    public List<AnnotationLink> getLinkList() {
+	/**
+	 * Getter list link
+	 * @return list of annotation
+	 */
+	public List<AnnotationLink> getLinkList() {
         return this;
     }
     
 	/**
 	 * get the vector of url
+	 * @param index indice int
 	 * @return the vector of String (url).
 	 */
 	public String getLink(int index) {
 		return get(index).toString();
 	}
+
+	/**
+	 * open link function
+	 * @param index indice
+	 */
 	public void openLink(int index) {
 		get(index).open();
 	}
+
+	/**
+	 * add link graph
+	 * @param s string to add
+	 * @param graph the graph
+	 */
 	public void addLink(String s, Graph graph) {
 		setLink(s, size(), graph);
 	}
+
+	/**
+	 * Delete link function
+	 * @param s string link
+	 * @param graph the graph
+	 */
 	public void delLink(String s, Graph graph) {
 		while (remove(new AnnotationLink(s, graph))) ;
 	}
+
+	/**
+	 * Stter for link
+	 * @param s  string link
+	 * @param index indice int
+	 * @param graph the graph
+	 */
 	public void setLink(String s, int index, Graph graph) {
 		if (index == size()) {
 			AnnotationLink al = new AnnotationLink(s, graph);
@@ -56,9 +85,21 @@ public class Annotation extends ArrayList<AnnotationLink> implements XMLize, Lis
 			(get(index)).setText(s, graph);
 		}
 	}
+
+	/**
+	 * Test function if contains link
+	 * @param al the AnnotationLink
+	 * @return boolean if contains link
+	 */
 	public boolean containsLink(AnnotationLink al) {
 		return contains(al);
 	}
+
+	/**
+	 * Test if contains link
+	 * @param s string link
+	 * @return boolean if contains link
+	 */
 	public boolean containsLink(String s) {
 		int nblinks = size();
 		for (int i=0 ; i<nblinks ; i++) {
@@ -119,13 +160,21 @@ public class Annotation extends ArrayList<AnnotationLink> implements XMLize, Lis
 		}
         out.closeTag();
 	}
-	
+
+	/**
+	 * Clone function new Annotation
+	 * @return cloned object
+	 */
 	public Object clone() {
 		Annotation clone = new Annotation();
 		clone.copyFrom(this);
 		return clone;
 	}
 
+	/**
+	 * Copy Annotation function
+	 * @param other a Annotation
+	 */
 	public void copyFrom(Annotation other) {
 		int len = other.size();
 		for (int i=0 ; i<len ; i++) {
@@ -135,12 +184,17 @@ public class Annotation extends ArrayList<AnnotationLink> implements XMLize, Lis
 	}
 	
     /**
+	 * Test if empty
      * @return true if the annotation is empty
      */
     public boolean isEmpty() {
         return "".equals(comment) && size() == 0;
     }
 
+	/**
+	 * reteur a html string comment
+	 * @return comment string
+	 */
 	public String getHTMLComment() {
 		StringBuffer buf = new StringBuffer();
 		boolean hasLink = false;

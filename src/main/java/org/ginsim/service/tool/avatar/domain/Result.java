@@ -29,7 +29,8 @@ public class Result {
 	/** Upper probability bound of attractors **/
 	public Map<String, Double> attractorsUpperBound;
 	/**
-	 * Transient cycles * public List<AbstractStateSet> transients;
+	 * Transient cycles
+	 * public List of AbstractStateSet transients;
 	 */
 	public int maxTransientSize = -1;
 	/** Depth of attractors (from a well-defined portion of the state space) **/

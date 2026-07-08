@@ -13,11 +13,11 @@ import org.ginsim.core.graph.objectassociation.GraphAssociatedObjectManager;
 import org.kohsuke.MetaInfServices;
 
 /**
- * An GraphAssociatedObjectManager providing an HashMap<DynamicNode, HierarchicalNode> storing a mapping between states and their corresponding HierarchicalNode
+ * An GraphAssociatedObjectManager providing an HashMap
+ * <code>&lt;DynamicNode, HierarchicalNode&gt; storing a mapping between states and their corresponding HierarchicalNode</code>
  * 
  * Usage : 
- * 	(HashMap<DynamicNode, HierarchicalNode>) ObjectAssociationManager.getInstance().getObject(dynamicGraph, StatesToHierarchicalMappingManager.key, true);
- *
+ * <code>(HashMap&lt;DynamicNode, HierarchicalNode&gt;) ObjectAssociationManager.getInstance().getObject(dynamicGraph, StatesToHierarchicalMappingManager.key, true);</code>
  * @author Duncan Berenguier
  */
 @MetaInfServices(GraphAssociatedObjectManager.class)

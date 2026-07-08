@@ -5,10 +5,13 @@ package org.ginsim.common.callable;
  * 
  * @author Aurelien Naldi
  *
- * @param <T>
+ * @param <T>  from T
  */
 public class BasicProgressListener<T> implements ProgressListener<T> {
 
+	/**
+	 * public T result
+	 */
 	public T result = null;
 	
 	@Override

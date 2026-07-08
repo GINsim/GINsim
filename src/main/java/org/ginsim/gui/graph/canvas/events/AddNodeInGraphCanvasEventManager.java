@@ -8,8 +8,14 @@ import org.ginsim.gui.graph.AddNodeAction;
 import org.ginsim.gui.graph.EditAction;
 import org.ginsim.gui.graph.canvas.GraphCanvasRenderer;
 
+/**
+ * class AddNodeInGraphCanvasEventManager
+ */
 public class AddNodeInGraphCanvasEventManager extends AbstractHelpCanvasEventManager {
-
+	/**
+	 * Constructor AddNodeInGraphCanvasEventManager
+	 * @param renderer the GraphCanvasRenderer
+	 */
 	public AddNodeInGraphCanvasEventManager(GraphCanvasRenderer renderer) {
 		super(renderer);
 	}

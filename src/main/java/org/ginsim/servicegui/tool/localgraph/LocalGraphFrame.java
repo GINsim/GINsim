@@ -28,7 +28,6 @@ import org.ginsim.core.graph.regulatorygraph.RegulatoryMultiEdge;
 import org.ginsim.core.graph.regulatorygraph.RegulatoryNode;
 import org.ginsim.core.graph.regulatorygraph.perturbation.Perturbation;
 import org.ginsim.core.graph.regulatorygraph.perturbation.PerturbationHolder;
-import org.ginsim.core.graph.regulatorygraph.perturbation.PerturbationStore;
 import org.ginsim.core.graph.view.style.StyleManager;
 import org.ginsim.core.notification.NotificationManager;
 import org.ginsim.core.service.GSServiceManager;
@@ -55,14 +54,14 @@ public class LocalGraphFrame extends StackDialog implements ActionListener,
 	private LocalGraphConfig config;
 	private Map<RegulatoryMultiEdge, LocalGraphCategory> functionalityMap;
 	private Map<RegulatoryNode, ActivityLevel> activityMap;
-	
+
 	private LocalGraphStyleProvider styleProvider;
 	private final StyleManager<RegulatoryNode, RegulatoryMultiEdge> styleManager;
 
 	private PerturbationSelectionPanel mutantSelectionPanel;
 	private Perturbation perturbation;
 	private StateSelectorTable sst;
-	
+
 	private boolean isColorized = false;
 
 	public LocalGraphFrame(LocalGraphConfig config) {
@@ -74,6 +73,8 @@ public class LocalGraphFrame extends StackDialog implements ActionListener,
 
 	public void initialize() {
 		if (mainPanel == null) {
+			this.setTitle(Txt.t("STR_localGraph"));
+
 			mainPanel = new javax.swing.JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			GridBagConstraints c = new GridBagConstraints();
@@ -85,8 +86,7 @@ public class LocalGraphFrame extends StackDialog implements ActionListener,
 			mutantSelectionPanel = new PerturbationSelectionPanel(this,
 					config.getGraph(), this);
 			mainPanel.add(mutantSelectionPanel, c);
-			
-			
+
 			c.gridy++;
 			c.weighty = 2;
 			sst = new StateSelectorTable();
@@ -151,30 +151,29 @@ public class LocalGraphFrame extends StackDialog implements ActionListener,
 		if (states == null || states.size() < 1) {
 			return null;
 		}
-		
 		// TODO: should we color nodes for multiple states?
 		byte[] state = states.get(0);
-
 		if (activityMap == null) {
 			activityMap = new HashMap<RegulatoryNode, ActivityLevel>();
 		} else {
 			activityMap.clear();
 		}
-		
 		int idx = 0;
-		for (RegulatoryNode node: config.getGraph().getNodeOrder()) {
+		for (RegulatoryNode node : config.getGraph().getNodeOrder()) {
 			byte cur = state[idx++];
-			if (cur > 0) {
-				if (cur < node.getMaxValue()) {
-					activityMap.put(node, ActivityLevel.MIDLEVEL);
-				} else {
-					activityMap.put(node, ActivityLevel.ACTIVE);
-				}
+			if (cur == node.getMaxValue()) {
+				activityMap.put(node, ActivityLevel.ACTIVE);
+			} else if (cur > 0) {
+				activityMap.put(node, ActivityLevel.MIDLEVEL);
+			} else if (cur == 0) {
+				activityMap.put(node, ActivityLevel.INACTIVE);
+			} else {
+				activityMap.put(node, ActivityLevel.FREE);
 			}
 		}
 		return activityMap;
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
 		GraphGUI graphGUI = GUIManager.getInstance().getGraphGUI(
 				config.getDynamic());
@@ -212,8 +211,11 @@ public class LocalGraphFrame extends StackDialog implements ActionListener,
 	public void valueChanged(ListSelectionEvent e) {
 		changed();
 	}
-	
+
 	private void changed() {
+		// if (isColorized){
+		// undoColorize();
+		// }
 		functionalityMap = null;
 		activityMap = null;
 		isColorized = false;
@@ -224,7 +226,6 @@ public class LocalGraphFrame extends StackDialog implements ActionListener,
 		if (isColorized) {
 			return;
 		}
-		
 		isColorized = true;
 		if (functionalityMap == null) {
 			run();

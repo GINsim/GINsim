@@ -44,7 +44,7 @@ public class ModelBooleanizerServiceGUI extends AbstractServiceGUI {
 
 	@Override
 	public int getInitialWeight() {
-		return W_TOOLS_MAIN + 50;
+		return W_TOOLS_MAIN + W_UNDER_DEVELOPMENT + 2;
 	}
 
 	class BooleanizeAction extends ToolAction {

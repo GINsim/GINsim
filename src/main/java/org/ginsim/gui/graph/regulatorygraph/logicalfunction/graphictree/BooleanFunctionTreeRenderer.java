@@ -12,22 +12,46 @@ import javax.swing.tree.TreePath;
 import org.ginsim.core.graph.regulatorygraph.logicalfunction.graphictree.TreeInteractionsModel;
 import org.ginsim.core.graph.regulatorygraph.logicalfunction.graphictree.TreeElement;
 
-
+/**
+ * class BooleanFunctionTreeRenderer
+ */
 public class BooleanFunctionTreeRenderer extends DefaultTreeCellRenderer implements ComponentListener {
 private static final long serialVersionUID = 3456841880209526024L;
 private int width;
   private JTree tree = null;
   private static final int leftmargin = 90;
-	private PanelFactory panelFactory;
+  private PanelFactory panelFactory;
 
+  /**
+   * Constructor BooleanFunctionTreeRenderer
+   * @param totalWidth the total wigth
+   * @param pf the PanelFactory
+   */
   public BooleanFunctionTreeRenderer(int totalWidth, PanelFactory pf) {
     super();
     width = totalWidth - leftmargin;
 		panelFactory = pf;
   }
+
+  /**
+   * width getter
+   * @return teh width int
+   */
   public int getWidth() {
     return width;
   }
+
+  /**
+   * Getter for Customize Toolbar...
+   * @param tree      the receiver is being configured for
+   * @param value     the value to render
+   * @param sel  whether node is selected
+   * @param expanded  whether node is expanded
+   * @param leaf      whether node is a lead node
+   * @param row       row index
+   * @param hasFocus  whether node has focus
+   * @return the Component
+   */
   public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
                                                 boolean leaf, int row, boolean hasFocus) {
     this.tree = tree;
@@ -37,8 +61,23 @@ private int width;
     p.updateSize();
     return p;
   }
+
+  /**
+   * componentHidden
+   * @param e the event to be processed
+   */
   public void componentHidden(ComponentEvent e) {}
+
+  /**
+   * componentMoved
+   * @param e the event to be processed
+   */
   public void componentMoved(ComponentEvent e) {}
+
+  /**
+   *  componentResized
+   * @param e the event to be processed
+   */
   public void componentResized(ComponentEvent e) {
     width = e.getComponent().getWidth() - leftmargin;
     if (tree != null) {
@@ -54,8 +93,18 @@ private int width;
       tree.setSelectionRows(sr);
     }
   }
+
+  /**
+   *  componentShown
+   * @param e the event to be processed
+   */
   public void componentShown(ComponentEvent e) {}
-	public PanelFactory getPanelFactory() {
+
+  /**
+   * PanelFactory getter
+   * @return the PanelFactory
+   */
+  public PanelFactory getPanelFactory() {
 		return panelFactory;
 	}
 }

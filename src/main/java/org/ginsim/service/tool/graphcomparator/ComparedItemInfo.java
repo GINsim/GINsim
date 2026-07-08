@@ -1,6 +1,8 @@
 package org.ginsim.service.tool.graphcomparator;
 
 /**
+ * class Comparator Item Info
+ * @param <T> vitem info T
  * Hold information on an item in a compared graph: allow to associated extra information to the ComparedItemStatus.
  */
 public class ComparedItemInfo<T> {

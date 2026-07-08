@@ -7,14 +7,14 @@
   <groupId>org.ginsim</groupId>
   <artifactId>GINsim</artifactId>
   <name>GINsim</name>
-  <version>3.0.0b-SNAPSHOT</version>
+  <version>3.1-SNAPSHOT</version>
   <description>Edition, simulation and analysis of logical models</description>
   <inceptionYear>2005</inceptionYear>
   <packaging>jar</packaging>
-  <url>http://www.ginsim.org</url>
+  <url>https://ginsim.github.io</url>
 
   <properties>
-    <project.java.version>1.8</project.java.version>
+    <project.java.version>11</project.java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
@@ -44,7 +44,7 @@
       <artifactId>metainf-services</artifactId>
       <version>1.8</version>
       <!-- only needed to compile: this allows to exclude it from copy-dependencies goal -->
-      <scope>provided</scope>  
+      <scope>provided</scope>
     </dependency>
 
 
@@ -65,15 +65,14 @@
       <groupId>org.python</groupId>
       <artifactId>jython-standalone</artifactId>
       <version>2.7.2</version>
-      <scope>provided</scope>  
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.colomoto</groupId>
       <artifactId>bioLQM</artifactId>
-      <version>0.8-SNAPSHOT</version>
+      <version>0.8</version>
     </dependency>
-	
     <dependency>
       <groupId>org.bibsonomy</groupId>
       <artifactId>bibsonomy-bibtex-parser</artifactId>
@@ -97,52 +96,54 @@
         <artifactId>xchart</artifactId>
         <version>3.8.1</version>
     </dependency>
-
-  </dependencies>
-
-
+    <dependency>
+        <groupId>org.bibsonomy</groupId>
+        <artifactId>bibsonomy-common</artifactId>
+        <version>2.0.48</version>
+    </dependency>
+    <dependency>
+        <groupId>org.bibsonomy</groupId>
+        <artifactId>bibsonomy-model</artifactId>
+        <version>2.0.48</version>
+    </dependency>
+</dependencies>
   <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <testSourceDirectory>src/test/java</testSourceDirectory>
     <plugins>
-
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-            <archive>
-                <manifest>
-                    <mainClass>org.ginsim.Launcher</mainClass>
-                </manifest>
-            </archive>
-            <descriptorRefs>
-                <descriptorRef>jar-with-dependencies</descriptorRef>
-            </descriptorRefs>
-        </configuration>
-      </plugin>
-
-<!-- TODO: Shade plugin: merge deps into the main jar (during package), concatenate service discovery files -->
-<!-- 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.1.0</version>
         <executions>
           <execution>
-             <phase>assembly</phase> 
+            <phase>package</phase>
             <goals>
               <goal>shade</goal>
             </goals>
             <configuration>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                    <exclude>META-INF/*.EC</exclude>
+                  </excludes>
+                </filter>
+              </filters>
               <transformers>
-                <transformer  implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"> 
-                   <mainClass>org.ginsim.Launcher</mainClass> 
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>org.ginsim.Launcher</mainClass>
                 </transformer>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
               </transformers>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
             </configuration>
           </execution>
         </executions>
       </plugin>
--->
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -152,7 +153,6 @@
            <target>1.8</target>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -171,7 +171,6 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -187,19 +186,19 @@
           </archive>
         </configuration>
        </plugin>
-
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.0.1</version>
-        <configuration>
-          <links>
-            <link>http://aurelien-naldi.github.com/gh-documentation/api/mddlib</link>
-            <link>http://aurelien-naldi.github.com/gh-documentation/api/bioLQM</link>
-          </links>
-        </configuration>
-      </plugin>
-
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.4.1</version>
+            <executions>
+                <execution>
+                    <id>attach-javadocs</id>
+                    <goals>
+                        <goal>javadoc</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -221,7 +220,6 @@
           </dependency>
         </dependencies>
       </plugin>
-
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>xml-maven-plugin</artifactId>
@@ -250,10 +248,8 @@
           </transformationSets>
         </configuration>
       </plugin>
-
     </plugins>
   </build>
-
   <!--
    deploy to a local repository using:
      mvn deploy -Dlocal.repository.url=file:///path/to/your/repository -DperformRelease

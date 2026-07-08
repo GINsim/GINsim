@@ -10,7 +10,7 @@ public interface GraphViewListener {
     /**
      * A single item was changed.
      *
-     * @param o
+     * @param o object to refrech
      */
 	void refresh(Object o);
 

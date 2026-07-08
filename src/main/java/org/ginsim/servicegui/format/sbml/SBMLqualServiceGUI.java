@@ -30,4 +30,10 @@ public class SBMLqualServiceGUI extends FormatSupportServiceGUI<SBMLqualService>
 		SBMLQualConfig config = new SBMLQualConfig(graph);
 		return new SBMLQualExportConfigPanel(config, action);
 	}
+
+	@Override
+	public int getInitialWeight() {
+		return 1;
+	}
+
 }

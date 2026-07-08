@@ -9,6 +9,7 @@ import org.ginsim.core.service.Service;
 import org.ginsim.core.service.ServiceStatus;
 import org.ginsim.service.tool.reg2dyn.htg.HTGSimulation;
 import org.kohsuke.MetaInfServices;
+import org.ginsim.service.tool.modelreduction.ReductionConfig;
 
 @MetaInfServices( Service.class)
 @Alias("simulation")
@@ -17,17 +18,13 @@ public class Reg2DynService implements Service {
 
 	public static final String KEY = "simulation";
 	
-	public Simulation get( LogicalModel model, ProgressListener<Graph> plist, SimulationParameters currentParameter){
-		
+	public Simulation get( LogicalModel model, ProgressListener<Graph> plist, SimulationParameters currentParameter, ReductionConfig reduction){
 		Simulation sim;
-		
-		if (currentParameter.simulationStrategy == SimulationParameters.STRATEGY_STG) {
+		if (currentParameter.strategy == SimulationStrategy.STG) {
 			sim = new Simulation( model, plist, currentParameter);
 		} else {
-			sim = new HTGSimulation( model, plist, currentParameter);
+			sim = new HTGSimulation( model, plist, currentParameter, reduction );
 		}
-		
 		return sim;
 	}
-
 }

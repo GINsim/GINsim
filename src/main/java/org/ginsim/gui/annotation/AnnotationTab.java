@@ -14,6 +14,9 @@ import org.ginsim.gui.shell.editpanel.EditTab;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * class AnnotationTab extends JPanel
+ */
 public class AnnotationTab extends JPanel implements EditTab {
 	
 	private static final long serialVersionUID = 1L;
@@ -37,6 +40,11 @@ public class AnnotationTab extends JPanel implements EditTab {
 		this.add(annotCpt, this.gbc);
 	}
 
+    /**
+     * init function
+     * @param gui  the gui
+     * @return a new AnnotationTab
+     */
     public static AnnotationTab prepareTab(GraphGUI<?,?,?> gui) {
         Graph graph = gui.getGraph();
         // TODO: enable the annotation panel for other graph types?

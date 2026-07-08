@@ -49,8 +49,10 @@ public class StartupDialog extends JFrame {
 		JLabel title; 
 		if (startup) {
 			title = new JLabel("Welcome to GINsim");
-		} else {
-			title = new JLabel("Quit GINsim ?");
+		}
+		else {
+			title = new JLabel("");
+			 //title = new JLabel("Quit GINsim ?");
 		}
 		header.setBackground(Color.DARK_GRAY);
 		title.setForeground(Color.WHITE);

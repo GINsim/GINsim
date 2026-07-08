@@ -25,6 +25,7 @@ public class RegulatoryGraphFactory extends AbstractGraphFactory<RegulatoryGraph
     		instance = this;
     	}
     }
+
     
     /**
      * @return an instance of this graphDescriptor.
@@ -41,6 +42,7 @@ public class RegulatoryGraphFactory extends AbstractGraphFactory<RegulatoryGraph
     	RegulatoryGraph graph = new RegulatoryGraphImpl();
         return graph;
     }
+
 	
 	@Override
     public Class getParser() {

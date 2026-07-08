@@ -58,6 +58,9 @@ public class TreeActionPanel extends JPanel implements GUIEditor<Tree> {
 	
 	@Override
 	public void setEditedItem(Tree tree) {
+		if (tree == null) {
+			return;
+		}
 		this.tree = tree;
         this.gui = GUIManager.getInstance().getGraphGUI(tree);
 		updateComboBox();

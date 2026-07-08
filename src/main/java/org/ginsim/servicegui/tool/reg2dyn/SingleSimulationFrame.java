@@ -81,10 +81,8 @@ public class SingleSimulationFrame extends BaseSimulationFrame {
 		if (currentParameter == null) {
 			return;
 		}
-		
 		setMessage(Txt.t("STR_wait_msg"));
 		bcancel.setText(Txt.t("STR_abort"));
-		
 		//FIXME: nearly everything should be disabled
 //		radioBreadthFirst.setEnabled(false);
 //		radioDephtFirst.setEnabled(false);
@@ -95,10 +93,9 @@ public class SingleSimulationFrame extends BaseSimulationFrame {
 //		textMaxDepth.setEnabled(false);
 //		textMaxNodes.setEnabled(false);
         brun.setEnabled(false);
-
 		isrunning = true;
 		Reg2DynService service = GSServiceManager.getService( Reg2DynService.class);
-		sim = service.get( model, this, currentParameter);
+		sim = service.get( model, this, currentParameter, this.realReduction);
 		new Thread(sim).start();
 	}
 

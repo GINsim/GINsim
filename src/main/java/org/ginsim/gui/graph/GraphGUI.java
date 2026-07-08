@@ -14,36 +14,66 @@ import org.ginsim.core.graph.Graph;
  * 
  * @author Aurelien Naldi
  *
- * @param <V>
- * @param <E>
+ * @param <V> the vertex V
+ * @param <E> the edge E
+ * @param <G> the graph
  */
 public interface GraphGUI<G extends Graph<V,E>, V, E extends Edge<V>> extends SavingGUI {
 
 	/**
+	 * graph Getter
+	 *
 	 * @return the underlying graph
 	 */
 	Graph<V, E> getGraph();
 	
 	/**
+	 * getter graph component
 	 * @return the widget showing the graph
 	 */
 	Component getGraphComponent();
 
 	/**
 	 * Fill the view menu with actions available on this graph GUI
+	 * @param layoutMenu  Jmenu input
+	 * @return JMenu
 	 */
 	JMenu getViewMenu(JMenu layoutMenu);
 
+	/**
+	 * Main Edit panel getter
+	 * @return GUIEditor of G
+	 */
 	GUIEditor<G> getMainEditionPanel();
 
+	/**
+	 * Getter for tab label
+	 * @return tab label edit
+	 */
 	String getEditingTabLabel();
 
+	/**
+	 * Node Edition panel getter
+	 * @return GUIEditor of V
+	 */
 	GUIEditor<V> getNodeEditionPanel();
 
+	/**
+	 * GuiEditor Getter
+	 * @return GUIEditor
+	 */
 	GUIEditor<E> getEdgeEditionPanel();
 
+	/**
+	 * Info Panel getter
+	 * @return info Jpanel
+	 */
 	JPanel getInfoPanel();
 
+	/**
+	 * getter of EditActionManager
+	 * @return the EditActionManager
+	 */
 	EditActionManager getEditActionManager();
 
 	/**
@@ -63,7 +93,7 @@ public interface GraphGUI<G extends Graph<V,E>, V, E extends Edge<V>> extends Sa
 	/**
 	 * Set the graph has been saved or has not been modified since opened
 	 * 
-	 * @param isSaved
+	 * @param isSaved boolean true if isvaved
 	 */
 	void setSaved( boolean isSaved);
 	
@@ -76,6 +106,7 @@ public interface GraphGUI<G extends Graph<V,E>, V, E extends Edge<V>> extends Sa
 	
 	/**
 	 * Pick a destination and save the graph.
+	 * @return  boolean if saved
 	 */
 	boolean saveAs();
 
@@ -87,24 +118,28 @@ public interface GraphGUI<G extends Graph<V,E>, V, E extends Edge<V>> extends Sa
 	/**
 	 * Register a GraphGUIListener
 	 * 
-	 * @param listener
+	 * @param listener graph listener
 	 */
 	void addGraphGUIListener(GraphGUIListener<G, V, E> listener);
 
 	/**
 	 * Remove a listener.
 	 * 
-	 * @param listener
+	 * @param listener graph listener
 	 */
 	void removeGraphGUIListener(GraphGUIListener<G, V, E> listener);
 	
 	/**
 	 * Get an object to interact with the selection
 	 * 
-	 * @return
+	 * @return a graph selection
 	 */
 	GraphSelection<V, E> getSelection();
-	
+
+	/**
+	 * test if edit allowed
+	 * @return boolean if edit allowed
+	 */
 	boolean isEditAllowed();
 	
 	/**
@@ -117,5 +152,9 @@ public interface GraphGUI<G extends Graph<V,E>, V, E extends Edge<V>> extends Sa
 	 */
 	void repaint();
 
-    double getZoomLevel();
+	/**
+	 * Zoom level getter
+	 * @return zoom level as double value
+	 */
+	double getZoomLevel();
 }

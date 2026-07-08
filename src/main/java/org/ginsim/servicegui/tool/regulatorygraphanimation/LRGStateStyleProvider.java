@@ -19,20 +19,20 @@ public class LRGStateStyleProvider implements StyleProvider<RegulatoryNode, Regu
 
 	private final StateColoredNodeStyle nodeStyle;
 	private final StateColoredEdgeStyle edgeStyle;
-	
+
 	private final Map<RegulatoryNode, Integer> nodeIndex = new HashMap<RegulatoryNode, Integer>();
-	
+
 	private byte[] state = null;
-	
+
 	public LRGStateStyleProvider(RegulatoryGraph lrg) {
-		
+
 		// build node index
-		int i=0;
-		for (RegulatoryNode node: lrg.getNodeOrder()) {
-			nodeIndex.put(node,  i);
+		int i = 0;
+		for (RegulatoryNode node : lrg.getNodeOrder()) {
+			nodeIndex.put(node, i);
 			i++;
 		}
-		
+
 		StyleManager<RegulatoryNode, RegulatoryMultiEdge> styleManager = lrg.getStyleManager();
 		nodeStyle = new StateColoredNodeStyle(styleManager.getDefaultNodeStyle());
 		edgeStyle = new StateColoredEdgeStyle(styleManager.getDefaultEdgeStyle());
@@ -41,35 +41,36 @@ public class LRGStateStyleProvider implements StyleProvider<RegulatoryNode, Regu
 	public void setState(byte[] state) {
 		this.state = state;
 	}
-	
+
 	@Override
 	public NodeStyle<RegulatoryNode> getNodeStyle(RegulatoryNode node, NodeStyle<RegulatoryNode> baseStyle) {
 		if (state == null) {
 			return baseStyle;
 		}
-		
+
 		Integer i = nodeIndex.get(node);
 		ActivityType activity;
 		if (i == null || state[i] < 0) {
 			activity = ActivityType.UNDEFINED;
 		} else if (state[i] == 0) {
-				activity = ActivityType.INACTIVE;
+			activity = ActivityType.INACTIVE;
 		} else if (state[i] == node.getMaxValue()) {
 			activity = ActivityType.ACTIVE;
 		} else {
 			activity = ActivityType.PARTIAL;
 		}
-		
+
 		nodeStyle.setBaseStyle(baseStyle, activity);
 		return nodeStyle;
 	}
 
 	@Override
-	public EdgeStyle<RegulatoryNode, RegulatoryMultiEdge> getEdgeStyle(RegulatoryMultiEdge edge, EdgeStyle<RegulatoryNode, RegulatoryMultiEdge> baseStyle) {
+	public EdgeStyle<RegulatoryNode, RegulatoryMultiEdge> getEdgeStyle(RegulatoryMultiEdge edge,
+			EdgeStyle<RegulatoryNode, RegulatoryMultiEdge> baseStyle) {
 		if (state == null) {
 			return baseStyle;
 		}
-		
+
 		Integer i = nodeIndex.get(edge.getSource());
 		boolean isActive = (i != null && state[i] >= edge.getMin(0));
 		edgeStyle.setBaseStyle(baseStyle, isActive);
@@ -89,26 +90,25 @@ enum ActivityType {
 	UNDEFINED, INACTIVE, ACTIVE, PARTIAL;
 }
 
-
 class StateColoredNodeStyle extends NodeStyleOverride<RegulatoryNode> {
 
 	private ActivityType activity = ActivityType.INACTIVE;
 
-	private static Color FREE         = new Color(255, 220, 150);
-	private static Color INACTIVE     = new Color(255, 255, 255);
-	private static Color ACTIVE       = new Color(50, 50, 150);
-	private static Color INTERMEDIATE = new Color(50, 150, 200);;
+	private static Color FREE = new Color(255, 220, 150);
+	private static Color INACTIVE = new Color(255, 255, 255);
+	private static Color ACTIVE = new Color(50, 50, 150);
+	private static Color INTERMEDIATE = new Color(50, 150, 200);
 
 	public StateColoredNodeStyle(NodeStyle<RegulatoryNode> style) {
 		super(style);
 	}
 
 	static void getCSS(StringBuffer sb) {
-		sb.append(".state_free .shape { fill: "+ColorPalette.getColorCode(FREE)+"; }\n");
-		sb.append(".state_active .shape { fill: "+ColorPalette.getColorCode(ACTIVE)+"; }\n");
-		sb.append(".state_active text { fill: "+ColorPalette.getColorCode(Color.WHITE)+"; }\n");
-		sb.append(".state_inactive .shape { fill: "+ColorPalette.getColorCode(INACTIVE)+"; }\n");
-		sb.append(".state_partial .shape { fill: "+ColorPalette.getColorCode(INTERMEDIATE)+"; }\n");
+		sb.append(".state_free .shape { fill: " + ColorPalette.getColorCode(FREE) + "; }\n");
+		sb.append(".state_active .shape { fill: " + ColorPalette.getColorCode(ACTIVE) + "; }\n");
+		sb.append(".state_active text { fill: " + ColorPalette.getColorCode(Color.WHITE) + "; }\n");
+		sb.append(".state_inactive .shape { fill: " + ColorPalette.getColorCode(INACTIVE) + "; }\n");
+		sb.append(".state_partial .shape { fill: " + ColorPalette.getColorCode(INTERMEDIATE) + "; }\n");
 	}
 
 	public void setBaseStyle(NodeStyle<RegulatoryNode> style, ActivityType activity) {
@@ -119,14 +119,14 @@ class StateColoredNodeStyle extends NodeStyleOverride<RegulatoryNode> {
 	@Override
 	public Color getBackground(RegulatoryNode obj) {
 		switch (activity) {
-		case UNDEFINED:
-			return FREE;
-		case ACTIVE:
-			return ACTIVE;
-		case PARTIAL:
-			return INTERMEDIATE;
-		default:
-			return INACTIVE;
+			case UNDEFINED:
+				return FREE;
+			case ACTIVE:
+				return ACTIVE;
+			case PARTIAL:
+				return INTERMEDIATE;
+			default:
+				return INACTIVE;
 		}
 	}
 
@@ -147,21 +147,26 @@ class StateColoredNodeStyle extends NodeStyleOverride<RegulatoryNode> {
 
 	@Override
 	public String getCSSClass(RegulatoryNode node) {
-		return "node "+getCSSClass(activity);
+		return "node " + getCSSClass(activity);
 	}
 
 	static String getCSSClass(ActivityType activity) {
 		switch (activity) {
-			case UNDEFINED: return "state_free";
-			case ACTIVE: return "state_active";
-			case INACTIVE: return "state_inactive";
-			case PARTIAL: return "state_partial";
-			default: return "";
+			case UNDEFINED:
+				return "state_free";
+			case ACTIVE:
+				return "state_active";
+			case INACTIVE:
+				return "state_inactive";
+			case PARTIAL:
+				return "state_partial";
+			default:
+				return "";
 		}
 	}
 }
 
-class StateColoredEdgeStyle extends EdgeStyleOverride<RegulatoryNode,RegulatoryMultiEdge> {
+class StateColoredEdgeStyle extends EdgeStyleOverride<RegulatoryNode, RegulatoryMultiEdge> {
 
 	private boolean isActive = false;
 
@@ -173,8 +178,8 @@ class StateColoredEdgeStyle extends EdgeStyleOverride<RegulatoryNode,RegulatoryM
 	}
 
 	static void getCSS(StringBuffer sb) {
-		sb.append(".edge_active { stroke: "+ColorPalette.getColorCode(ACTIVE)+"; }\n");
-		sb.append(".edge_inactive { stroke: "+ColorPalette.getColorCode(INACTIVE)+"; }\n");
+		sb.append(".edge_active { stroke: " + ColorPalette.getColorCode(ACTIVE) + "; }\n");
+		sb.append(".edge_inactive { stroke: " + ColorPalette.getColorCode(INACTIVE) + "; }\n");
 	}
 
 	public void setBaseStyle(EdgeStyle<RegulatoryNode, RegulatoryMultiEdge> style, boolean isActive) {
@@ -185,7 +190,14 @@ class StateColoredEdgeStyle extends EdgeStyleOverride<RegulatoryNode,RegulatoryM
 	@Override
 	public Color getColor(RegulatoryMultiEdge obj) {
 		if (isActive) {
-			return ACTIVE;
+			switch (obj.getSign()) {
+				case POSITIVE:
+					return Color.green;
+				case NEGATIVE:
+					return Color.red;
+				default:
+					return ACTIVE;
+			}
 		}
 		return INACTIVE;
 	}
@@ -198,4 +210,11 @@ class StateColoredEdgeStyle extends EdgeStyleOverride<RegulatoryNode,RegulatoryM
 		return "edge edge_inactive";
 	}
 
+	@Override
+	public int getWidth(RegulatoryMultiEdge edge) {
+		if (isActive) {
+			return 4;
+		}
+		return 1;
+	}
 }

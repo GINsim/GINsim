@@ -16,6 +16,8 @@ import org.ginsim.core.graph.view.NodeAttributesReader;
 import org.ginsim.core.graph.view.style.StyleManager;
 import org.ginsim.core.io.parser.GinmlHelper;
 import org.ginsim.core.io.parser.GsXMLHelper;
+import org.ginsim.service.tool.reg2dyn.SimulationParameters;
+import org.ginsim.service.tool.reg2dyn.SimulationStrategy;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -55,18 +57,30 @@ public class HierarchicalTransitionGraphParser extends GsXMLHelper {
 	private byte[] childCount;
     
     /**
+     * Constructor
      * @param nodeToParse the set of node to parse, the others will be filtered
      * @param attributes
      * @param s_dtd
      */
     public HierarchicalTransitionGraphParser(Set<String> nodeToParse, Attributes attributes, String s_dtd) throws GsException{
     	
-    	this.htg = GSGraphManager.getInstance().getNewGraph( HierarchicalTransitionGraph.class, true);
+        this.htg = GSGraphManager.getInstance().getNewGraph( HierarchicalTransitionGraph.class);
+        
     	this.nodeToParse = nodeToParse;
 		styleManager = htg.getStyleManager();
 		vareader = htg.getNodeAttributeReader();
 		ereader = htg.getEdgeAttributeReader();
 		
+        if (attributes.getValue("type")!=null) {
+            if (attributes.getValue("type").equals("scc")) {
+                htg.setSimulationStrategy(SimulationStrategy.SCCG);
+            } else {
+                htg.setSimulationStrategy(SimulationStrategy.HTG);
+            }
+        } else {
+            htg.setSimulationStrategy(SimulationStrategy.HTG);
+        }
+        
 		try {
 			htg.setGraphName(attributes.getValue("id"));
 		} catch (GsException e) {
@@ -78,11 +92,11 @@ public class HierarchicalTransitionGraphParser extends GsXMLHelper {
 		for (int i=0 ; i<t_nodeOrder.length ; i++) {
 			String[] args = t_nodeOrder[i].split(":");
 			byte max = 1;
-			try {
-				max = Byte.parseByte(args[1]);
-			} catch(NumberFormatException e) {
-				
-			}
+            if (args.length > 1) {
+                try {
+                    max = Byte.parseByte(args[1]);
+                } catch(NumberFormatException e) {}
+            }
 		    nodeOrder.add( new NodeInfo( args[0], max));
 		    childCount[i] = (byte)(max+1);
 		}
@@ -99,6 +113,7 @@ public class HierarchicalTransitionGraphParser extends GsXMLHelper {
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
         
+
         switch (pos) {
 			case POS_FILTERED:
 			    if (qName.equals("node") || qName.equals("edge")) {
@@ -210,6 +225,11 @@ public class HierarchicalTransitionGraphParser extends GsXMLHelper {
             			if (!HierarchicalTransitionGraphFactory.KEY.equals(attributes.getValue("class"))) {
             				throw new SAXException( new GsException( GsException.GRAVITY_ERROR, "STR_HTG_NotHierarchicalTransitionGraph"));
             			}
+                        if (attributes.getValue("type") != null && attributes.getValue("type").equals("scc")) {
+                            htg.setSimulationStrategy(SimulationStrategy.SCCG);
+                        } else {
+                            htg.setSimulationStrategy(SimulationStrategy.HTG);
+                        }
             			try {
 							htg.setGraphName( attributes.getValue("id"));
 						} catch (GsException e) {
@@ -237,6 +257,9 @@ public class HierarchicalTransitionGraphParser extends GsXMLHelper {
                 	pos = POS_COMPACT;
                 } else if (qName.equals("link")) {
                     htg.setAssociatedGraphID(attributes.getValue("xlink:href"));
+                } else if (qName.equals("annotation")) {
+                    pos = POS_GRAPH_NOTES;
+                    annotation = this.htg.getAnnotation();
                 }
                 break; // POS_OUT
             case POS_GRAPH_NOTES:

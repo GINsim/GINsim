@@ -26,5 +26,10 @@ public class BoolNetFormatServiceGUI extends FormatSupportServiceGUI<BNetFormatS
 	public BoolNetFormatServiceGUI() {
 		super("BoolNet", SERVICE, FORMAT);
 	}
+
+	@Override
+	public int getInitialWeight() {
+		return 2;
+	}
 	
 }

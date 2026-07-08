@@ -21,8 +21,14 @@ import org.xml.sax.Attributes;
 @MetaInfServices(GraphAssociatedObjectManager.class)
 public class BiblioManager extends BasicGraphAssociatedManager<BiblioList> {
 
+	/**
+	 * static final String KEY = "biblio"
+	 */
 	public static final String KEY = "biblio";
-	
+
+	/**
+	 * Constructor
+	 */
 	public BiblioManager() {
 		super(KEY, null, RegulatoryGraph.class);
 		AnnotationLink.addHelperClass("ref", KEY);

@@ -67,9 +67,9 @@ public class LRMInitialStateModel extends AbstractTableModel {
 	}
 
 	/**
-	 * 
-	 * @param element
-	 * @param maxvalue
+	 * show string value
+	 * @param element the integer number element
+	 * @param maxValue the max value
 	 * @return a formated String showing values for this component
 	 */
 	public static String showValue(Integer element, int maxValue) {

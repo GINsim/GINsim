@@ -24,7 +24,8 @@ public class PriorityDefinitionPanel extends ListEditionPanel<PriorityClass, Pri
     private final StockButton but_group = new StockButton("group.png",true);
 
     /**
-     * @param editPanel
+     * @param nodeOrder
+     * @param pcdef
      */
     public PriorityDefinitionPanel(List<RegulatoryNode> nodeOrder, PrioritySetDefinition pcdef) {
     	super(PriorityDefinitionHelper.HELPER, pcdef, "pclassConfig", null, null);

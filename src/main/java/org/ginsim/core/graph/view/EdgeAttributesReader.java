@@ -12,6 +12,8 @@ import org.ginsim.core.graph.view.style.EdgeStyle;
  * graphic info on an edge.
  * this extension of the GsGraphManager is used to get or change visual info on edges objects.
  * It can also change default value (but they aren't persistant yet).
+ * @param <V> vertex
+ * @param <E> the edge
  */
 public interface EdgeAttributesReader<V,E extends Edge<V>> extends AttributesReader {
 

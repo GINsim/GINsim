@@ -55,35 +55,37 @@ public final class DynamicParser extends GsXMLHelper {
      * @param set
      * @param attributes
      * @param s_dtd
-     * @param s_filename
      */
     public DynamicParser(Set<String> set, Attributes attributes, String s_dtd) throws GsException {
-    	
-        this.graph = GSGraphManager.getInstance().getNewGraph( DynamicGraph.class, true);
-    	this.set = set;
-		styleManager = graph.getStyleManager();
-		vareader = graph.getNodeAttributeReader();
-		ereader = graph.getEdgeAttributeReader();
-		
-		try {
-			graph.setGraphName(attributes.getValue("id"));
-		} catch (GsException e) {
-			throw new GsException(GsException.GRAVITY_ERROR, "invalidGraphName");
-		}
-		String[] t_nodeOrder = attributes.getValue("nodeorder").split(" ");
-		List<NodeInfo> nodeOrder = new ArrayList<NodeInfo>(t_nodeOrder.length);
-		for (int i=0 ; i<t_nodeOrder.length ; i++) {
-		    nodeOrder.add( new NodeInfo( t_nodeOrder[i]));
-		}
-		graph.setNodeOrder(nodeOrder);
 
+		///this.graph = GSGraphManager.getInstance().getNewGraph( DynamicGraph.class, true);
+		List<Object> list = new ArrayList<>();
+		this.graph = GSGraphManager.getInstance().getNewGraph(DynamicGraph.class, list);
+    	this.set = set;
+		if (this.graph != null) {
+			styleManager = graph.getStyleManager();
+			vareader = graph.getNodeAttributeReader();
+			ereader = graph.getEdgeAttributeReader();
+
+			try {
+				graph.setGraphName(attributes.getValue("id"));
+			} catch (GsException e) {
+				throw new GsException(GsException.GRAVITY_ERROR, "invalidGraphName");
+			}
+			String[] t_nodeOrder = attributes.getValue("nodeorder").split(" ");
+			List<NodeInfo> nodeOrder = new ArrayList<NodeInfo>(t_nodeOrder.length);
+			for (int i = 0; i < t_nodeOrder.length; i++) {
+				nodeOrder.add(new NodeInfo(t_nodeOrder[i]));
+			}
+			graph.setNodeOrder(nodeOrder);
+		}
     }
 
     /**
      * create a new dynamical graph from a file.
      * 
      * @param file the file to read.
-     * @param map "filter" to open only partially a graph
+     * @param set  "filter" to open only partially a graph
      * @param graph the graph to fill with this data.
      */
     public void parse(File file, Set<String> set, Graph graph)  throws GsException{

@@ -16,14 +16,17 @@ import org.ginsim.gui.graph.GraphGUIHelper;
 import org.ginsim.gui.graph.regulatorygraph.RegulatoryGraphOptionPanel;
 import org.ginsim.gui.shell.GsFileFilter;
 import org.ginsim.gui.utils.widgets.Frame;
+import org.ginsim.service.tool.reg2dyn.SimulationParameters;
+import org.ginsim.service.tool.reg2dyn.SimulationStrategy;
 import org.kohsuke.MetaInfServices;
 
 
 /**
+ * class helper HierarchicalTransitionGraphGUIHelper
+ *
  * @author Lionel Spinelli
  *
  */
-
 @MetaInfServices( GraphGUIHelper.class)
 public class HierarchicalTransitionGraphGUIHelper implements GraphGUIHelper<HierarchicalTransitionGraph, HierarchicalNode, DecisionOnEdge> {
 
@@ -44,8 +47,9 @@ public class HierarchicalTransitionGraphGUIHelper implements GraphGUIHelper<Hier
 	
 	/**
 	 * Create a panel containing the option for graph saving 
-	 * 
+	 *
 	 * @param graph the edited graph
+	 * @return    a JPanel
 	 */
 	@Override
 	public JPanel getSaveOptionPanel( HierarchicalTransitionGraph graph) {
@@ -68,7 +72,7 @@ public class HierarchicalTransitionGraphGUIHelper implements GraphGUIHelper<Hier
 
 	@Override
 	public String getEditingTabLabel(HierarchicalTransitionGraph graph) {
-		return "HTG";
+		return graph.getSimulationStrategy().getAcronym();
 	}
 
 	@Override

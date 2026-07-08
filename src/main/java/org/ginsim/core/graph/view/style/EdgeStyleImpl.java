@@ -14,8 +14,8 @@ import org.ginsim.core.graph.view.EdgePattern;
  * 
  * @author Aurelien Naldi
  *
- * @param <V>
- * @param <E>
+ * @param <V>  the vertex
+ * @param <E> the edge
  */
 public class EdgeStyleImpl<V, E extends Edge<V>> extends BaseStyle<EdgeStyle<V, E>> implements EdgeStyle<V, E> {
 

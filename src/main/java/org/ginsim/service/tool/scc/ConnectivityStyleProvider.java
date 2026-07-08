@@ -65,6 +65,10 @@ public class ConnectivityStyleProvider implements StyleProvider {
     }
 
     @Override
+    public Map<Object, Color>  getMColorsMap(){
+        return nodeStyle.getMColorsMap();
+    }
+    @Override
     public NodeStyle getNodeStyle(Object node, NodeStyle baseStyle) {
         nodeStyle.setBaseStyle(baseStyle);
         return nodeStyle;
@@ -84,6 +88,10 @@ class SCCNodeStyle extends NodeStyleOverride {
     public SCCNodeStyle(NodeStyle defaultStyle, Map<Object, Color> m_colors) {
         super(defaultStyle);
         this.m_colors = m_colors;
+    }
+
+    public Map<Object, Color>  getMColorsMap(){
+        return this.m_colors;
     }
 
     @Override

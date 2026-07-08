@@ -12,7 +12,9 @@ import org.ginsim.core.graph.view.NodeAttributesReader;
  * Create a new graph with all components from the two compared graphs and track
  * components which are specific to one of them, or changes between common components.
  * This abstract class provides the common mechanism, extensions support specific graph types.
- *
+ * @param <E>  edge
+ * @param <V>  vertex
+ * @param <G>  graph
  * @author Duncan Berenguier
  * @author Aurelien Naldi
  * @since January 2009

@@ -16,7 +16,7 @@ import org.ginsim.core.service.Service;
 import org.ginsim.service.tool.reg2dyn.SimulationParameters;
 import org.kohsuke.MetaInfServices;
 
-@MetaInfServices( Service.class)
+@MetaInfServices(Service.class)
 @Alias("htg-simulation")
 public class LimitedSimulationService implements Service {
 
@@ -24,20 +24,22 @@ public class LimitedSimulationService implements Service {
 
 	/**
 	 * Construct the dynamic graph correponding the contraint on the HTG.
+	 * 
 	 * @param htg
 	 * @param constraint
 	 * @return the dynamic graph
 	 * @throws GsException if getAssociatedGraph goes wrong
 	 */
-	public DynamicGraph run(HierarchicalTransitionGraph htg, SimulationConstraint constraint, LogicalModel model, SimulationParameters params) throws GsException {
+	public DynamicGraph run(HierarchicalTransitionGraph htg, SimulationConstraint constraint, LogicalModel model,
+			SimulationParameters params) throws GsException {
 		if (!constraint.isValid()) {
-			throw new GsException(GsException.GRAVITY_ERROR, "no_hierarchicalNode_selected");
+			throw new GsException(GsException.GRAVITY_ERROR, "No HTG or SCC node selected");
 		}
-		
+
 		if (params == null) {
 			params = new SimulationParameters(htg.getAssociatedGraph());
 		}
-		
+
 		BasicProgressListener<Graph> simulationManager = new BasicProgressListener<Graph>();
 		this.simu = new LimitedSimulation(model, htg, constraint, params, simulationManager);
 		simu.run();
@@ -45,6 +47,7 @@ public class LimitedSimulationService implements Service {
 	}
 
 	public static HashMap<DynamicNode, HierarchicalNode> getStatesToHierarchicalNodes(DynamicGraph dynamicGraph) {
-		return 	(HashMap<DynamicNode, HierarchicalNode>) ObjectAssociationManager.getInstance().getObject(dynamicGraph, StatesToHierarchicalMappingManager.KEY, true);
+		return (HashMap<DynamicNode, HierarchicalNode>) ObjectAssociationManager.getInstance().getObject(dynamicGraph,
+				StatesToHierarchicalMappingManager.KEY, true);
 	}
 }

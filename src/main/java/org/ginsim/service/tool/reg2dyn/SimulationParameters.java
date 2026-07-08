@@ -34,16 +34,12 @@ import org.ginsim.service.tool.reg2dyn.priorityclass.UpdaterDefinitionStore;
  */
 public class SimulationParameters implements XMLize, NamedObject, NamedStateStore, UpdaterDefinitionStore {
 
-	public static final int STRATEGY_STG = 0;
-	public static final int STRATEGY_SCCG = 1;
-	public static final int STRATEGY_HTG = 2;
-
 	public String name = "new_parameter";
 
     public int maxdepth;
     public int maxnodes;
     public boolean breadthFirst = false;
-    public int simulationStrategy = STRATEGY_STG;
+    public SimulationStrategy strategy = SimulationStrategy.STG;
 
     public Map m_initState = new HashMap();
     public Map m_input = new HashMap();
@@ -93,7 +89,7 @@ public class SimulationParameters implements XMLize, NamedObject, NamedStateStor
         if (perturbation != null) {
             s += "    Perturbation: "+perturbation+"\n";
         }
-        s += "    Simulation strategy: " + simulationStrategy + "\n";
+        s += "    Simulation strategy: " + strategy + "\n";
 		if (updaterDefinition != null) {
 			s += "    Updating policy: " + updaterDefinition.summary(nodeOrder);
 		}
@@ -151,7 +147,7 @@ public class SimulationParameters implements XMLize, NamedObject, NamedStateStor
 		out.addAttr("breadthFirst", ""+breadthFirst);
 		out.addAttr("maxdepth", ""+maxdepth);
 		out.addAttr("maxnodes", ""+maxnodes);
-		out.addAttr("simulationStrategy", ""+simulationStrategy);
+		out.addAttr("simulationStrategy", ""+strategy);
 
 		if (pcdef instanceof PrioritySetDefinition) {
 			out.openTag("priorityClass");
@@ -188,7 +184,7 @@ public class SimulationParameters implements XMLize, NamedObject, NamedStateStor
     @Override
     public SimulationParameters clone() {
     	SimulationParameters newp = new SimulationParameters(param_list);
-    	newp.simulationStrategy = simulationStrategy;
+    	newp.strategy = strategy;
     	newp.name = name;
     	newp.maxdepth = maxdepth;
     	newp.maxnodes = maxnodes;
@@ -231,7 +227,7 @@ public class SimulationParameters implements XMLize, NamedObject, NamedStateStor
 	}
 
     public void copy_to(SimulationParameters other, Map mapping) {
-        other.simulationStrategy = this.simulationStrategy;
+        other.strategy = this.strategy;
         other.breadthFirst = this.breadthFirst;
         other.maxdepth = this.maxdepth;
         other.maxnodes = this.maxnodes;

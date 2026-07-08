@@ -5,7 +5,10 @@ name: Latest pre-release
 
 on:
   push:
-    branches: [ publish ]
+    branches: [ main ]
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -20,7 +23,7 @@ jobs:
         java-version: '11'
         cache: 'maven'
     - name: Build with Maven
-      run: mvn -B assembly:assembly --file pom.xml
+      run: mvn -B package --file pom.xml
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"

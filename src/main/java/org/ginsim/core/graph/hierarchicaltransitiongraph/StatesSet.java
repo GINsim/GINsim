@@ -14,23 +14,23 @@ import java.util.List;
 /**
  * <p>A wrapper of OMDDNode that adds the essentials methods to store states.</p>
  *
- * <p>Each path terminating with a value > 0 indicates the state is present in the set.<br>
+ * <p>Each path terminating with a value &gt; 0 indicates the state is present in the set.<br>
  * The value is used to indicates several status.</p>
  *
- * <h3>Working with the size</h3>
+ * <h2>Working with the size</h2>
  * <p>The value of the <b>size</b> attribute, that is the number of state inside the set, could be inconsistent.<br>
  * When adding a state (or a merge several Omdds), there is no efficient way to know if the state is added or if it was already present.<br>
  * In this class, the size is always incremented when we try to add a new state. Therefore the value of the size could be inconsistent, more
  * precisely be an overapproximation of the real value<br>
  * To cope with this problem, there is several methods to work with the <b>size</b> :
  * 	<ul>
- * 		<li><tt>public int isSizeConsistent()</tt> indicates if the size is consistent</li>
- * 		<li><tt>public int updateSize()</tt> count the current size, by exploring the whole diagram</li>
- * 		<li><tt>public int getSize()</tt> gives the size or INCONSISTENT_SIZE is the size is not consistent</li>
- * 		<li><tt>public int getSizeOrOverApproximation()</tt> gives the size no matter its consistency</li>
- * 		<li><tt>public int getSizeOrUpdate()</tt>gives the size and eventually update it before if needed</li>
+ * 		<li><code>public int isSizeConsistent()</code> indicates if the size is consistent</li>
+ * 		<li><code>public int updateSize()</code> count the current size, by exploring the whole diagram</li>
+ * 		<li><code>public int getSize()</code> gives the size or INCONSISTENT_SIZE is the size is not consistent</li>
+ * 		<li><code>public int getSizeOrOverApproximation()</code> gives the size no matter its consistency</li>
+ * 		<li><code>public int getSizeOrUpdate()</code>gives the size and eventually update it before if needed</li>
  * 	</ul>
- * </p>
+ *
 
  * @author Duncan Berenguier
  */
@@ -111,8 +111,8 @@ public class StatesSet {
      * Add <b>state</b> to the set with <b>status</b><br>
      * If the state was already there, the old status remains.<br>
      *  NB: use updateStatus to change the status.
-     * @param state
-     * @param newStatus
+     * @param state byte array for state
+     * @param newStatus new status int
      */
     public void addState(byte[] state, int newStatus) {
         int newState = stateFromArray(state, newStatus);
@@ -124,7 +124,7 @@ public class StatesSet {
      * If the state was already there, the old status remains.<br>
      * NB: use updateStatus to change the status.
      *
-     * @param newState
+     * @param newState indice
      * @param incSize the number of added state(s)
      */
     private void addMDD(int newState, int incSize) {
@@ -143,8 +143,8 @@ public class StatesSet {
      * Add <b>state</b> to the set with <b>status</b><br>
      * If the state was already there, the old status remains.<br>
      *  NB: use updateStatus to change the status.
-     * @param state
-     * @param newStatus
+     * @param state string
+     * @param newStatus the new status int
      */
     public void addState(String state, int newStatus) {
         addState(byteArrayFromString(state), newStatus);
@@ -251,8 +251,8 @@ public class StatesSet {
 
 
     /**
-     * <p>Gives the count of states in the diagram.<br />
-     * If the size is in inconsistent state, then call <tt>updateSize()</tt> before.</p>
+     * <p>Gives the count of states in the diagram.</p>
+     * If the size is in inconsistent state, then call <code>updateSize()</code> before.
      *
      * <p>Note that by calling this function, you will not be able to retrieve the count of state per status.</p>
      *
@@ -282,9 +282,9 @@ public class StatesSet {
 
 
     /**
-     * Change the status associated of <b>state</b> in the set to </b>newStatus</b>
-     * @param state
-     * @param newStatus
+     * Change the status associated of <b>state</b> in the set to <b>newStatus</b>
+     * @param state  byte state
+     * @param newStatus  the new status
      * @return <ul>
      * 		<li><b>true</b> if the status is changed or was already equal to newStatus.</li>
      * 		<li><b>false</b> if the state wasn't in the set.</li>
@@ -341,7 +341,7 @@ public class StatesSet {
     }
 
     /**
-     * Generate a new omdd corresponding to the <b>state</b> and with the status 1>
+     * Generate a new omdd corresponding to the <b>state</b> and with the status 1
      * @param str_state the state to generate
      * @return the omdd
      */
@@ -374,9 +374,9 @@ public class StatesSet {
      * <p>Return An array indicating such that childsCount[i] indicates the maxValue of the i-th gene</p>
      *
      * <p>Use :</p> <pre>
-     * 	int countChilds = childsCount[level];
-     * 	for (int i = 0; i < countChilds; i++) {
-     * 		....omdd.next[i]....
+     * 	<code>int countChilds = childsCount[level];</code>
+     * 	<code>for (int i = 0; i &lt; countChilds; i++) {</code>
+     * 	<code>	....omdd.next[i]....</code>
      * </pre>
      * @return the ChildsCount array
      */
@@ -403,8 +403,9 @@ public class StatesSet {
     /**
      * Fill a list with all the states in the omdd
      * Each item of the returned list is a string representation using wildcard * (-1).
-     * Note the order in the list is relative to the omdd structure.
-     * @return a list made of all the states as schemata (using *)
+     * Note the order in the list is relat * @param stateRestrictionive to the omdd structure.
+     * @param v  vertex
+     * a list made of all the states as schemata (using *)
      */
     public void statesToSchemaList(List<byte[]> v) {
         byte[] t = new byte[childsCount.length];
@@ -439,10 +440,12 @@ public class StatesSet {
         return v;
     }
     /**
+     *
      * Fill a list with all the states in the omdd
      * Each item of the returned list is a string representation using wildcard * (-1).
      * Note the order in the list is relative to the omdd structure.
-     * @return a list made of all the states as schemata (using *)
+     * a list made of all the states as schemata (using *)
+     * @param v list byte vertex
      */
     public void statesToFullList(List<byte[]> v) {
         byte[] t = new byte[childsCount.length];

@@ -26,5 +26,11 @@ public class BoolsimFormatServiceGUI extends FormatSupportServiceGUI<BoolsimForm
 	public BoolsimFormatServiceGUI() {
 		super("Boolsim", SERVICE, FORMAT);
 	}
+
+	@Override
+	public int getInitialWeight() {
+		return 3;
+	}
+
 	
 }

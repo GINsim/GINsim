@@ -203,9 +203,9 @@ public class InteractionPanel extends AbstractParameterPanel
         }
         if (obj != null && obj instanceof RegulatoryNode) {
             currentNode = (RegulatoryNode)obj;
-						edgeList.setEdge(graph.getIncomingEdges(currentNode));
+			edgeList.setEdge(graph.getIncomingEdges(currentNode));
             interactionList.setNode(currentNode);
-            cellRenderer.setNode(currentNode);
+             cellRenderer.setNode(currentNode);
             if (jTable.getSelectedRow() == -1) {
                 int i = interactionList.getRowCount();
                 jTable.getSelectionModel().setSelectionInterval(i - 1, i - 1);
@@ -470,7 +470,8 @@ public class InteractionPanel extends AbstractParameterPanel
 			List edgeindex = new ArrayList();
 			Object[] objs = jList.getSelectedValues();
 			for (int i=0;i<indices.length;i++) {
-				if (objs[i] != null) {
+				// Bug issue #18
+				if (objs != null && i < objs.length && objs[i] != null) {
                     edgeindex.add(objs[i]);
                 }
 			}

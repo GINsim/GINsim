@@ -36,7 +36,7 @@ public abstract class Selector {
 
 	/**
 	 * return a new selector corresponding to an identifier
-	 * @param id the identifier
+	 * @param identifier  the identifier
 	 * @return a new selector with identifier id or null if the class doesn't exists or can't be instantiated.
 	 */
 	public static Selector getNewSelector(String identifier) {
@@ -80,7 +80,7 @@ public abstract class Selector {
 	 * 
 	 * If possible call getStyleForNode or getStyleForEdge, when you know the type of object
 	 * 
-	 * @param obj
+	 * @param obj the Ojject node
 	 * @return the default style for this object
 	 */	
 	public CSSStyle getStyle(Object obj) {
@@ -108,6 +108,7 @@ public abstract class Selector {
 	/**
 	 * Set the style for a category id. 
 	 * @param category the id of the category
+	 * @param style  the CSSStyle
 	 * @return false if the category doesn't exists
 	 */
 	public final boolean setStyle(String category, CSSStyle style) {
@@ -121,6 +122,7 @@ public abstract class Selector {
 	/**
 	 * Apply the style to an element using an attributesReder for a category id or null if the category doesn't exist.
 	 * @param category the id of the category
+	 * @param areader   the  AttributesReader reader
 	 * @return false if the category doesn't exist
 	 */
 	private final boolean applyStyle(String category, AttributesReader areader) {
@@ -137,6 +139,7 @@ public abstract class Selector {
 	/**
 	 * Apply the style to a node using an attributesReder for a category id or null if the category doesn't exist.
 	 * @param obj a node
+	 * @param areader  a AttributesReader    reader
 	 * @return false if the category doesn't exist
 	 */	
 	public final boolean applyStyleForNode(Object obj, AttributesReader areader) {
@@ -146,6 +149,7 @@ public abstract class Selector {
 	/**
 	 * Apply the style to an edge using an attributesReder for a category id or null if the category doesn't exist.
 	 * @param obj an edge
+	 * @param areader a  AttributesReader reader
 	 * @return false if the category doesn't exist
 	 */	
 	public final boolean applyStyleForEdge(Object obj, AttributesReader areader) {
@@ -168,7 +172,7 @@ public abstract class Selector {
 
 	/**
 	 * Called when the category doesn't exist in the map.
-	 * @param category
+	 * @param category  category style
 	 * @return null
 	 */
 	protected CSSStyle missingCategory(String category) {
@@ -177,7 +181,7 @@ public abstract class Selector {
 
 	/**
 	 * Called when the category doesn't exist in the map.
-	 * @param category
+	 * @param category the category string
 	 * @param areader the areader to apply the corresponding style on.
 	 * @return false
 	 */
@@ -187,7 +191,7 @@ public abstract class Selector {
 
 	/**
 	 * Called when the category doesn't exist in the map.
-	 * @param category
+	 * @param category the category style
 	 * @param style the style to save for this category
 	 * @return false
 	 */
@@ -216,7 +220,7 @@ public abstract class Selector {
 	 * 
 	 * If possible call getCategoryForNode or getCategoryForEdge, when you know the type of object
 	 * 
-	 * @param obj
+	 * @param obj a edge object
 	 * @return the associated category or null
 	 */
 	public final String getCategory(Object obj) {
@@ -229,22 +233,27 @@ public abstract class Selector {
 	/**
 	 * Return the category corresponding to the object obj or null if it doesn't respond to any.
 	 * 
-	 * When subclassing Selector you should use a cache system if you can't get the category for an object in a constant time. And therefore also extend the function flush() to empty this cache (set to to null).
-	 * @param obj
+	 * When subclassing Selector you should use a cache system if you can't get the category for
+	 * an object in a constant time. And therefore also extend the function flush() to empty this
+	 * cache (set to to null).
+	 * @param obj a object
      * @return the associated category or null
 	 */
 	abstract protected String getCategoryForNode(Object obj);
 	/**
 	 * Return the category corresponding to the object obj or null if it doesn't respond to any.
 	 * 
-	 * When subclassing Selector you should use a cache system if you can't get the category for an object in a constant time. And therefore also extend the function flush() to empty this cache (set to to null).
-	 * @param obj
+	 * When subclassing Selector you should use a cache system if you can't get the category for
+	 * an object in a constant time. And therefore also extend the function flush() to empty this
+	 * cache (set to to null).
+	 * @param obj the object
      * @return the associated category or null
 	 */
 	abstract protected String getCategoryForEdge(Object obj);
 	
 	/**
-	 * By default this does nothing but subclasses of Selector could use this function to free the cache of category<=>object.
+	 * By default this does nothing but subclasses of Selector could use this functio
+	 * n to free the cache of category &lt;=&gt; object.
 	 * Should only be called if you are sure you doesn't need to use getCategory on this selector anymore.
 	 */
 	public void flush() {};

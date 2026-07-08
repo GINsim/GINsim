@@ -10,7 +10,7 @@ import org.ginsim.core.graph.view.NodeShape;
  * 
  * @author Aurelien Naldi
  *
- * @param <V>
+ * @param <V> the vertex
  */
 public interface NodeStyle<V> extends Style {
 

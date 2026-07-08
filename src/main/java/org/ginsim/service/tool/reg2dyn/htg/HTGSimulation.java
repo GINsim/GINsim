@@ -23,7 +23,7 @@ import org.ginsim.service.tool.reg2dyn.SimulationParameters;
 import org.ginsim.service.tool.reg2dyn.SimulationQueuedState;
 import org.ginsim.service.tool.reg2dyn.helpers.HTGSimulationHelper;
 import org.ginsim.service.tool.reg2dyn.updater.SimulationUpdater;
-
+import org.ginsim.service.tool.modelreduction.ReductionConfig;
 
 
 
@@ -87,21 +87,21 @@ public class HTGSimulation extends Simulation {
 	
 
 	/**
-	 * The simulation parameters
+	 * The simulation parametersSimulation
 	 */
 	protected HierarchicalSigmaSetFactory sigmaFactory;
 	
 	protected NodeAttributesReader vreader;
 
 	
-	public HTGSimulation(LogicalModel model, ProgressListener<Graph> plist, SimulationParameters params) {
+	public HTGSimulation(LogicalModel model, ProgressListener<Graph> plist, SimulationParameters params, ReductionConfig reduction) {
 		super(model, plist, params);
 		
 		// ignore max depth and max nodes parameters
 		this.maxdepth = 0;
 		this.maxnodes = 0;
-				
-		helper = new HTGSimulationHelper(model, params);
+
+		helper = new HTGSimulationHelper(model, params, reduction);
 	}
   
     

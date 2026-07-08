@@ -8,7 +8,7 @@ import org.ginsim.core.graph.dynamicgraph.TransitionGraph;
 import org.ginsim.core.graph.regulatorygraph.RegulatoryGraph;
 import org.ginsim.core.graph.regulatorygraph.RegulatoryMultiEdge;
 import org.ginsim.core.graph.regulatorygraph.RegulatoryNode;
-
+import org.ginsim.service.tool.modelreduction.ReductionConfig;
 /**
  * Hierarchical Transition Graphs provide a compact representation of the dynamical behaviour.
  * Each node in this graph represent a set of states with a similar fate in the STG (cycle, linear path...)
@@ -49,8 +49,8 @@ public interface HierarchicalTransitionGraph extends TransitionGraph<Hierarchica
 	 * @return the node order as a List of NodeInfo
 	 */
 	public List<NodeInfo> getNodeOrder();
-	
-	
+
+
 	/**
 	 * @return an array indicating for each node in the nodeOrder their count of childs. (ie. their max value)
 	 */
@@ -81,4 +81,15 @@ public interface HierarchicalTransitionGraph extends TransitionGraph<Hierarchica
 	public boolean areTransientCompacted();
 
     StatesSet createStateSet();
+
+	public void setReduction(ReductionConfig reduction);
+
+	public ReductionConfig getReduction();
+	
+	/**
+	 * Gets the range of values of a extra node on a given (set of) state(s).
+	 * 
+	 * @return "*" if range is 0-max, or "min-max"
+	 */
+	public String getExtraValueInterval(byte[] state, int idx);
 }

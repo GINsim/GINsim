@@ -18,7 +18,7 @@ import org.ginsim.core.io.parser.GINMLWriter;
  * @author Cecile Menahem
  * @author Aurelien Naldi
  *
- * @param <G>   type of the original graph
+ * @param <G>   type of the original graphE
  * @param <V>   type of the original vertices
  * @param <E>   type of the original edges
  */

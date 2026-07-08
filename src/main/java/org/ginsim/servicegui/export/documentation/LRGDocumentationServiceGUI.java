@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.ginsim.gui.service.ServiceGUI.W_EXPORT_DOC;
+
 
 /**
  * GenericDocumentExport is a plugin to export the documentation of a model into multiples document format.
@@ -61,7 +63,7 @@ public class LRGDocumentationServiceGUI extends AbstractServiceGUI {
 
     @Override
     public int getInitialWeight() {
-        return W_EXPORT_DOC;
+        return W_EXPORT_DOC  + 4;
     }
 }
 

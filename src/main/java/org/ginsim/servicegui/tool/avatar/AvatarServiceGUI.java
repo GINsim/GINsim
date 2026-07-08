@@ -43,7 +43,7 @@ public class AvatarServiceGUI extends AbstractServiceGUI {
 
     @Override
     public int getInitialWeight() {
-        return W_UNDER_DEVELOPMENT + 10;
+        return W_TOOLS_MAIN  + 2;
     }
 }
 

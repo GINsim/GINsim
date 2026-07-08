@@ -22,7 +22,8 @@ public class MonteCarloPanel extends SimulationPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private JTextField runs = new JTextField(), depth = new JTextField();
+	private JTextField runs = new JTextField();
+	private JTextField depth = new JTextField();
 
 	private String open = "<html><div style=\"width:265px;\">", end = "</div></html>";
 	private String runsVar = open + "Maximum number of iterations [default: 1000]" + end;
@@ -30,21 +31,21 @@ public class MonteCarloPanel extends SimulationPanel {
 
 	/**
 	 * Instantiates the context of a simulation panel
-	 * 
-	 * @param img
-	 *            icon for the help tooltip
+	 *
+	 * icon for the help tooltip
 	 */
 	public MonteCarloPanel() {
 		this.setBorder(BorderFactory.createTitledBorder(EnumAlgorithm.MONTE_CARLO + " Parameters"));
 
-		JLabel runsL = new JLabel("#Runs");
-		JLabel depthL = new JLabel("Max depth    ");
-		runs.setText("1E3");
-		depth.setText("1E3");
+		JLabel runsL = new JLabel("# Runs");
+		JLabel depthL = new JLabel("Max depth");
 
 		setLayout(new GridLayout(2, 2));
 		runsL.setToolTipText(runsVar);
 		depthL.setToolTipText(depthVar);
+
+		runs.setText("1000");
+		depth.setText("1000");
 		add(runsL);
 		add(runs);
 		add(depthL);
@@ -56,14 +57,12 @@ public class MonteCarloPanel extends SimulationPanel {
 		MonteCarloSimulation sim = new MonteCarloSimulation();
 		sim.addModel(model);
 		sim.isGUI = true;
-		sim.runs = (int) Double.parseDouble(runs.getText());
-		sim.maxSteps = (int) Double.parseDouble(depth.getText()); // optional
+		if (this.runs.getText().equals(""))
+			this.runs.setText("1000");
+		sim.runs = (int) Double.parseDouble(this.runs.getText());
+		sim.maxSteps = (int) Double.parseDouble(this.depth.getText());
 		sim.quiet = quiet;
 
-		// System.out.println("MonteCarlo\n"+"Model: "+model.getName());
-		// System.out.println("Initial states:");
-		// for(byte[] state : model.getInitialStates()) System.out.println(" "+new
-		// State(state));
 		return sim;
 	}
 

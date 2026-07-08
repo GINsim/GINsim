@@ -17,7 +17,12 @@ abstract public class AbstractGraphFactory<G extends Graph<?,?>> implements Grap
 
 	private final Class graphClass;
 	private final String graphClassName;
-	
+
+	/**
+	 * constructor AbstractGraphFactory
+	 * @param graphClass  the graph class
+	 * @param graphClassName the graph class name
+	 */
 	public AbstractGraphFactory(Class graphClass, String graphClassName) {
 		this.graphClass = graphClass;
 		this.graphClassName = graphClassName;

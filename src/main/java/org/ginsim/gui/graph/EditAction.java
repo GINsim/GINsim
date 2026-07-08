@@ -26,6 +26,7 @@ public class EditAction {
 	}
 	
 	/**
+	 * Getter of edit mode
 	 * @return the type of edit performed (to group nodes and edges related actions)
 	 */
 	public EditMode getMode() {
@@ -33,6 +34,7 @@ public class EditAction {
 	}
 	
 	/**
+	 * Name getter
 	 * @return the name of this edit 
 	 */
 	public String getName() {
@@ -40,6 +42,7 @@ public class EditAction {
 	}
 	
 	/**
+	 * Icon image getter
 	 * @return the icon for this edit mode 
 	 */
 	public ImageIcon getIcon() {
@@ -53,6 +56,7 @@ public class EditAction {
 	/**
 	 * Warn the edit action manager that this action was performed.
 	 * The manager will revert to the edit action is unlocked.
+	 * @param manager  EditActionManager manager
 	 */
 	public void performed(EditActionManager manager) {
 		manager.actionPerformed(this);

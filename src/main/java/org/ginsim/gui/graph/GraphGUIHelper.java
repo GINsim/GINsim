@@ -14,16 +14,16 @@ import org.ginsim.core.graph.Graph;
  * A helper is a singleton dedicated to a specific graph type.
  * It provides GUI components required to visualize and edit a graph.
  * 
- * Implementors must be called with the same pattern: '<GraphClassName>GUIHelper.java' in order to have
+ * Implementors must be called with the same pattern: 'GraphClassName' in order to have
  * the GraphGUIHelperFactory able to create their instances through introspective access
  * 
  * Implementations must be annotated "@MetaInfServices( GraphGUIHelper.class)" to be discovered at runtime
  *
  * @author Aurelien Naldi
  *
- * @param <G>
- * @param <V>
- * @param <E>
+ * @param <G> the graph
+ * @param <V> the vertex
+ * @param <E> the edge
  */
 public interface GraphGUIHelper<G extends Graph<V,E>, V, E extends Edge<V>> {
 
@@ -39,7 +39,7 @@ public interface GraphGUIHelper<G extends Graph<V,E>, V, E extends Edge<V>> {
 	 * Retrieve the Title used for the selection edition tab
 	 * 
 	 * @param graph the graph requiring the panel
-	 * @return
+	 * @return the string editable
 	 */
 	String getEditingTabLabel(G graph);
 	
@@ -97,7 +97,7 @@ public interface GraphGUIHelper<G extends Graph<V,E>, V, E extends Edge<V>> {
 	/**
 	 * Does this graph type support copy/paste actions?
 	 * 
-	 * @param graph
+	 * @param graph the graph
 	 * @return true if copy/paste is supported, false otherwise.
 	 */
 	boolean canCopyPaste(G graph);

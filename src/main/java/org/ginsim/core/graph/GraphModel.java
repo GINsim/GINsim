@@ -52,7 +52,7 @@ public interface GraphModel<V,E extends Edge<V>> {
 	/**
 	 * Add a node to this graph structure
 	 * 
-	 * @param node
+	 * @param node the node
 	 * @return the created node
 	 */
 	boolean addNode( V node);
@@ -60,7 +60,7 @@ public interface GraphModel<V,E extends Edge<V>> {
 	/**
 	 * Add an edge to this graph structure.
 	 * 
-	 * @param edge
+	 * @param edge the edge
 	 * @return the created edge
 	 */
 	boolean addEdge( E edge);
@@ -68,7 +68,7 @@ public interface GraphModel<V,E extends Edge<V>> {
     /**
      * Remove a node from the graph.
      * 
-     * @param node
+     * @param node the node
      * @return true if the node was effectively removed
      */ 
 	boolean removeNode( V node);
@@ -76,7 +76,7 @@ public interface GraphModel<V,E extends Edge<V>> {
     /**
      * Remove an edge from the graph.
      * 
-     * @param edge
+     * @param edge the edge
      * @return true if the edge was effectively removed
      */
 	boolean removeEdge( E edge);
@@ -124,44 +124,55 @@ public interface GraphModel<V,E extends Edge<V>> {
 	
 	
     /**
-     * @param source
-     * @param target
+	 * getter of edge
+     * @param source the Vertex source
+     * @param target the vertex target
      * @return the edge between source and target or null if not found.
      */
     E getEdge(V source, V target);
     
 	
     /**
+	 * getter of collection of edges
      * @return a Collection of the graph edges.
      */
 	Collection<E> getEdges();
 
 	
     /**
-     * @param node
+	 * test if contains node
+     * @param node the vertex node
      * @return true if the node is in the graph, false if not.
      */
     boolean containsNode(V node);
-    
-    V getExistingNode(V node);
+
+	/**
+	 * node getter
+	 * @param node the node V
+	 * @return the node objecy
+	 */
+	V getExistingNode(V node);
     
     /**
-     * @param from
-     * @param to
+	 * test if contains edges
+     * @param from the from vertex V
+     * @param to the to vertex V
      * @return true if an edge between the two provided vertices exists in the graph, false if not.
      */
     boolean containsEdge(V from, V to);
     
     
     /**
-     * @param node
+	 * getter of incoming edges
+     * @param node the node V
      * @return incoming edges of the given node.
      */
     Collection<E> getIncomingEdges(V node);
     
     
     /**
-     * @param node
+	 * getter of outgoing edges
+     * @param node the node V
      * @return outgoing edges of the given node.
      */
     Collection<E> getOutgoingEdges(V node);
@@ -199,6 +210,7 @@ public interface GraphModel<V,E extends Edge<V>> {
      * Merge the provided graph with the current one
      * 
      * @param graph The graph to merge with the current graph
+	 * @return merged list
      */
     List<?> merge( Graph<V,E> graph);
 

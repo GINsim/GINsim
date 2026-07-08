@@ -18,6 +18,9 @@ import org.ginsim.core.graph.regulatorygraph.logicalfunction.parser.TBooleanPars
 import org.ginsim.core.graph.regulatorygraph.logicalfunction.parser.TBooleanTreeNode;
 
 
+/**
+ * class BooleanParser
+ */
 public class BooleanParser extends TBooleanParser {
 	private Hashtable operandList;
 	private static String returnClassName = LogicalFunctionList.class.getName();
@@ -27,9 +30,21 @@ public class BooleanParser extends TBooleanParser {
 	private RegulatoryNode vertex;
 	private boolean shouldAutoAddNewElements;
 
+	/**
+	 * Constructor
+	 * @param edgesList collection of RegulatoryMultiEdge
+	 * @throws ClassNotFoundException the class exception
+	 */
 	public BooleanParser( Collection<RegulatoryMultiEdge> edgesList) throws ClassNotFoundException {
 		this(edgesList, false);
 	}
+
+	/**
+	 * Constructor
+	 * @param edgesList collection of RegulatoryMultiEdge
+	 * @param shouldAutoAddNewElements boolean if should Auto Add New Elements
+	 * @throws ClassNotFoundException the class exception
+	 */
 	public BooleanParser( Collection<RegulatoryMultiEdge> edgesList, boolean shouldAutoAddNewElements) throws ClassNotFoundException {
 		super(returnClassName, operandClassName);
 		nodeFactory = new BooleanTreeNodeFactory(returnClassName, operandClassName, this);
@@ -39,6 +54,12 @@ public class BooleanParser extends TBooleanParser {
 		}
 		this.shouldAutoAddNewElements = shouldAutoAddNewElements;
 	}
+
+	/**
+	 * Test if lis is verified
+	 * @param list the list to verify
+	 * @return boolean if OperandList is verified
+	 */
 	public boolean verifOperandList(List list) {
 		// FIXME: revert or delete dead code
 		return true;
@@ -71,6 +92,11 @@ public class BooleanParser extends TBooleanParser {
 //		}
 //		return v.containsAll(list);
 	}
+
+	/**
+	 * Setter for all data
+	 * @param edgesList collection of edge
+	 */
 	protected void setAllData(Collection<RegulatoryMultiEdge> edgesList) {
 		List[] F = new List[operandList.size()];
 		int[] N = new int[operandList.size()];
@@ -123,6 +149,11 @@ public class BooleanParser extends TBooleanParser {
 		}
 	}
 
+	/**
+	 * Parmeters getter
+	 * @param indexes list of index to get
+	 * @return list of parameters
+	 */
 	public List getParams(List<Integer> indexes) {
 		List v = new ArrayList();
 		for (int i: indexes) {
@@ -130,6 +161,11 @@ public class BooleanParser extends TBooleanParser {
 		}
 		return v;
 	}
+
+	/**
+	 *  Parameter Getter
+	 * @return array of parameters
+	 */
 	public Object[] getAllParams() {
 		return allParams;
 	}
@@ -151,22 +187,55 @@ public class BooleanParser extends TBooleanParser {
 			}
 		}
 	}
+
+	/**
+	 * Getter for the Savec string
+	 * @param s the save string index
+	 * @return the saved string
+	 */
 	public String getSaveString(String s) {
 		return (String)operandList.get(s);
 	}
+
+	/**
+	 * Getter for TBooleanTreeNode root attribute
+	 * @return TBooleanTreeNode attribute
+	 */
 	public TBooleanTreeNode getRoot() {
 		return root;
 	}
+
+	/**
+	 * className as string getter
+	 * @return the class name as string
+	 */
 	public static String getReturnClassName() {
 		return returnClassName;
 	}
+
+	/**
+	 * operandClassName getter
+	 * @return he operand class name as string
+	 */
 	public static String getOperandClassName() {
 		return operandClassName;
 	}
+
+	/**
+	 * TBooleanTreeNode setter
+	 * @param root the TBooleanTreeNode attribute
+	 */
 	public void setRoot(TBooleanTreeNode root) {
 		this.root = root;
 	}
-	
+
+	/**
+	 * Compile function
+	 * @param v the source vertex node
+	 * @param graph the  RegulatoryGraph
+	 * @param vertex the RegulatoryNode
+	 * @return boolean compile status
+	 */
 	public boolean compile(String v, RegulatoryGraph graph, RegulatoryNode vertex) {
 		this.graph = graph;
 		this.vertex = vertex;
@@ -227,6 +296,13 @@ public class BooleanParser extends TBooleanParser {
 		}
 		return sourceNodes;
 	}
+
+	/**
+	 * Edge getter
+	 * @param value the string edge
+	 * @return the edge object
+	 * @throws GsException
+	 */
 	public Object getEdge(String value) throws GsException {
 		String nodeID;
 		int edgeTh = value.indexOf(":");

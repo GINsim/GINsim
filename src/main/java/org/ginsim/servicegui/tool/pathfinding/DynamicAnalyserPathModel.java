@@ -23,10 +23,7 @@ public class DynamicAnalyserPathModel extends DefaultTableModel implements PathF
     private DynamicGraph graph;
     
     /**
-     * @param graph
-     * @param v_path
-     * @param v_inPath
-     * @param config
+     * @param graph  the dynamical graph
      */
     public DynamicAnalyserPathModel(DynamicGraph graph) {
         nodeOrder = graph.getNodeOrder();

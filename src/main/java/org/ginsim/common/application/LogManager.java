@@ -455,8 +455,9 @@ public class LogManager {
 	public static void setDebug(int debug) {
 		LogManager.debugmask = debug;
 	}
+
 	/**
-	 * Define the outputStream. (<tt>System.err</tt> by default)
+	 * Define the outputStream. (<code>System.err</code> by default)
 	 * @param out the outputStream to set
 	 */
 	public static void setOut(PrintStream out) {

@@ -21,7 +21,7 @@ public class StronglyConnectedComponentTask extends AbstractTask<List<NodeReduce
 	/**
 	 * get ready to run.
 	 *
-	 * @param graph
+	 * @param graph the graph
 	 */
 	public StronglyConnectedComponentTask(Graph graph) {
 		this.graph = graph;

@@ -4,34 +4,41 @@ import java.util.List;
 
 /**
  * Group a list of values and a selected item from this list.
+ * @param <T>  list extend
  */
 public class ValueList<T> {
     private List<T> values;
     private int selected;
     private String s_none;
 
+    /**
+     * getter element of first element
+     * @param values  list value
+     */
     public ValueList(List<T> values) {
     	this(values, 0);
     }
 
     /**
-     * @param values
-     * @param selected
+     * getter of list
+     * @param values list values
+     * @param selected indice selected
      */
     public ValueList(List<T> values, int selected) {
         this(values, selected, "");
     }
     /**
-     * @param values
-     * @param s_none
+     * getter of listValues
+     * @param values list values
+     * @param s_none string 'None' or not
      */
     public ValueList(List<T> values, String s_none) {
         this(values, -1, s_none);
     }
     /**
-     * @param values
-     * @param selected
-     * @param s_none
+     * @param values liste values
+     * @param selected selected indice
+     * @param s_none  string 'None' or not
      */
     public ValueList(List<T> values, int selected, String s_none) {
         this.values = values;
@@ -39,9 +46,10 @@ public class ValueList<T> {
         this.s_none = s_none;
     }
     /**
-     * @param values
-     * @param selected
-     * @param s_none
+     * reset of list Values
+     * @param values list values
+     * @param selected selcted indice
+     * @param s_none  string 'None' or not
      */
     public void reset(List<T> values, int selected, String s_none) {
         this.values = values;
@@ -56,6 +64,7 @@ public class ValueList<T> {
         return values.get(selected).toString();
     }
     /**
+     * getter of selected indice
      * @return the index of the selected value, or -1 if none/empty
      */
     public int getSelectedIndex() {

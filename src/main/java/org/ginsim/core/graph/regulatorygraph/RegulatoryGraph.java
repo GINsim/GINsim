@@ -97,22 +97,18 @@ public interface RegulatoryGraph extends Graph<RegulatoryNode, RegulatoryMultiEd
      */
     MDDManager getMDDFactory();
 
-    
-    /**
+
+	 /**
      * 
      * @param node
      * @param newId
      * @throws GsException
-     */
+     **/
     void changeNodeId(Object node, String newId) throws GsException;
-    
-    /**
-     * 
-     * @return
-     */
+
 	List<RegulatoryNode> getNodeOrderForSimulation();
-	
-	
+
+
 	/**
 	 * Set a list of class dependent objects representing the order of node as defined by the model
 	 * 

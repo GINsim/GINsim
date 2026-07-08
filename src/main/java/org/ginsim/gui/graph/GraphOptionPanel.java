@@ -8,10 +8,11 @@ public interface GraphOptionPanel {
 
     /**
      * @return the save mode selected by the user.
-     * @see GsGraph#doSave(String, int, boolean)
+     * see doSave(String, int, boolean)
      */
 	public int getSaveMode();
     /**
+     * Save if associated parameters
      * @return true if associated parameters should also be saved
      */
     public boolean isExtended() ;

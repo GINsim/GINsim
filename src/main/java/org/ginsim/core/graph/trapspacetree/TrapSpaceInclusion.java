@@ -4,7 +4,7 @@ import org.ginsim.core.graph.Edge;
 import org.ginsim.core.graph.Graph;
 
 /**
- * 
+ * class TrapSpaceInclusion
  * @author Aurelien Naldi
  */
 public class TrapSpaceInclusion extends Edge<TrapSpaceNode> {

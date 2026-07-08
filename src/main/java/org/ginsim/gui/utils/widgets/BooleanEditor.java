@@ -9,13 +9,16 @@ import org.ginsim.gui.utils.data.GenericPropertyHolder;
 import org.ginsim.gui.utils.data.GenericPropertyInfo;
 import org.ginsim.gui.utils.data.ObjectPropertyEditorUI;
 
-
-
+/**
+ * class BooleanEditor
+ */
 public class BooleanEditor extends JCheckBox implements ObjectPropertyEditorUI, ChangeListener {
 	private static final long	serialVersionUID	= 7188801384907165831L;
-
 	GenericPropertyInfo pinfo = null;
-	
+
+	/**
+	 * Constructor
+	 */
 	public BooleanEditor() {
 	    this.addChangeListener(this);
 	}

@@ -28,21 +28,19 @@ abstract public class AvatarLogicalModelActionDialog extends LogicalModelActionD
 		implements PerturbationHolder, ReductionHolder, ChangeListener {
 
 	private static final long serialVersionUID = 6959189835195994930L;
+	/**
+	 * int yAdjustment
+	 */
 	protected int yAdjustment = 130;
 
 	/**
 	 * Creates the necessary context to instantiate the panel of avatar simulations
 	 * 
-	 * @param lrg
-	 *            the target regulatory graph
-	 * @param parent
-	 *            the parent panel
-	 * @param id
-	 *            the ID of the current panel (avatar simulations)
-	 * @param w
-	 *            the suggested width for the main panel
-	 * @param h
-	 *            the suggested height for the main panel
+	 * @param lrg the target regulatory graph
+	 * @param parent the parent panel
+	 * @param id the ID of the current panel (avatar simulations)
+	 * @param w the suggested width for the main panel
+	 * @param h the suggested height for the main panel
 	 */
 	public AvatarLogicalModelActionDialog(RegulatoryGraph lrg, Frame parent, String id, int w, int h) {
 		super(lrg, parent, id, w, h);

@@ -20,7 +20,7 @@ import org.ginsim.gui.service.GUIFor;
 import org.ginsim.core.service.ServiceStatus;
 import org.ginsim.service.export.image.ImageExportService;
 import org.kohsuke.MetaInfServices;
-
+import static org.ginsim.gui.service.ServiceGUI.W_EXPORT_DOC;
 
 /**
  * GUI integration of the PNG and SVG exports.
@@ -44,7 +44,7 @@ public class ImageExportServiceGUI extends AbstractServiceGUI {
 
 	@Override
 	public int getInitialWeight() {
-		return W_EXPORT_DOC + 10;
+		return W_EXPORT_DOC+1 ; // ,+ 10
 	}
 }
 

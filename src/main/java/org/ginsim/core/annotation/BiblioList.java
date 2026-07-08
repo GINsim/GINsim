@@ -53,6 +53,11 @@ public class BiblioList implements XMLize, OpenHelper, GraphListener<GraphModel<
 	private Ref curRef = null;
 	private boolean parsing;
 
+	/**
+	 * Constructor
+	 * @param graph the graph
+	 * @param parsing boolean if parsing
+	 */
 	public BiblioList( Graph<?,?> graph, boolean parsing) {
 		this.graph = graph;
 		this.parsing = parsing;
@@ -81,11 +86,19 @@ public class BiblioList implements XMLize, OpenHelper, GraphListener<GraphModel<
 		out.closeTag();
 	}
 
+	/**
+	 * Add key function
+	 * @param key key string
+	 */
 	public void addRef(String key) {
 		curRef = new Ref();
 		setKey(key);
 	}
-	
+
+	/**
+	 * Key setter
+	 * @param key string key
+	 */
 	public void setKey(String key) {
 		if (key == null || curRef == null || curRef.key != null) {
 			return;
@@ -93,7 +106,12 @@ public class BiblioList implements XMLize, OpenHelper, GraphListener<GraphModel<
 		curRef.key = key;
 		m_references.put(key, curRef);
 	}
-	
+
+	/**
+	 * Add link function
+	 * @param proto proto string
+	 * @param value string value
+	 */
 	public void addLinkToCurRef(String proto, String value) {
 		if (curRef == null) {
 			LogManager.error( "No current ref");
@@ -102,6 +120,11 @@ public class BiblioList implements XMLize, OpenHelper, GraphListener<GraphModel<
 		curRef.addLink(proto, value);
 	}
 
+	/**
+	 * Add function
+	 * @param proto proto string
+	 * @param value string value
+	 */
 	public void add(String proto, String value){
 		if (!proto.equals("ref")) {
 			return;
@@ -112,6 +135,9 @@ public class BiblioList implements XMLize, OpenHelper, GraphListener<GraphModel<
 		}
 	}
 
+	/**
+	 * Add file function
+	 */
 	protected void addFile(){
 		JFileChooser jfc = new JFileChooser();
 		int r = jfc.showOpenDialog(null);
@@ -122,6 +148,12 @@ public class BiblioList implements XMLize, OpenHelper, GraphListener<GraphModel<
 		addFile(fileName);
 	}
 
+	/**
+	 * Test if Open
+	 * @param proto proto string
+	 * @param value string value
+	 * @return boolean if open
+	 */
 	public boolean open(String proto, String value) {
 		if (!proto.equals("ref")) {
 			return false;
@@ -135,6 +167,10 @@ public class BiblioList implements XMLize, OpenHelper, GraphListener<GraphModel<
 		return true;
 	}
 
+	/**
+	 * addMissingRefWarning function
+	 * @param value string value
+	 */
 	public void addMissingRefWarning(String value){
 		if (parsing) {
 			return;
@@ -154,9 +190,19 @@ public class BiblioList implements XMLize, OpenHelper, GraphListener<GraphModel<
 				}
 			}
 		}
-		
+
+		/**
+		 * NotificationResolution resolution
+		 */
 		NotificationResolution resolution = new NotificationResolution(){
-			
+
+			/**
+			 * Perform function
+			 * @param graph the graph
+			 * @param data object array
+			 * @param index indice int
+			 * @return boolean for status
+			 */
 			public boolean perform( Graph graph, Object[] data, int index){
 				
 				switch (index) {
@@ -169,7 +215,11 @@ public class BiblioList implements XMLize, OpenHelper, GraphListener<GraphModel<
 				}
 				return true;
 			}
-			
+
+			/**
+			 * Option namess getter
+			 * @return string array for option names
+			 */
 			public String[] getOptionsName(){
 				
 				String[] t = { "STR_addBib", "STR_ignore"};
@@ -179,7 +229,13 @@ public class BiblioList implements XMLize, OpenHelper, GraphListener<GraphModel<
 		
 		NotificationManager.publishResolvableError( graph, "STR_noref", graph, new Object[] {this}, resolution);
 	}
-	
+
+	/**
+	 * Getter Link
+	 * @param proto proto string
+	 * @param value string value
+	 * @return string of link
+	 */
 	public String getLink(String proto, String value) {
 		if (!proto.equals("ref")) {
 			return null;
@@ -199,6 +255,10 @@ public class BiblioList implements XMLize, OpenHelper, GraphListener<GraphModel<
 		return null;
 	}
 
+	/**
+	 * add file function
+	 * @param fileName string filename
+	 */
 	public void addFile(String fileName){
 		files.put(fileName, new Date());
 		
@@ -231,7 +291,11 @@ public class BiblioList implements XMLize, OpenHelper, GraphListener<GraphModel<
 			NotificationManager.publishResolvableWarning( graph, "STR_noBibFile", graph, new Object[] {this, fileName}, resolution);
 		}
 	}
-	
+
+	/**
+	 * Remove function
+	 * @param fileName string filename
+	 */
 	public void removeFile(String fileName) {
 		files.remove(fileName);
 	}
@@ -251,6 +315,9 @@ public class BiblioList implements XMLize, OpenHelper, GraphListener<GraphModel<
 
 }
 
+/**
+ * class Ref
+ */
 class Ref implements XMLize {
 	String key;
 	Map links = new TreeMap();
@@ -309,6 +376,7 @@ class ReferencerParser extends XMLHelper {
 	}
 	
     /**
+	 * ReferencerParser
      * @param graph expected node order
      */
     public ReferencerParser(BiblioList bibList, String path){

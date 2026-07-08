@@ -24,9 +24,9 @@ public class CascadingStyleSheetManager {
 	/**
 	 * Apply a selector on an edge using its attribute reader.
 	 * If shouldStoreOldStyle is true it save the old style too.
-	 * @param sel
-	 * @param edge
-	 * @param areader
+	 * @param sel selector
+	 * @param edge  a edge
+	 * @param areader a reader EdgeAttributesReader
 	 */
 	public void applyOnEdge(Selector sel, Object edge, EdgeAttributesReader areader) {
 		if (shouldStoreOldStyle) old_edges.put(edge, new CSSEdgeStyle(areader));
@@ -36,9 +36,9 @@ public class CascadingStyleSheetManager {
 	/**
 	 * Apply a selector on a node using its attribute reader.
 	 * If shouldStoreOldStyle is true it save the old style too.
-	 * @param sel
-	 * @param edge
-	 * @param areader
+	 * @param sel a selector
+	 * @param node a object node
+	 * @param areader NodeAttributesReader reader
 	 */
 	public void applyOnNode(Selector sel, Object node, NodeAttributesReader areader) {
 		if (shouldStoreOldStyle) old_nodes.put(node, new CSSNodeStyle(areader));
@@ -48,9 +48,9 @@ public class CascadingStyleSheetManager {
 	/**
 	 * Apply a style on an edge using its attribute reader.
 	 * If shouldStoreOldStyle is true it save the old style too.
-	 * @param selID
-	 * @param edge
-	 * @param areader
+	 * @param style  css style
+	 * @param edge a object edge
+	 * @param areader EdgeAttributesReader reader
 	 */
 	public void applyOnEdge(CSSEdgeStyle style, Object edge, EdgeAttributesReader areader) {
 		if (shouldStoreOldStyle) old_edges.put(edge, new CSSEdgeStyle(areader));
@@ -60,9 +60,9 @@ public class CascadingStyleSheetManager {
 	/**
 	 * Apply a style on an edge using its attribute reader.
 	 * If shouldStoreOldStyle is true it save the old style too.
-	 * @param selID
-	 * @param node
-	 * @param areader
+	 * @param style  the style
+	 * @param node the node
+	 * @param areader a NodeAttributesReader  reader
 	 */
 	public void applyOnNode(CSSNodeStyle style, Object node, NodeAttributesReader areader) {
 		if (shouldStoreOldStyle) old_nodes.put(node, new CSSNodeStyle(areader));
@@ -146,7 +146,7 @@ public class CascadingStyleSheetManager {
 	 * If you want to apply several selector, use applySelectorsOnNodes instead.
 	 *
 	 * @param sel the selector to apply on each nodes
-	 * @param edges a collection of nodes to apply the selectors on
+	 * @param nodes  a collection of nodes to apply the selectors on
 	 * @param vreader an node AttributesReader
 	 */
 	public void applySelectorOnNodes(Selector sel, Collection nodes, NodeAttributesReader vreader) {
@@ -256,7 +256,7 @@ public class CascadingStyleSheetManager {
 
 	/**
 	 * store all the nodes from the collection nodes.
-	 * @param nodes a collection of nodes to store
+	 * @param edges a collection of nodes to store
 	 * @param areader a node attributesReader
 	 */
 	public void storeAllEdges(Collection edges, EdgeAttributesReader areader) {

@@ -30,10 +30,8 @@ public class SATEncoder {
 	/**
 	 * Export the graph to a SAT model description
 	 * 
-	 * @param config
-	 *            the user defined parameters with the model
-	 * @param out
-	 *            the writer receiving the encoded model description
+	 * @param config the user defined parameters with the model
+	 * @param out the writer receiving the encoded model description
 	 */
 	public void write(SATConfig config, Writer out) throws Exception {
 

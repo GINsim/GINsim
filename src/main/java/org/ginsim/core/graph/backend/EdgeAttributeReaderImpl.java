@@ -31,6 +31,8 @@ import org.ginsim.core.graph.view.style.StyleManager;
 
 /**
  * a generic edgeAttributeReader storing data into a dedicated hashmap
+ * @param <V> vertex
+ * @param <E>  edge
  */
 public class EdgeAttributeReaderImpl<V, E extends Edge<V>> implements EdgeAttributesReader<V,E> {
 

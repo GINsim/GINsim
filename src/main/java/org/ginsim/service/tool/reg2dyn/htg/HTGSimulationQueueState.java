@@ -32,10 +32,9 @@ public class HTGSimulationQueueState implements HTGSimulationQueueItem  {
 	
 	/**
 	 * Simple constructor.
-	 * @param state
-	 * @param index
-	 * @param low_index
-	 * @param updater
+	 * @param state the state
+	 * @param index  the index
+	 * @param low_index the low index
 	 */
 	public HTGSimulationQueueState(byte[] state, int index, int low_index) {
 		this.setState(state);

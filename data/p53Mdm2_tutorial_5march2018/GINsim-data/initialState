@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<initialStates>
+  <initialState name="damage" value="DNAdam;1 Mdm2cyt;1 p53;0 Mdm2nuc;1"/>
+</initialStates>

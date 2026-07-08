@@ -11,8 +11,9 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.GabowStrongConnectivityInspector;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultListenableGraph;
-
+import org.ginsim.core.graph.backend.EdgeSet;
 import java.util.*;
+import java.util.Collection;
 
 public class JgraphtBackendImpl<V, E extends Edge<V>> extends DefaultListenableGraph<V, E> implements GraphBackend<V, E> {
 	private static final long serialVersionUID = -7766943723639796018L;
@@ -21,7 +22,7 @@ public class JgraphtBackendImpl<V, E extends Edge<V>> extends DefaultListenableG
 		GsJGraphtBaseGraph base = new GsJGraphtBaseGraph();
 		return new JgraphtBackendImpl(base, graph);
 	}
-	
+
 	private GsJGraphtBaseGraph<V,E> base;
 	private GraphViewListener viewListener = null;
     private Map<E,EdgeViewInfo<V, E>> evsmap = new HashMap<E, EdgeViewInfo<V,E>>();
@@ -42,6 +43,7 @@ public class JgraphtBackendImpl<V, E extends Edge<V>> extends DefaultListenableG
 	public boolean addEdgeInBackend(E edge) {
 		return super.addEdge(edge.getSource(), edge.getTarget(), edge);
 	}
+
 	
     /**
      * Add a vertex in the JGraphT graph
@@ -62,10 +64,20 @@ public class JgraphtBackendImpl<V, E extends Edge<V>> extends DefaultListenableG
 	 */
 	@Override
 	public boolean removeNode(V node) {
-		
+
 		return super.removeVertex( node);
 	}
-	
+
+	@Override
+	public void updateEvsmap(){
+		// Bug  Issue #18 remove in evsmap removed Edge (but not related with bug)
+		Map<E,EdgeViewInfo<V, E>> newevsmap = new HashMap<E, EdgeViewInfo<V,E>>();
+		for (E me : getEdges()) {
+			EdgeViewInfo<V, E> info = evsmap.get(me);
+			newevsmap.put(me, info);
+		}
+        this.evsmap = newevsmap;
+	}
 	@Override
 	public int getNodeCount() {
 		return vertexSet().size();

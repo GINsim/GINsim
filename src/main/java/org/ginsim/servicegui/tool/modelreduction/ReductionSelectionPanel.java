@@ -16,9 +16,19 @@ public class ReductionSelectionPanel extends JPanel {
 	PatternSelectionPanel patternPanel;
 
 	public ReductionSelectionPanel(StackDialog dialog, RegulatoryGraph graph, ReductionHolder holder) {
+		this.internalConstructorReductionSelectionPanel(dialog, graph, holder);
+	}
+	//public ReductionSelectionPanel(StackDialog dialog, RegulatoryGraph graph, ReductionHolder holder, JCheckBox  cb_simplify) {
+	//	this.internalConstructorReductionSelectionPanel(dialog, graph, holder);
+		//cfgPanel.setCBSimplify(cb_simplify);
+	//}
+	public void refresh() {
+		cfgPanel.refresh();
+	}
+
+	private void internalConstructorReductionSelectionPanel(StackDialog dialog, RegulatoryGraph graph, ReductionHolder holder){
 		cfgPanel = new ReductionConfigSelectionPanel(dialog, graph, holder);
 		patternPanel = PatternSelectionPanel.getInputSelectorOrNull(graph, holder);
-
 		setLayout(new GridBagLayout());
 		GridBagConstraints cst = new GridBagConstraints();
 		cst.gridx = cst.gridy = 1;
@@ -29,9 +39,5 @@ public class ReductionSelectionPanel extends JPanel {
 			cst.gridy++;
 			add(patternPanel, cst);
 		}
-	}
-
-	public void refresh() {
-		cfgPanel.refresh();
 	}
 }

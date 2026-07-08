@@ -13,12 +13,22 @@ import org.ginsim.gui.graph.GraphSelection;
 public interface EditTab {
 
 	/**
+	 * title getter
 	 * @return the title to be used by this tab
 	 */
 	public String getTitle();
 
+	/**
+	 * Component getter
+	 * @return the component
+	 */
 	public Component getComponent();
-	
+
+	/**
+	 * Test if active
+	 * @param selection graph selection
+	 * @return boolean if actif
+	 */
 	public boolean isActive( GraphSelection<?, ?> selection);
 
     default JPopupMenu getMenu() {

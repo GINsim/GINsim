@@ -21,16 +21,14 @@ public abstract class SimulationPanel extends JPanel {
 	 * Given contextual information, returns a simulation adequately parameterized
 	 * according to the panel
 	 * 
-	 * @param model
-	 *            the stateful logical model possibly defining a set of initial
+	 * @param model the stateful logical model possibly defining a set of initial
 	 *            states and oracles
-	 * @param plots
-	 *            whether charts should be created and plotted
+     *            whether charts should be created and plotted
 	 * @param quiet
 	 *            whether detailed logs of the behavior of the simulation are to be
 	 *            printed (default: true)
 	 * @return the parameterized simulation ready to be executed
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	public abstract Simulation getSimulation(StatefulLogicalModel model, boolean quiet) throws Exception;
 

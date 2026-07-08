@@ -20,11 +20,19 @@ import org.ginsim.common.application.GsException;
 abstract public class AbstractDerivedGraph<V, E extends Edge<V>, AG extends Graph<AV, AE>, AV, AE extends Edge<AV>>
 			 extends AbstractGraph<V,E>
 			 implements GraphAssociation<AG, AV, AE>, GraphListener<AG> {
-
+    /**
+     * associated graph attribute
+     */
     protected AG associatedGraph = null;
+    /**
+     *  associated graph ID
+     */
     protected String associatedID = null;
 
-    
+    /**
+     * constructor of Graph factory
+     * @param factory the factory
+     */
     public AbstractDerivedGraph( GraphFactory factory) {
     	super(factory);
     }
@@ -33,7 +41,7 @@ abstract public class AbstractDerivedGraph<V, E extends Edge<V>, AG extends Grap
     /**
      * Associate the given graph to the current one
      * 
-     * @param associated_graph
+     * @param associated_graph  the associated graph
      */
 	@Override
 	public void setAssociatedGraph( AG associated_graph) {
@@ -53,6 +61,7 @@ abstract public class AbstractDerivedGraph<V, E extends Edge<V>, AG extends Grap
 	
     /**
      * @return the graph associated with this one.
+     * @throws GsException  exception
      */
 	@Override
     public AG getAssociatedGraph() throws GsException{
@@ -84,6 +93,7 @@ abstract public class AbstractDerivedGraph<V, E extends Edge<V>, AG extends Grap
     
     /**
      * @return the ID (path) of the associated graph.
+     * @throws GsException  exception
      */
 	@Override
     public String getAssociatedGraphID() throws GsException{
@@ -111,14 +121,14 @@ abstract public class AbstractDerivedGraph<V, E extends Edge<V>, AG extends Grap
      * test if a graph can be associated with this one.
      * this is a default implementation and will always return false, override to do something useful.
      *
-     * @param graph
+     * @param graph the graph
      * @return true if this is a valid associated graph.
      */
 	protected abstract boolean isAssociationValid( Graph<?,?> graph);
     
     /**
      * set the path to the associated graph.
-     * @param value
+     * @param value the string value
      */
 	@Override	
     public void setAssociatedGraphID(String value) {

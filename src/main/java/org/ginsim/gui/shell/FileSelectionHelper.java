@@ -29,6 +29,12 @@ public class FileSelectionHelper {
 		GsFileFilter file_filter = new GsFileFilter(extensions, description);
 		return selectSaveFilename( parent, file_filter);
 	}
+
+	public static void setLastDirectory( String dir)
+	{		
+		lastDirectory = dir;
+		OptionStore.setOption(DIRKEY, dir);
+	}
 	
 	public static String selectSaveFilename( Frame parent, FileFilter file_filter) {
 		JFileChooser chooser = new JFileChooser();
@@ -45,7 +51,7 @@ public class FileSelectionHelper {
 		
 		// change the remembered directory
 		lastDirectory = chooser.getCurrentDirectory().getAbsolutePath();
-		OptionStore.setOption(DIRKEY, lastDirectory);
+		setLastDirectory(lastDirectory);
 		
 		// List the available extensions in the provided File Filter
 		String[] extensions;
@@ -81,6 +87,7 @@ public class FileSelectionHelper {
 			int confirm = JOptionPane.showConfirmDialog(parent, "The file exists, do you want to overwrite it?");
 			if (confirm != JOptionPane.OK_OPTION) {
 				return null;
+
 			}
 		}
 		

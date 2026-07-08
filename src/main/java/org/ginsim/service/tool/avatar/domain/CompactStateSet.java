@@ -37,7 +37,7 @@ public class CompactStateSet extends AbstractStateSet {
 	 * Creates a state-set with the given list of states and their probability of occurrence
 	 * @param hashkey key identifying the state-set (state-sets with the same states share the same key)
 	 * @param vars lists the components
-	 * @param the set of states to be compacted
+	 * @param stateset of states to be compacted
 	 */
 	public CompactStateSet(String hashkey, List<NodeInfo> vars, AbstractStateSet stateset) {
 		this(vars);
@@ -54,7 +54,7 @@ public class CompactStateSet extends AbstractStateSet {
 	 * Creates a state-set with the given list of states and their probability of occurrence
 	 * @param hashkey key identifying the state-set (state-sets with the same states share the same key)
 	 * @param vars lists the components
-	 * @param statepatterns a list of patterns representing the states of a given state set<br>
+	 * @param noncompactstates  a list of patterns representing the states of a given state set<br>
 	 *        &emsp;&emsp;a pattern is represented as a byte array, where each position defines the possible states of a component (according to a well defined-order)<br>
 	 *        &emsp;&emsp;when all the states of a given component are allowed to occur, the associated position in byte array is specified as -1
 	 */

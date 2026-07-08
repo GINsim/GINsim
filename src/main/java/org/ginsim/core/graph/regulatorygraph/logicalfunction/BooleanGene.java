@@ -7,28 +7,60 @@ import org.ginsim.core.graph.regulatorygraph.logicalfunction.parser.TBooleanData
 import org.ginsim.core.graph.regulatorygraph.logicalfunction.parser.TBooleanOperand;
 
 
+/**
+ * class BooleanGene
+ */
 public class BooleanGene extends TBooleanOperand {
   private LogicalFunctionList il;
   private RegulatoryMultiEdge me;
   private RegulatoryEdge edge;
 
-  public BooleanGene() {
+    /**
+     * Constructor
+     */
+    public BooleanGene() {
     super();
     il = null;
   }
-  public TBooleanData getValue() {
+
+    /**
+     * Getter of TBooleanData
+     * @return TBooleanData value
+     */
+    public TBooleanData getValue() {
     return il;
   }
-  public void setLogicalFunctionList(LogicalFunctionList list) {
+
+    /**
+     * LogicalFunctionList  setter
+     * @param list the LogicalFunctionList
+     */
+    public void setLogicalFunctionList(LogicalFunctionList list) {
     il = list;
   }
-  public String toString(boolean par) {
+
+    /**
+     * Reteur the value as string
+     * @param par boolean par for partial not used
+     * @return the value as string
+     */
+    public String toString(boolean par) {
     return getVal();
   }
-  public String getSaveVal(){
+
+    /**
+     * Save value getter
+     * @return the save value as string
+     */
+    public String getSaveVal(){
     return ((BooleanParser)parser).getSaveString(value);
   }
-  public String getVal() {
+
+    /**
+     * Value getter
+     * @return the value as tring
+     */
+    public String getVal() {
 	  if (me == null) {
 		  return "nil";
 	  }
@@ -37,7 +69,14 @@ public class BooleanGene extends TBooleanOperand {
 	  }
 	  return me.getSource().getId();
   }
-  public void setInteractionName(BooleanParser parser, String value) throws GsException {
+
+    /**
+     * InteractionName steer
+     * @param parser the BooleanParser
+     * @param value the string value
+     * @throws GsException the Gs exception
+     */
+    public void setInteractionName(BooleanParser parser, String value) throws GsException {
 	  setParser(parser);
 	  setValue(value);
 	  Object o = parser.getEdge(value);
@@ -48,7 +87,13 @@ public class BooleanGene extends TBooleanOperand {
 		  me = edge.me;
 	  }
   }
-  public boolean hasEdge(LogicalFunctionListElement element) {
+
+    /**
+     * Test if has edge
+     * @param element a LogicalFunctionListElement element
+     * @return boolean if has edge
+     */
+    public boolean hasEdge(LogicalFunctionListElement element) {
 	  RegulatoryMultiEdge me = element.getEdge();
 	  if (me == null) {
 		  return false;

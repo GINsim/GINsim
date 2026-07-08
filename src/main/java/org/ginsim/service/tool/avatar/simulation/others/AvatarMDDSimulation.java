@@ -46,8 +46,7 @@ public class AvatarMDDSimulation extends AvatarSimulation {
 
 	/**
 	 * Instantiates an Avatar simulation based on a logical model
-	 * 
-	 * @param _model
+	 *
 	 *            a stateful logical model possibly defining a set of initial states
 	 *            and oracles
 	 */
@@ -418,10 +417,8 @@ public class AvatarMDDSimulation extends AvatarSimulation {
 	 * Calculates a complex attractor based on the knowledge of previous
 	 * incarnations
 	 * 
-	 * @param C
-	 *            terminal cycles from all incarnations
-	 * @param t
-	 *            the current time
+	 * @param C terminal cycles from all incarnations
+	 * @param t the current time
 	 * @return the revised complex attractor
 	 */
 	public MDDStateSet calculateComplexAttractor(List<MDDStateSet> C, int t) {
@@ -451,14 +448,11 @@ public class AvatarMDDSimulation extends AvatarSimulation {
 	/**
 	 * Method for rewiring a cycle
 	 * 
-	 * @param cycle
-	 *            the cycle (state-set) to be rewired
-	 * @param out
-	 *            the exit states
-	 * @param pi
-	 *            the transitions between cycle and exit states whose probability is
+	 * @param cycle the cycle (state-set) to be rewired
+	 * @param out the exit states
+	 * @param pi the transitions between cycle and exit states whose probability is
 	 *            to be adjusted
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	public void rewriteGraph(MDDStateSet cycle, MDDStateSet out, FinalPaths pi) throws Exception {
 

@@ -47,7 +47,7 @@ public class Reg2DynServiceGUI extends AbstractServiceGUI {
 
 	@Override
 	public int getInitialWeight() {
-		return W_TOOLS_MAIN + 10;
+		return W_TOOLS_MAIN + 1;
 	}
 
 

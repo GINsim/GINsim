@@ -95,6 +95,11 @@ public class AvaParameterEditionPanel extends JPanel
 		currentParam = sel;
 	}
 
+	/**
+	 * Setter of AvatarParameters
+	 *
+	 * @param p the AvatarParameters
+	 */
 	public void setCurrent(AvatarParameters p) {
 		if (currentParam.length == 0)
 			paramList.set(0, p);

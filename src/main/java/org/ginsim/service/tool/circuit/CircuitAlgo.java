@@ -67,10 +67,11 @@ public class CircuitAlgo {
         this(graph, null, do_cleanup);
     }
 
-        /**
-         * @param graph the studied graph
-         * @param t_constraint constraints on the nodes
-         */
+    /**
+    * @param graph the studied graph
+    * @param mutant  perturbation
+    * @param do_cleanup constraints on the nodes
+    */
     public CircuitAlgo(RegulatoryGraph graph, Perturbation mutant, boolean do_cleanup) {
         this.do_cleanup = do_cleanup;
         LogicalModel lmodel = graph.getModel();

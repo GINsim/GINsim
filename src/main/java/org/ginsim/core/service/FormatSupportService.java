@@ -18,7 +18,7 @@ import java.util.Set;
  * Generic service to support format implemented in LogicalModel.
  * This provides an easy way to use the core capabilities provides by LogicalModel formats.
  * A static method allows to add automatic wrappers for all available formats.
- * 
+ * @param <F>  LogicalModelFormat
  * @author Aurelien Naldi
  */
 public class FormatSupportService<F extends LogicalModelFormat> implements Service {
@@ -28,7 +28,7 @@ public class FormatSupportService<F extends LogicalModelFormat> implements Servi
 	/**
 	 * register a format when creating an instance of this class.
 	 * 
-	 * @param f
+	 * @param f the LogicalModelFormat
 	 */
 	private static void registerFormat(LogicalModelFormat f) {
 		knownFormats.add(f);
@@ -37,7 +37,7 @@ public class FormatSupportService<F extends LogicalModelFormat> implements Servi
 	/**
 	 * Blacklist a format to prevent the creation of an automatic wrapper for it.
 	 * 
-	 * @param f
+	 * @param f the LogicalModelFormat
 	 */
 	public static void blacklistFormat(LogicalModelFormat f) {
 		knownFormats.add(f);
@@ -54,22 +54,50 @@ public class FormatSupportService<F extends LogicalModelFormat> implements Servi
 			}
 		}
 	}
-	
+
+	/**
+	 * final F format;
+	 */
 	public final F format;
-	
+
+	/**
+	 * Constructor
+	 * @param format the F format
+	 */
 	public FormatSupportService(F format) {
 		this.format = format;
 		registerFormat(format);
 	}
 
+	/**
+	 * Export as string
+	 * @param graph the RegulatoryGraph graph
+	 * @param filename the string filename
+	 * @return the String
+	 * @throws Exception the exception
+	 */
 	public String export(RegulatoryGraph graph, String filename) throws Exception {
 		return export(graph.getModel(), filename);
 	}
 
+	/**
+	 * Export as string
+	 * @param model the LogicalModel
+	 * @param filename the string filename
+	 * @return a string
+	 * @throws Exception the exception
+	 */
 	public String export(LogicalModel model, String filename) throws Exception {
 		return export(model, StreamProvider.create(filename));
 	}
-	
+
+	/**
+	 * Export as string
+	 * @param model the LogicalModel model
+	 * @param out the StreamProvider
+	 * @return a String
+	 * @throws Exception the exception
+	 */
 	public String export(LogicalModel model, StreamProvider out) throws Exception {
 		String message = null;
 		if (!model.isBoolean() && format.getMultivaluedSupport() == MultivaluedSupport.BOOLEANIZED) {
@@ -79,29 +107,60 @@ public class FormatSupportService<F extends LogicalModelFormat> implements Servi
 		format.export(model, out);
 		return message;
 	}
-	
+
+	/**
+	 * Load file
+	 * @param f File
+	 * @return the LogicalModel
+	 * @throws Exception the exception
+	 */
 	public LogicalModel importFile(File f) throws Exception {
 		return format.load( f);
 	}
-	
+
+	/**
+	 * Load File
+	 * @param filename the string filename
+	 * @return the LogicalModel
+	 * @throws Exception the exception
+	 */
 	public LogicalModel importFile(String filename) throws Exception {
 		return importFile( new File(filename));
 	}
-	
+
+	/**
+	 * load File
+	 * @param filename the string filename
+	 * @return the RegulatoryGraph graph
+	 * @throws Exception the exception
+	 */
 	public RegulatoryGraph importLRG(String filename) throws Exception {
 		LogicalModel model = importFile(filename);
 		return LogicalModel2RegulatoryGraph.importModel(model);
 	}
-	
+
+	/**
+	 * Test if can export
+	 * @return boolean if can export
+	 */
 	public boolean canExport() {
 		return format.canExport();
 	}
-	
+
+	/**
+	 * Test if can import
+	 * @return boolean if can import
+	 */
 	public boolean canImport() {
 		return format.canLoad();
 	}
 
-    public boolean canExportModel(RegulatoryGraph graph) {
+	/**
+	 * test if can export model
+	 * @param graph the RegulatoryGraph  graph
+	 * @return boolean if can export model
+	 */
+	public boolean canExportModel(RegulatoryGraph graph) {
         if (!canExport()) {
             return false;
         }

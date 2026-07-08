@@ -1,10 +1,25 @@
 package org.ginsim.core.graph.view.style;
 
+/**
+ * public class BaseStyle
+ * @param <S> style
+ */
 abstract public class BaseStyle<S extends Style> implements Style {
 
+	/**
+	 * String name
+	 */
 	protected String name;
+	/**
+	 * final S parent
+	 */
 	protected final S parent;
-	
+
+	/**
+	 * Constructor
+	 * @param parent style parent
+	 * @param name name string style
+	 */
 	public BaseStyle(S parent, String name) {
 		this.parent = parent;
 		this.name = name;
@@ -29,7 +44,11 @@ abstract public class BaseStyle<S extends Style> implements Style {
 		return value;
 	}
 
-    protected String getCSSNameSuffix() {
+	/**
+	 * Getter of SNameSuffix
+	 * @return string of SNameSuffix
+	 */
+	protected String getCSSNameSuffix() {
         if (name == null) {
             return "";
         }
@@ -48,8 +67,13 @@ abstract public class BaseStyle<S extends Style> implements Style {
     		setProperty(prop, source.getProperty(prop));
     	}
     }
-    
-    public boolean equals(Object other) {
+
+	/**
+	 * Test if equal
+	 * @param other object
+	 * @return boolean if equal
+	 */
+	public boolean equals(Object other) {
     	if (other == null || other.getClass() != getClass()) {
     		return false;
     	}

@@ -8,12 +8,13 @@ import org.ginsim.core.graph.Graph;
 
 /**
  * Implement this interface to save/open objects associated to graph automatically.
- *
+ * @param <T>  manager
  * @author Lionel Spinelli
  */
 public interface GraphAssociatedObjectManager<T> {
 
     /**
+     * Getter  object name
      * @return the name of the object (for the zip entry)
      */
     String getObjectName();
@@ -26,7 +27,8 @@ public interface GraphAssociatedObjectManager<T> {
     String[] getAliases();
 
     /**
-     * @param graph
+     * Test if saving needed
+     * @param graph the graph
      * @return true if this graph has a relevant associated object
      */
     boolean needSaving( Graph graph);
@@ -34,38 +36,40 @@ public interface GraphAssociatedObjectManager<T> {
     /**
      * save the object associated with this graph.
      * 
-     * @param out
-     * @param graph
-     * @throws GsException 
+     * @param out OutputStreamWriter object
+     * @param graph the graph
+     * @throws GsException graph exception
      */
     void doSave(OutputStreamWriter out, Graph graph) throws GsException;
 
     /**
      * open associated object.
      * 
-     * @param is
-     * @param graph
-     * @throws GsException 
+     * @param is InputStream object
+     * @param graph the graph
+     * @return T object
+     * @throws GsException  graph exception
      */
     T doOpen(InputStream is, Graph graph) throws GsException;
 
     /**
      * create the associated object for a graph
-     * @param graph
+     * @param graph the graph
+     * @return  T object
      */
 	T doCreate( Graph graph);
 	
 	/**
 	 * get the existing associated object for a graph
 	 * 
-	 * @param graph
+	 * @param graph the graph
 	 * @return the existing object, or null if not created
 	 */
 	T getObject( Graph graph);
 
     /**
      * Test if the key is a valid name for this data manager
-     * @param key
+     * @param key the string key value
      *
      * @return true if this manager believes it can handle the key
      */

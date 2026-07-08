@@ -36,14 +36,14 @@ public class AboutDialog extends Frame implements HyperlinkListener {
 	private javax.swing.JPanel		jContentPane = null;
 	private javax.swing.JEditorPane	jEditorPane  = null;
 	private javax.swing.JScrollPane	jScrollPane  = null;
-	private JTabbedPane				tabpane;
-	private JScrollPane				jScrollPane2;
-	private JEditorPane				jEditorPane2;
 
 	private static AboutData data;
 	private static String aboutText = "";
-	private static String contribText = "";
-	
+
+	/**
+	 * setter for file
+	 * @param path the path to set
+	 */
 	public static final void setDOAPFile(String path) {
 		data = new AboutData();
 		new DOAPParser(data, path);
@@ -52,29 +52,16 @@ public class AboutDialog extends Frame implements HyperlinkListener {
 		s.append("\n<img src='" + ImageLoader.getImagePath(data.logo) + "'/>");
 		s.append("\n<h1>" + data.name + " " + data.version + "</h1>");
 		s.append(data.description);
-		s.append("\n<p/><a href='" + data.link + "'>"+data.link+"</a>");
+		s.append("\n<a href='" + data.link + "'>"+data.link+"</a>");
+		s.append("<br><br><br>");
+		
+		s.append("<h2>Contact and credits</h2>");
+		s.append("To contact us, or for more information about the ");
+		s.append("development team, please visit:");
+		s.append("\n<a href='" + data.link + "/contact'>"+data.link+"/contact</a>");
+		
 		s.append("</center></body>");
 		aboutText = s.toString();
-
-		s = new StringBuffer("<body><table>");
-		if (data.contributors.size() > 0) {
-			s.append("<tr><th colspan='2'>Current team</th></tr>");
-			for (Iterator it = data.contributors.iterator() ; it.hasNext() ; ) {
-				String[] t = (String[])it.next();
-				String s_name = t[1] != null ? "<a href='"+t[1]+"'>"+t[0]+"</a>" : t[0];
-				s.append("<tr><td>" + s_name + "</td><td>" + t[2] + "</td></tr>");
-			}
-		}
-		if (data.previousContributors.size() > 0) {
-			s.append("<tr><th colspan='2'>Previous contributors</th></tr>");
-			for (Iterator it = data.previousContributors.iterator() ; it.hasNext() ; ) {
-				String[] t = (String[])it.next();
-				String s_name = t[1] != null ? "<a href='"+t[1]+"'>"+t[0]+"</a>" : t[0];
-				s.append("<tr><td>" + s_name + "</td><td>" + t[2] + "</td></tr>");
-			}
-		}
-		s.append("</table></body>");
-		contribText = s.toString();
 	}
 
 	/**
@@ -82,16 +69,8 @@ public class AboutDialog extends Frame implements HyperlinkListener {
 	 */
 	public AboutDialog() {
 		super("aboutDialog", 430, 400);
+		this.setTitle("About GINsim");
 		setContentPane(getJContentPane());
-	}
-
-	private JTabbedPane getTabPane() {
-		if (tabpane == null) {
-			tabpane = new JTabbedPane();
-			tabpane.addTab("About", getJScrollPane());
-			tabpane.addTab("Credits", getJScrollPane2());
-		}
-		return tabpane;
 	}
 
 	/**
@@ -112,7 +91,7 @@ public class AboutDialog extends Frame implements HyperlinkListener {
 			c_sp.weightx = 1;
 			c_sp.weighty = 1;
 			c_sp.fill = GridBagConstraints.BOTH;
-			jContentPane.add(getTabPane(), c_sp);
+			jContentPane.add(getJScrollPane(), c_sp);
 		}
 		return jContentPane;
 	}
@@ -135,18 +114,6 @@ public class AboutDialog extends Frame implements HyperlinkListener {
 		return jEditorPane;
 	}
 
-	private javax.swing.JEditorPane getJEditorPane2() {
-		if (jEditorPane2 == null) {
-			jEditorPane2 = new javax.swing.JEditorPane();
-			jEditorPane2.setContentType("text/html");
-			jEditorPane2.setEditable(false);
-			jEditorPane2.setEnabled(true);
-			jEditorPane2.setBackground(SystemColor.window);
-			jEditorPane2.setText(contribText);
-		}
-		return jEditorPane2;
-	}
-
 	/**
 	 * This method initializes jScrollPane
 	 * 
@@ -158,19 +125,6 @@ public class AboutDialog extends Frame implements HyperlinkListener {
 			jScrollPane.setViewportView(getJEditorPane());
 		}
 		return jScrollPane;
-	}
-
-	/**
-	 * This method initializes jScrollPane
-	 * 
-	 * @return javax.swing.JScrollPane
-	 */
-	private javax.swing.JScrollPane getJScrollPane2() {
-		if (jScrollPane2 == null) {
-			jScrollPane2 = new javax.swing.JScrollPane();
-			jScrollPane2.setViewportView(getJEditorPane2());
-		}
-		return jScrollPane2;
 	}
 
 	/**

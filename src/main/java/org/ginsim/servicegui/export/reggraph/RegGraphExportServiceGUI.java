@@ -19,6 +19,8 @@ import org.ginsim.gui.shell.actions.ExportAction;
 import org.ginsim.service.export.reggraph.RegGraphExportService;
 import org.kohsuke.MetaInfServices;
 
+import static org.ginsim.gui.service.ServiceGUI.W_EXPORT_GRAPH;
+
 /**
  * GUI Action to export the regulatory graph interactions and corresponding
  * signs.
@@ -42,7 +44,7 @@ public class RegGraphExportServiceGUI extends AbstractServiceGUI {
 
 	@Override
 	public int getInitialWeight() {
-		return W_EXPORT_SPECIFIC + 30;
+		return W_EXPORT_GRAPH + 4;
 	}
 }
 

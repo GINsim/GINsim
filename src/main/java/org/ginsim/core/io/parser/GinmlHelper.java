@@ -25,7 +25,7 @@ import org.xml.sax.Attributes;
 public class GinmlHelper {
 	
     /** default URL of the DTD */
-    public static final String DEFAULT_URL_DTD_FILE = "http://ginsim.org/GINML_2_2.dtd";
+    public static final String DEFAULT_URL_DTD_FILE = "https://ginsim.github.io/GINML_2_2.dtd";
     public static final String DOCTYPE = "gxl SYSTEM \""+DEFAULT_URL_DTD_FILE+"\"";
 
     /**
@@ -35,7 +35,7 @@ public class GinmlHelper {
      * @param vareader
      * @param qName
      * @param attributes
-     * @return 1 if byte VS, 2 otherwise
+     * 1 if byte VS, 2 otherwise
      */
 	public static void applyNodeVisualSettings(NodeAttributesReader vareader, StyleManager stylemanager, String qName, Attributes attributes) {
         vareader.setPos(Integer.parseInt(attributes.getValue("x")),Integer.parseInt(attributes.getValue("y")));

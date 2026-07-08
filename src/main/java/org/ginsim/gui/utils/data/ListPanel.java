@@ -37,6 +37,8 @@ import org.ginsim.gui.utils.widgets.StockButton;
  * It works with any type of list, relying on a helper to provide
  * capabilities and methods to alter the list.
  * It can be used as part of a ListEditionPanel.
+ * @param <T>   panel
+ * @param <L>  list exted
  */
 public class ListPanel<T, L extends List<T>> extends JPanel
 	implements ListSelectionListener {

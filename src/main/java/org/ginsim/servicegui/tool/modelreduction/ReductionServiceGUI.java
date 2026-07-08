@@ -38,7 +38,7 @@ public class ReductionServiceGUI extends AbstractServiceGUI {
 
 	@Override
 	public int getInitialWeight() {
-		return W_TOOLS_MAIN + 50;
+		return W_TOOLS_MAIN + W_UNDER_DEVELOPMENT + 1;
 	}
 
 

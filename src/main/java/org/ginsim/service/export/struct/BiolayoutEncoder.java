@@ -7,15 +7,17 @@ import java.util.Collection;
 import org.ginsim.core.graph.Edge;
 import org.ginsim.core.graph.Graph;
 
+/**
+ * class BiolayoutEncoder
+ */
 public class BiolayoutEncoder {
-
-
 	/**
 	 * Encode the graph to struct output
 	 * 
 	 * @param graph the graph to encode
 	 * @param edges the list of edges that must be part of the output
 	 * @param filename the path to the output file
+	 * @throws IOException the exception
 	 */
 	public void encode( Graph graph, Collection<Edge<?>> edges, String filename) throws IOException{
 		

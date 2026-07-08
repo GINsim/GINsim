@@ -159,8 +159,8 @@ public class RegulatoryNode implements ToolTipsable, NodeInfoHolder {
 	    			// Create the Notification
 	    			Object[] data = new Object[5];
 	    			data[0] = this;
-	    			data[1] = new Integer( max);
-	    			data[2] = l_conflict;
+	    			data[1] = Integer.valueOf( max);
+					data[2] = l_conflict;
 	    			data[3] = l_fixable;
 	    			data[4] = l_parameters;
 	    			

@@ -19,14 +19,14 @@ public class TreeBuilderFromManualOmdd extends TreeBuilderFromMDD {
 	 * @param root
 	 */
 	public void initRealDepth(int root) {
-		realDetph = new int[nodeOrder.size()+1]; //+1 for the leafs
+		realDepth = new int[nodeOrder.size()+1]; //+1 for the leafs
 		_initRealDepth(root);
 		int next_realDepth = 0;
-		for (int i = 0; i < realDetph.length; i++) {
-			if (realDetph[i] == -1) {
+		for (int i = 0; i < realDepth.length; i++) {
+			if (realDepth[i] == -1) {
 				total_levels++;
-				realDetph[i] = next_realDepth++;
-			} else realDetph[i] = -2;
+				realDepth[i] = next_realDepth++;
+			} else realDepth[i] = -2;
 		}
 	}
 

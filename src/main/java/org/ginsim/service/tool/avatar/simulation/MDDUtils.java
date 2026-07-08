@@ -131,7 +131,7 @@ public final class MDDUtils {
 	/**
 	 * Infers a set of state patterns from a given set of states
 	 * 
-	 * @param model
+	 * @param vars list of node info
 	 *            the logical model to facilitate the generation of the MDD for the
 	 *            extraction of pattern
 	 * @param stateset

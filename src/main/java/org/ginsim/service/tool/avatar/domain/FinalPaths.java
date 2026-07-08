@@ -28,7 +28,7 @@ public interface FinalPaths {
 	 * @param states the states within the cycle
 	 * @param exits the states accessible from the states within the cycle
 	 * @param probs a matrix specifying the probabilities of the transitions from the all the states of the cycle towards all the exit states
-	 * @throws AvatarLogicalModelException 
+	 * @throws AvatarLogicalModelException  exception
 	 */
 	public void addOutputPaths(Collection<String> states, Collection<String> exits, double[][] probs) throws AvatarLogicalModelException;
 	

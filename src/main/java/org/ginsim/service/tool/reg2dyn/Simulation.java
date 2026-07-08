@@ -50,7 +50,7 @@ public class Simulation implements Runnable {
 		this.maxdepth = params.maxdepth;
 		this.maxnodes = params.maxnodes;
 
-		if (params.simulationStrategy == SimulationParameters.STRATEGY_STG) {
+		if (params.strategy == SimulationStrategy.STG) {
 			helper = new STGSimulationHelper(model, params);
 		}
 		breadthFirst = params.breadthFirst;

@@ -19,7 +19,6 @@ public class DynamicGINMLWriter extends GINMLWriter<DynamicGraph, DynamicNode, D
 	protected void hook_graphAttribute(XMLWriter out) throws IOException {
   		out.addAttr("nodeorder", stringNodeOrder(graph.getNodeOrder()));
 	}
-
 	protected void hook_nodeAttribute(XMLWriter out, DynamicNode node) throws IOException {
         out.addAttr("id", node.getId());
         if (node.isStable()) {

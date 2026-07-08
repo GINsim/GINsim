@@ -13,6 +13,7 @@ import org.ginsim.gui.graph.GUIEditor;
  * An ObjectEditor acts as proxy between an object and the UI to edit its properties.
  * It knows the available properties, can check if a proposed value is correct
  * and can apply them.
+ * @param <T>  gui editor
  */
 public abstract class ObjectEditor<T> implements GUIEditor<T> {
 

@@ -19,6 +19,7 @@ import org.ginsim.core.graph.regulatorygraph.RegulatoryGraphImpl;
 import org.ginsim.core.graph.regulatorygraph.RegulatoryNode;
 import org.ginsim.core.graph.view.NodeAttributesReader;
 import org.ginsim.core.io.parser.GINMLWriter;
+import org.ginsim.service.tool.reg2dyn.SimulationStrategy;
 
 /**
  * Implementation of dynamical graphs.
@@ -32,6 +33,8 @@ public final class DynamicGraphImpl	extends TransitionGraphImpl<DynamicNode, Dyn
 	public static final String GRAPH_ZIP_NAME = "stateTransitionGraph.ginml";
 	
 	protected List v_stables = null;
+
+    private SimulationStrategy _strategy = SimulationStrategy.STG;
 
 	/**
 	 * create a new DynamicGraph.
@@ -92,6 +95,7 @@ public final class DynamicGraphImpl	extends TransitionGraphImpl<DynamicNode, Dyn
 		
 		nodeOrder = node_order;
 	}
+
     
 	/**
 	 * Return the zip extension for the graph type
@@ -211,4 +215,10 @@ public final class DynamicGraphImpl	extends TransitionGraphImpl<DynamicNode, Dyn
         return RegulatoryGraphImpl.associationValid((RegulatoryGraph)graph, this);
     }
 
+    public void setSimulationStrategy(SimulationStrategy strategy) {
+        _strategy = strategy;
+    }
+    public SimulationStrategy getSimulationStrategy() {
+        return _strategy;
+    }
 }

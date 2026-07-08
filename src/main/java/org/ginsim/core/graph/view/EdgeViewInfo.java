@@ -11,8 +11,8 @@ import org.ginsim.core.graph.view.style.EdgeStyle;
  * 
  * @author Aurelien Naldi
  *
- * @param <V>
- * @param <E>
+ * @param <V>  vertex
+ * @param <E>  edge
  */
 public interface EdgeViewInfo<V, E extends Edge<V>> {
 

@@ -23,15 +23,12 @@ public class ReductionStub implements ReductionLauncher {
 	}
 
 	/**
-	 * @param graph
-	 *            a Graph object (which needs to be a RegulatoryGraph)
+	 * @param graph a Graph object (which needs to be a RegulatoryGraph)
 	 * 
-	 * @param e
-	 *            an Exception which might have occured during reduction
-	 * 
+	 * @param e an Exception which might have occured during reduction
 	 *            (non-Javadoc)
 	 * 
-	 * @see org.ginsim.service.tool.modelreduction.ReductionLauncher#endSimu(org
+	 * @see org.ginsim.service.tool.modelreduction.ReductionLauncher
 	 *      .ginsim.core.graph.common.Graph, java.lang.Exception)
 	 */
 	public void endSimu(Graph graph, Exception e) {
@@ -45,8 +42,8 @@ public class ReductionStub implements ReductionLauncher {
 	 * Stub method ignoring GUI options
 	 * 
 	 * (non-Javadoc)
-	 * 
-	 * @see org.ginsim.service.tool.modelreduction.ReductionLauncher#
+	 * @param l_todo  to do list
+	 * @see org.ginsim.service.tool.modelreduction.ReductionLauncher
 	 *      showPartialReduction(java.util.List)
 	 */
 	@Override

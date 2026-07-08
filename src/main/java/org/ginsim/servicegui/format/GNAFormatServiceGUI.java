@@ -26,7 +26,11 @@ public class GNAFormatServiceGUI extends
 			"GNA", "gna");
 
 	public GNAFormatServiceGUI() {
-		super("GNA (non-xml)", SERVICE, FORMAT);
+		super("Others/GNA (non-xml)", SERVICE, FORMAT);
+	}
+	@Override
+	public int getInitialWeight() {
+		return 9;//W_EXPORT_SPECIFIC + 40
 	}
 
 }

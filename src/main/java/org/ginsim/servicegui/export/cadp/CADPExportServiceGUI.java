@@ -46,7 +46,7 @@ public class CADPExportServiceGUI extends AbstractServiceGUI {
 
 	@Override
 	public int getInitialWeight() {
-		return W_EXPORT_SPECIFIC + 40;
+		return W_EXPORT_GENERIC + 4;// + 40
 	}
 }
 

@@ -9,6 +9,7 @@ import java.util.Map;
 import org.ginsim.common.application.LogManager;
 
 /**
+ * class HierarchicalSigmaSet
  * @author Duncan Berenguier
  */
 public class HierarchicalSigmaSet {

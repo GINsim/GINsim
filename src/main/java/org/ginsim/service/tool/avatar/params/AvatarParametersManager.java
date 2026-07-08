@@ -19,9 +19,6 @@ import org.ginsim.core.graph.objectassociation.GraphAssociatedObjectManager;
 import org.ginsim.core.graph.objectassociation.ObjectAssociationManager;
 import org.ginsim.core.graph.regulatorygraph.RegulatoryGraph;
 import org.ginsim.core.graph.regulatorygraph.RegulatoryNode;
-import org.ginsim.core.graph.regulatorygraph.perturbation.Perturbation;
-import org.ginsim.service.tool.modelreduction.ListOfReductionConfigs;
-import org.ginsim.service.tool.modelreduction.ReductionConfig;
 import org.kohsuke.MetaInfServices;
 
 /**
@@ -53,7 +50,7 @@ public class AvatarParametersManager extends BasicGraphAssociatedManager<AvatarP
 		AvatarParameterList paramList = (AvatarParameterList) ObjectAssociationManager.getInstance().getObject(graph,
 				KEY, false);
 		// for(AvatarParameters pi : paramList) System.out.println(pi.toFullString());
-		//System.out.println("do save");
+		// System.out.println("do save");
 
 		List nodeOrder = ((RegulatoryGraph) graph).getNodeOrder();
 		try {
@@ -114,7 +111,7 @@ public class AvatarParametersManager extends BasicGraphAssociatedManager<AvatarP
 						(RegulatoryGraph) graph);
 				p.statesSelected = getBoolVector(getStringValue("statesselection", args));
 				p.istatesSelected = getBoolVector(getStringValue("istatesselection", args));
-				
+
 				// p.ostatesSelected = getBoolVector(getStringValue("ostatesselection",args));
 				/*
 				 * p.oraclesSelected = getBoolVector(getStringValue("oracleselection",args));
@@ -139,12 +136,14 @@ public class AvatarParametersManager extends BasicGraphAssociatedManager<AvatarP
 				p.ffBeta = getStringValue("ffBeta", args);
 				p.mcDepth = getStringValue("mcDepth", args);
 				p.mcRuns = getStringValue("mcRuns", args);
-				/*if(line.contains("<reduction>")) {
-					p.reduction = new ReductionConfig();
-					p.reduction.setName(getStringValue("simplificationConfig name", args));
-					p.reduction.strict = Boolean.valueOf(getStringValue("strict", args));
-					//p.reduction.setSelected(node, true); = getStringValue("removeList", args);
-				}*/
+				/*
+				 * if(line.contains("<reduction>")) {
+				 * p.reduction = new ReductionConfig();
+				 * p.reduction.setName(getStringValue("simplificationConfig name", args));
+				 * p.reduction.strict = Boolean.valueOf(getStringValue("strict", args));
+				 * //p.reduction.setSelected(node, true); = getStringValue("removeList", args);
+				 * }
+				 */
 				paramList.add(p);
 			}
 		} catch (Exception e) {
@@ -154,7 +153,7 @@ public class AvatarParametersManager extends BasicGraphAssociatedManager<AvatarP
 	}
 
 	private List<byte[]> getStatesList(String value, Map<String, Integer> nodes) {
-		value = value.replace('-','_');
+		value = value.replace('-', '_');
 		List<byte[]> result = new ArrayList<byte[]>();
 		List<Map<String, Byte>> states = getStateMap(value);
 		for (Map<String, Byte> state : states) {

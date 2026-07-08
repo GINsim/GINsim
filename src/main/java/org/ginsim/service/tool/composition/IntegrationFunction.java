@@ -15,10 +15,9 @@ public enum IntegrationFunction {
 	MAX, MIN, AND, OR, THRESHOLD2, MAX_LEFT, MAX_RIGHT;
 
 	/**
-	 * @param integrationFunction
-	 *            an integration function
+	 * @param integrationFunction an integration function
 	 * 
-	 * @result True if the given integration function is implemented, false
+	 * @return  True if the given integration function is implemented, false
 	 *         otherwise.
 	 */
 	public static boolean isImplemented(IntegrationFunction integrationFunction) {

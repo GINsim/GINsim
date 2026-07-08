@@ -41,7 +41,7 @@ public abstract class TreeBuilder {
 	 *      
 	 * A value of -2, indicates the depth correspond to a skipped level.
 	 */
-	protected int[] realDetph;
+	protected int[] realDepth;
 	/**
 	 * The total number of levels that are not skipped
 	 */
@@ -128,7 +128,7 @@ public abstract class TreeBuilder {
 		Iterator<RegulatoryNode> it = nodeOrder.iterator();
 		for (int i = 0 ; it.hasNext() ; i++) {
 			RegulatoryNode v = it.next();
-			if (realDetph[i] != -2) {
+			if (realDepth[i] != -2) {
 				int max = v.getMaxValue()+1;
 				widthPerDepth[i] = max;
 				if (last_real != -1) widthPerDepth_acc[i] = widthPerDepth_acc[last_real] * widthPerDepth[last_real];
@@ -187,7 +187,7 @@ public abstract class TreeBuilder {
 	protected List<TreeNode> addChildren(int j, int mult, List<TreeNode> parents, int childIndex, int[] currentWidthPerDepth, EdgeAttributesReader ereader) {
 		List<TreeNode> newParents = new ArrayList<TreeNode>(mult);
 		
-		while (realDetph[j] == -2 && j < max_depth) j++; //Get the child level
+		while (realDepth[j] == -2 && j < max_depth) j++; //Get the child level
 		
 		String parentId = getNodeName(j);
 		
@@ -213,7 +213,7 @@ public abstract class TreeBuilder {
 	protected int jump(int lastLevel, int maxLevel, int[] currentWidthPerDepth) {
 		int mult = 1;
 		for (int j = lastLevel+1 ; j < maxLevel ; j++) { //For all the missing genes
-			if (realDetph[j] != -2) {
+			if (realDepth[j] != -2) {
 				currentWidthPerDepth[j] += mult;
 				mult *= widthPerDepth[j];
 			}
@@ -239,13 +239,13 @@ public abstract class TreeBuilder {
 	public int[] getWidthPerDepth_acc() { return widthPerDepth_acc; }
 	public int getMaxTerminal() { return max_terminal; }
 	public int getMaxDepth() { return max_depth; }
-	public int[] getRealDetph() { return realDetph; }
+	public int[] getRealDepth() { return realDepth; }
 	public int getTerminalWidth() { return widthPerDepth_acc[max_depth]; }
 	public int getTotalLevels() { return total_levels; }
 	
 	protected int getRealDepth(TreeNode node) {
 		if (node.getDepth() == TreeNode.LEAF_DEFAULT_DEPTH) return getMaxDepth();
-		return getRealDetph()[node.getDepth()];
+		return getRealDepth()[node.getDepth()];
 	}
 	protected int getWidthPerDepth_acc(TreeNode node) {
 		if (node.getDepth() == TreeNode.LEAF_DEFAULT_DEPTH) return getWidthPerDepth_acc()[getMaxDepth()];

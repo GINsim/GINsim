@@ -85,10 +85,10 @@ public final class RegulatoryParser extends GsXMLHelper {
     }
 
     /**
-     * @param set
-     * @param attributes
-     * @param s_dtd
-     * @throws SAXException
+     * @param set  the set
+     * @param attributes  the attribute
+     * @param s_dtd  string
+     * @throws GsException
      */
     public RegulatoryParser(Set set, Attributes attributes, String s_dtd) throws GsException {
     	

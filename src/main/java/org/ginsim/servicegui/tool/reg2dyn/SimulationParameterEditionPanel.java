@@ -10,6 +10,7 @@ import org.ginsim.gui.utils.dialog.stackdialog.StackDialog;
 import org.ginsim.service.tool.reg2dyn.Reg2DynService;
 import org.ginsim.service.tool.reg2dyn.SimulationParameterList;
 import org.ginsim.service.tool.reg2dyn.SimulationParameters;
+import org.ginsim.service.tool.reg2dyn.SimulationStrategy;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -26,8 +27,11 @@ import java.awt.event.FocusListener;
  */
 public class SimulationParameterEditionPanel extends JPanel implements ListPanelCompanion<SimulationParameters, SimulationParameterList> {
 
-    private static final String[] simulationMethodsNames = {Txt.t("STR_STG"), Txt.t("STR_SCCG"), Txt.t("STR_HTG")};
-
+    private final String[] simulationMethodsNames = {
+    	SimulationStrategy.STG.toString(),
+    	SimulationStrategy.SCCG.toString(),
+    	SimulationStrategy.HTG.toString()
+    };
     private SimulationParameterList paramList;
     private SimulationParameters currentParameter;
 
@@ -167,10 +171,18 @@ public class SimulationParameterEditionPanel extends JPanel implements ListPanel
     private JComboBox getSimulationMethodsComboBox() {
         if (simulationMethodsComboBox == null) {
             simulationMethodsComboBox = new JComboBox(simulationMethodsNames);
-            Integer selectedIndex = (Integer) OptionStore.getOption("simulation.defaultMethod");
-            if (selectedIndex != null) {
-                int v = selectedIndex.intValue();
-                simulationMethodsComboBox.setSelectedIndex(v);
+            try {
+				String selected = (String) OptionStore.getOption("simulation.defaultMethod");
+				if (selected != null) {
+					simulationMethodsComboBox.setSelectedItem(selected);
+				}
+			} catch (ClassCastException e) {
+            	// Legacy .config/org.ginsim.xml files with integers
+				Integer selectedIndex = (Integer) OptionStore.getOption("simulation.defaultMethod");
+				if (selectedIndex != null) {
+					int v = selectedIndex.intValue();
+					simulationMethodsComboBox.setSelectedIndex(v);
+				}
             }
             simulationMethodsComboBox.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -185,15 +197,16 @@ public class SimulationParameterEditionPanel extends JPanel implements ListPanel
         if (currentParameter == null) {
             return;
         }
-        currentParameter.simulationStrategy = simulationMethodsComboBox.getSelectedIndex();
-        boolean depthControl = currentParameter.simulationStrategy == SimulationParameters.STRATEGY_STG;
+        currentParameter.strategy = SimulationStrategy.fromString((String) simulationMethodsComboBox.getSelectedItem());
+        boolean depthControl = (currentParameter.strategy == SimulationStrategy.STG);
         radioBreadthFirst.setEnabled(depthControl);
         radioDephtFirst.setEnabled(depthControl);
         textMaxDepth.setEnabled(depthControl);
         textMaxNodes.setEnabled(depthControl);
         labelMaxDepth.setEnabled(depthControl);
         labelMaxNodes.setEnabled(depthControl);
-        OptionStore.setOption("simulation.defaultMethod", new Integer(simulationMethodsComboBox.getSelectedIndex()));
+        OptionStore.setOption("simulation.defaultMethod", 
+        		(String) simulationMethodsComboBox.getSelectedItem());
     }
 
 

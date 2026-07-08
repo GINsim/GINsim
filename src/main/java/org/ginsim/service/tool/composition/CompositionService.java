@@ -40,18 +40,14 @@ public class CompositionService implements Service {
 	 * Topology and an IntegrationFunctionMapping and return the composed graph
 	 * after invoking the necessary reduction operations
 	 * 
-	 * @param graph
-	 *            the current RegulatoryGraph
-	 * @param topology
-	 *            the composition Topology, indicating the neighbourhood
-	 *            relationships
-	 * @param mapping
-	 *            the integration functions to apply to each mapped input
+	 * @param graph the current RegulatoryGraph
+	 * @param config   the composition Topology, indicating the neighbourhood
+	 *                 relationships
+	 *                 the integration functions to apply to each mapped input
 	 * 
-	 * @return RegulatoryGraph
-	 * @throws GsException
+	 * @return RegulatoryGraph the graph
+	 * @throws GsException the graph exception
 	 */
-
 	public RegulatoryGraph run(RegulatoryGraph graph, CompositionConfig config)
 			throws Exception {
 

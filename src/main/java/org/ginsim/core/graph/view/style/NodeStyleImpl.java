@@ -13,7 +13,7 @@ import org.ginsim.core.graph.view.NodeShape;
  * 
  * @author Aurelien Naldi
  *
- * @param <V>
+ * @param <V>  vertex v
  */
 public class NodeStyleImpl<V> extends BaseStyle<NodeStyle<V>> implements NodeStyle<V> {
 
@@ -63,6 +63,7 @@ public class NodeStyleImpl<V> extends BaseStyle<NodeStyle<V>> implements NodeSty
 			border = DEFAULT_BORDER;
 		}
 	}
+
 	
 	@Override
 	public Color getBackground(V obj) {
@@ -77,6 +78,10 @@ public class NodeStyleImpl<V> extends BaseStyle<NodeStyle<V>> implements NodeSty
 			return parent.getBackground(obj);
 		}
 		return bg;
+	}
+
+	public void setBg(Color bg) {
+		this.bg = bg;
 	}
 
 	@Override

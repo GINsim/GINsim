@@ -50,7 +50,14 @@ public class AvatarSimulation extends Simulation {
 
 	/** enum specifying the different behavioral strategies of Avatar */
 	public enum AvatarStrategy {
-		MatrixInversion, RandomExit
+		/**
+		 * MatrixInversion
+		 */
+		MatrixInversion,
+		/**
+		 * RandomExit
+		 */
+		RandomExit
 	}
 
 	/****************/
@@ -85,6 +92,9 @@ public class AvatarSimulation extends Simulation {
 	/** maximum depth for the approximate rewiring strategy */
 	public int approxDepth = -1;
 
+	/**
+	 * AsynchronousUpdater exhaustiveUpdater
+	 */
 	protected AsynchronousUpdater exhaustiveUpdater;
 	// public AvatarUpdater sequentialUpdater;
 
@@ -128,6 +138,7 @@ public class AvatarSimulation extends Simulation {
 		/** II: Simulation **/
 
 		for (int sn = 1, time = 0, tau = tauInit; sn <= runs; sn++, time = 0, avgSteps = 0, minSteps = 0, psize = 0, tau = tauInit) {
+			checkPause();
 		    if(keepTransients && savedTransients.size() > limitTransients) {
 		    	PriorityQueue<StateSet> pqnew = new PriorityQueue<StateSet>(new StateSetComparator());
 		    	while(pqnew.size() < 10) pqnew.add(savedTransients.poll());
@@ -156,9 +167,13 @@ public class AvatarSimulation extends Simulation {
 
 			StateSet localTransient = null;
 			while (!F.isEmpty()) {
+				checkPause();
 				State s = F.getProbableRandomState();
 				//System.out.println("new state: "+s.toShortString());
-				
+				if (Thread.currentThread().isInterrupted()) {
+					// System.out.println("Simulation stoped by user !");
+					return null;
+				}
 				if (!quiet)
 					output("  Popped state=" + s + " Sim=" + sn + ", Reincarnation=" + time + ", #F="
 							+ F.size() + ", #D=" + D.size() + ", #A=" + result.attractorsCount.keySet().size());
@@ -168,6 +183,10 @@ public class AvatarSimulation extends Simulation {
 				// State nv = null; #1024
 				for (AbstractStateSet itrans : temporaryTransients) {
 					StateSet trans = (StateSet) itrans;
+					if (Thread.currentThread().isInterrupted()) {
+						System.out.println("Simulation interrompue !");
+						return null;
+					}
 					if (trans.contains(s)) {
 						//System.out.println("tempTransient #"+trans.size()+" "+trans.getKey()+" P"+trans.hasPaths()+" E"+trans.hasExits());
 						if (strategy.equals(AvatarStrategy.RandomExit))
@@ -194,6 +213,10 @@ public class AvatarSimulation extends Simulation {
 				if (keepTransients) {
 					for (AbstractStateSet itrans : savedTransients) {
 						StateSet trans = (StateSet) itrans;
+						if (Thread.currentThread().isInterrupted()) {
+							System.out.println("Simulation interrompue !");
+							return null;
+						}
 						if (trans.contains(s)) {
 							//System.out.println("tempTransient #"+trans.size()+" "+trans.getKey()+" P"+trans.hasPaths()+" E"+trans.hasExits());
 							minSteps++;
@@ -261,8 +284,13 @@ public class AvatarSimulation extends Simulation {
 
 					StateSet cycleToRewire = new StateSet(Ct), exitStatesRewiring = new StateSet();
 					exitStates = null;
-					System.out.println("growing");
+					//System.out.println("growing");
 					do {
+						checkPause();
+						if (Thread.currentThread().isInterrupted()) {
+							System.out.println("Simulation interrompue !");
+							return null;
+						}
 						prev_cycle_size = Ct.size();
 						if (!quiet)
 							output("  Tau updated from " + tau + " to " + (tau * 2) + " (prev cycle=#" + prev_cycle_size
@@ -316,7 +344,7 @@ public class AvatarSimulation extends Simulation {
 						// memory=(int)Math.max(memory,Runtime.getRuntime().totalMemory()/1024);
 
 					} while (exitRatio > 0 && prev_cycle_size < Ct.size() && Ct.size() < maxPSize);
-					System.out.println("grown");
+					//System.out.println("grown");
 
 					if (!quiet)
 						publish("Extended cycle with #" + Ct.size() + " states and exitRatio=" + exitRatio);
@@ -345,9 +373,9 @@ public class AvatarSimulation extends Simulation {
 					if (Ct.size() > minCSize) {
 						if (!quiet)
 							output("  Rewiring cycle  with #" + Ct.size() + " states");
-						System.out.println("To rewire");
+						//System.out.println("To rewire");
 						rewriteGraph(Ct, exitStates, exitProbs);
-						System.out.println("Rewired");
+						//System.out.println("Rewired");
 						if (!quiet)
 							output("  Cycle rewired");
 						if (Ct.size() > minTransientSize) {
@@ -548,12 +576,10 @@ public class AvatarSimulation extends Simulation {
 	/**
 	 * Calculates a complex attractor based on the knowledge of previous
 	 * incarnations
-	 * @param savedTransients 
+	 * @param savedTransients PriorityQueue saved
 	 * 
-	 * @param C
-	 *            terminal cycles from all incarnations
-	 * @param t
-	 *            the current time
+	 * @param Ct terminal cycles from all incarnations
+	 * @param temporaryTransients the current time
 	 * @return the revised complex attractor
 	 */
 	public StateSet calculateComplexAttractor(StateSet Ct, List<StateSet> temporaryTransients, PriorityQueue<StateSet> savedTransients) {
@@ -584,14 +610,11 @@ public class AvatarSimulation extends Simulation {
 	/**
 	 * Method for rewiring a cycle
 	 * 
-	 * @param cycle
-	 *            the cycle (state-set) to be rewired
-	 * @param out
-	 *            the exit states
-	 * @param pi
-	 *            the transitions between cycle and exit states whose probability is
+	 * @param cycle the cycle (state-set) to be rewired
+	 * @param out the exit states
+	 * @param pi the transitions between cycle and exit states whose probability is
 	 *            to be adjusted
-	 * @throws Exception
+	 * @throws Exception an exception
 	 */
 	public void rewriteGraph(StateSet cycle, StateSet out, FinalPaths pi) throws Exception {
 
@@ -741,20 +764,14 @@ public class AvatarSimulation extends Simulation {
 	/**
 	 * Method for extending cycles before rewiring
 	 * 
-	 * @param v
-	 *            the state being expanded (null at the start)
-	 * @param cycle
-	 *            the state-set representing the initial cycle
-	 * @param result
-	 *            the extended cycle
-	 * @param i
-	 *            the current time
-	 * @param tau
-	 *            the expansion rate
-	 * @param time
-	 *            structure maintaining the time/depth of the included states
-	 * @param originalTime
-	 *            the original time
+	 * @param v the state being expanded (null at the start)
+	 * @param cycle the state-set representing the initial cycle
+	 * @param exits the extended cycle
+	 * @param i the current time
+	 * @param tau the expansion rate
+	 * @param time structure maintaining the time/depth of the included states
+	 * @param originalTime the original time
+	 * @param newstates the new state
 	 */
 	public void extendCycle(State v, StateSet cycle, StateSet exits, StateSet newstates, int i, int tau,
 			Map<String, Integer> time, int originalTime) {

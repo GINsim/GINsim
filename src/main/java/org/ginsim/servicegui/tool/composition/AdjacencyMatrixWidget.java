@@ -32,6 +32,10 @@ public class AdjacencyMatrixWidget extends JPanel {
 
 	private CompositionSpecificationDialog dialog = null;
 
+	/**
+	 * Constructor
+	 * @param dialog the CompositionSpecificationDialog
+	 */
 	public AdjacencyMatrixWidget(final CompositionSpecificationDialog dialog) {
 		super();
 		this.dialog = dialog;
@@ -255,27 +259,50 @@ public class AdjacencyMatrixWidget extends JPanel {
 
 	}
 
+	/**
+	 * Test if selected
+	 * @param x position x
+	 * @param y position y
+	 * @return boolean if selected
+	 */
 	public boolean isSelected(int x, int y) {
 		if (x < matrix.length && y < matrix.length)
 			return matrix[x][y].isSelected();
 		return false;
 	}
 
+	/**
+	 * Setter selection
+	 * @param x position x
+	 * @param y position y
+	 */
 	public void setSelected(int x, int y) {
 		if (x < matrix.length && y < matrix.length)
 			matrix[x][y].setSelected(true);
 
 	}
 
+	/**
+	 * Test if symetric
+	 * @return booelean if symetric
+	 */
 	public boolean isSymmetric() {
 		return this.symmetricTopology;
 	}
 
+	/**
+	 * Setter if symetric
+	 * @param symmetry boolean for symetry property
+	 */
 	public void setSymmetry(boolean symmetry) {
 		this.symmetricTopology = symmetry;
 		updateSymmetryGroupSelection();
 	}
 
+	/**
+	 * rebuild éfunction
+	 * @return a new AdjacencyMatrixWidget
+	 */
 	public AdjacencyMatrixWidget reBuild() {
 		AdjacencyMatrixWidget widget = new AdjacencyMatrixWidget(dialog);
 		for (int x = 0; x < matrix.length; x++)

@@ -19,7 +19,8 @@ import org.ginsim.core.graph.view.style.StyleManager;
  * The main graph object in GINsim.
  * Beside the basic graph methods from the GraphModel interface, this provides
  * access to the view (styles and attribute readers), and define methods to save a graph.
- *
+ * @param <E> the edge E
+ * @param <V> the vertex V
  * @author Aurelien Naldi
  * @author Lionel Spinelli
 **/
@@ -48,21 +49,25 @@ public interface Graph<V,E extends Edge<V>> extends GraphModel<V,E>{
 	/**
 	 * Get the global bounds of the graph.
 	 * 
-	 * @return
+	 * @return the dimention
 	 */
 	Dimension getDimension();
 	
 	/**
 	 * Save this graph.
      *
-	 * @param path
+	 * @param path the path string
+	 * @throws GsException  exeption returned
 	 */
 	void save(String path) throws GsException;
 	
 	/**
 	 * Save some components of this graph.
      *
-	 * @param path
+	 * @param path the path string
+	 * @param edges the edges collection
+	 * @param nodes the nodes collection
+	 * @throws GsException graph exception
 	 */
 	void save(String path, Collection<V> nodes, Collection<E> edges) throws GsException;
 
@@ -73,7 +78,7 @@ public interface Graph<V,E extends Edge<V>> extends GraphModel<V,E>{
 	/**
 	 * Add a listener for view change events.
 	 * Note: only one listener is supported: the GraphGUI
-	 * @param listener
+	 * @param listener GraphViewListener listener
 	 */
 	void addViewListener(GraphViewListener listener);
 	
@@ -83,22 +88,23 @@ public interface Graph<V,E extends Edge<V>> extends GraphModel<V,E>{
 	 * will be copied from the source graph to the current one
 	 * 
 	 * @param src the source graph
+	 * @param helper    copy helper
 	 */
 	void copyView(Graph<V,E> src, ViewCopyHelper<Graph<V,E>,V,E> helper);
 	
 	/**
 	 * The graph has changed, all listeners will be notified.
 	 * It will also be marked as unsaved.
-	 * @param type
-     * @param data
+	 * @param type graphchange type
+     * @param data object data
 	 */
 	void fireGraphChange(GraphChangeType type, Object data);
 
 	/**
 	 * Retrieve the name to use when displaying a graph node.
 	 *
-	 * @param node
-	 * @return
+	 * @param node the V node
+	 * @return the display name
 	 */
 	String getDisplayName(V node);
 
@@ -109,6 +115,15 @@ public interface Graph<V,E extends Edge<V>> extends GraphModel<V,E>{
 	 */
 	Map<String,String> getAttributes();
 
+	/**
+	 * Setter attribute
+	 * @param name  name to set
+	 * @param value value to set
+	 */
 	void setAttribute(String name, String value);
 
+	/**
+	 * update Evsmap attribute
+	 */
+	void updateEvsmap();
 }

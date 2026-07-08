@@ -25,6 +25,7 @@ public abstract class ExportAction<G extends Graph> extends BaseAction {
      * @param graph
      * @param name Entry to insert in the menu
      * @param tooltip Long description of the action
+	 * @param serviceGui serviceGui
      */
 	public ExportAction(G graph, String name, String tooltip, ServiceGUI serviceGui) {
 		super(name, null, tooltip, null, serviceGui);
@@ -44,8 +45,7 @@ public abstract class ExportAction<G extends Graph> extends BaseAction {
 
 	/**
 	 * The action was launched, show a GUI if needed, select a file and if all went fine, call the backend
-	 * 
-	 * @throws GsException
+	 *
 	 */
 	public void selectFile() {
 		// TODO: restore file filters

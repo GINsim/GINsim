@@ -11,8 +11,8 @@ import org.ginsim.core.graph.view.EdgePattern;
  * 
  * @author Aurelien Naldi
  *
- * @param <V>
- * @param <E>
+ * @param <V> the vertex
+ * @param <E> the edge
  */
 public interface EdgeStyle<V,E extends Edge<V>> extends Style {
 
@@ -32,7 +32,7 @@ public interface EdgeStyle<V,E extends Edge<V>> extends Style {
     /**
      * get the CSS class(es) used by a specific edge.
      *
-     * @param edge
+     * @param edge  the edge
      * @return a String with one or several class names.
      */
     String getCSSClass(E edge);

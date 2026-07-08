@@ -138,6 +138,13 @@ public class AvatarServiceFacade implements Service {
 		return sim;
 	}
 
+	/**
+	 * Add model to simulation
+	 * @param sim the simulation
+	 * @param filename string for filename
+	 * @return the  Simulation
+	 * @throws Exception the exception
+	 */
 	public static Simulation addModel(Simulation sim, String filename) throws Exception {
 		StatefulLogicalModel model = null;
 		if (filename.contains(".avatar")) {

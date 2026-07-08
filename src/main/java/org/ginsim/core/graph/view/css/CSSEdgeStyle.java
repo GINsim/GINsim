@@ -58,8 +58,9 @@ public class CSSEdgeStyle implements CSSStyle {
 	/**
 	 * A new style from the scratch
 	 * @param lineColor the lineColor color for the node
-	 * @param shape the shape for the line 
-	 * @param lineEnd the style for the end of the line 
+	 * @param  curve the shape for the line
+	 * @param lineEnd the style for the end of the line
+	 * @param border  border length
 	 * 
 	 * @see EdgeAttributesReader
 	 */

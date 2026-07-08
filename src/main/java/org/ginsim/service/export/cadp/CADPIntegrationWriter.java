@@ -13,16 +13,28 @@ import org.ginsim.common.application.GsException;
 import org.ginsim.core.graph.regulatorygraph.RegulatoryNode;
 import org.ginsim.service.tool.composition.IntegrationFunction;
 
+/**
+ *  class CADPIntegrationWriter
+ */
 public class CADPIntegrationWriter extends CADPWriter {
 	private Map<Map.Entry<RegulatoryNode, Integer>, IntegrationProcessWriter> association = new HashMap<Map.Entry<RegulatoryNode, Integer>, IntegrationProcessWriter>();
 	private Collection<String> integrationProcessSignature = new HashSet<String>();
 	private Collection<String> integrationFunctionSignature = new HashSet<String>();
 
+	/**
+	 * Constructor
+	 * @param config the CADPExportConfig c
+	 * @throws GsException the exception graph
+	 */
 	public CADPIntegrationWriter(CADPExportConfig config) throws GsException {
 		super(config);
 		init();
 	}
 
+	/**
+	 * Init function
+	 * @throws GsException the graph exception
+	 */
 	public void init() throws GsException {
 
 		int numberInstances = this.getNumberInstances();
@@ -59,6 +71,10 @@ public class CADPIntegrationWriter extends CADPWriter {
 
 	}
 
+	/**
+	 * To string function
+	 * @return the representation as string
+	 */
 	public String toString() {
 		String out = "";
 
@@ -93,6 +109,9 @@ public class CADPIntegrationWriter extends CADPWriter {
 
 	}
 
+	/**
+	 * class IntegrationProcessWriter
+	 */
 	public class IntegrationProcessWriter {
 		private RegulatoryNode input = null;
 		private int inputModuleIndex;
@@ -119,6 +138,13 @@ public class CADPIntegrationWriter extends CADPWriter {
 		private String formalParameterBaseName = "g";
 		private boolean toWrite = true;
 
+		/**
+		 * IntegrationProcessWriter constructor
+		 * @param inputFromModule map of RegulatoryNode
+		 * @param listExternal list of map with RegulatoryNode
+		 * @param integrationFunction the integration function
+		 * @throws GsException the graph exception
+		 */
 		public IntegrationProcessWriter(
 				Map.Entry<RegulatoryNode, Integer> inputFromModule,
 				List<Map.Entry<RegulatoryNode, Integer>> listExternal,
@@ -181,6 +207,10 @@ public class CADPIntegrationWriter extends CADPWriter {
 			}
 		}
 
+		/**
+		 * retuern concreteIntegrationProces string
+		 * @return a string of concreteIntegrationProces
+		 */
 		public String concreteIntegrationProcess() {
 			if (!this.toWrite)
 				return "";

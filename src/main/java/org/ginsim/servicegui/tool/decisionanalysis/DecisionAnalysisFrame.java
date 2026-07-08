@@ -2,7 +2,7 @@ package org.ginsim.servicegui.tool.decisionanalysis;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-
+import java.awt.Component;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -31,6 +31,10 @@ public class DecisionAnalysisFrame extends LogicalModelActionDialog  {
 	public DecisionAnalysisFrame(JFrame frame, HierarchicalTransitionGraph graph, RegulatoryGraph lrg) {
 		super(lrg, frame, "STR_htg_decision_analysis", 475, 260);
 		this.htg = (HierarchicalTransitionGraph) graph;
+		if (this.htg.getReduction() != null && this.getReduction() == null){
+			this.setReduction(this.htg.getReduction());
+		}
+
     }
 	
 	protected JPanel getMainPanel() {
@@ -59,17 +63,22 @@ public class DecisionAnalysisFrame extends LogicalModelActionDialog  {
 			selectPriorityClass = new PrioritySelectionPanel(this, paramList.pcmanager);
 			this.currentParameter = paramList.get(0);
 			selectPriorityClass.setStore(currentParameter);
+			for (Component comp : selectPriorityClass.getComponents()){
+			    comp.setEnabled(false);}
 		}
 		return selectPriorityClass;
 	}
 
 	@Override
 	public void run(LogicalModel model) {
+		// enlever curentparameter
+		//LogicalModel lg = model.getView(htg.getNodeOrder());
+
 		DecisionAnalysis decisionAnalysis = new DecisionAnalysis(model, htg, currentParameter);
 		this.brun.setEnabled(false);
 		decisionAnalysis.run( GUIManager.getInstance().getGraphGUI( htg).getSelection().getSelectedNodes());
 		this.brun.setEnabled(true);
 		cancel();
 	}
-	
+
 }

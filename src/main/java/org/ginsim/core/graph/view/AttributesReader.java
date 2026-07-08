@@ -6,6 +6,9 @@ import java.io.IOException;
 
 import org.ginsim.common.xml.XMLWriter;
 
+/**
+ * Interface AttributeReader
+ */
 public interface AttributesReader {
 
 	/**
@@ -29,7 +32,7 @@ public interface AttributesReader {
 	/**
 	 * Test if a point can be used to select the current item.
 	 * 
-	 * @param p
+	 * @param p point
 	 * @return true if the item should be selected
 	 */
 	boolean select(Point p);
@@ -37,16 +40,16 @@ public interface AttributesReader {
     /**
      * Move the item.
      * 
-     * @param dx
-     * @param dy
+     * @param dx position x
+     * @param dy position y
      */
     void move(int dx, int dy);
 
     /**
      * Save the visual settings in GINML.
      * 
-     * @param writer
-     * @throws IOException
+     * @param writer  xml writer
+     * @throws IOException io exception
      */
 	void writeGINML(XMLWriter writer) throws IOException;
 }

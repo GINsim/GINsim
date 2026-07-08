@@ -32,7 +32,7 @@ public class PrioritySetList extends NamedList<UpdaterDefinition> {
 		add(UpdaterDefinitionAsynchronous.DEFINITION);
 		add(UpdaterDefinitionSynchronous.DEFINITION);
 		add(UpdaterDefinitionComplete.DEFINITION);
-		add(new UpdaterDefinitionSequential());
+		//add(new UpdaterDefinitionSequential());
 		
 		this.lockedIndex = size();
 	}

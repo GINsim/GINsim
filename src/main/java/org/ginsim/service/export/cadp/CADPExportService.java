@@ -27,6 +27,13 @@ import org.kohsuke.MetaInfServices;
 @ServiceStatus(EStatus.DEVELOPMENT)
 public class CADPExportService implements Service {
 
+	/**
+	 * Run function
+	 * @param config the CADPExportConfig
+	 * @param fileheadname the string filename
+	 * @throws IOException io exception
+	 * @throws GsException the graph exception
+	 */
 	public void run(CADPExportConfig config, String fileheadname)
 			throws IOException, GsException {
 		export(config, fileheadname);
@@ -36,12 +43,10 @@ public class CADPExportService implements Service {
 	 * 
 	 * Exports the necessary files for CADP
 	 * 
-	 * @param config
-	 *            the configuration of the composition
-	 * @param fileheadname
-	 *            the name of the bundle (zip) file
-	 * @throws GsException
-	 * @throws IOException
+	 * @param config the configuration of the composition
+	 * @param fileheadname the name of the bundle (zip) file
+	 * @throws GsException the graph exception
+	 * @throws IOException the io exception
 	 */
 	public void export(CADPExportConfig config, String fileheadname)
 			throws GsException, IOException {

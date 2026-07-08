@@ -3,7 +3,7 @@ package org.ginsim.gui.notifications;
 import org.ginsim.core.notification.Notification;
 
 /**
- * 
+ * interface  NotificationSource
  * @author Aurelien Naldi
  *
  */

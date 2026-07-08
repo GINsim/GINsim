@@ -57,6 +57,7 @@ public class InteractionAnalysisFrame extends StackDialog implements ActionListe
     }
 
 	public void initialize() {
+		setTitle(Txt.t("STR_interactionAnalysis"));
 		setMainPanel(getMainPanel());
 	}
 	
@@ -94,7 +95,7 @@ public class InteractionAnalysisFrame extends StackDialog implements ActionListe
 		    saveReportButton.addActionListener(this);
 		
 		    c.gridy++;
-			colorizerPanel = new ColorizerPanel("interactionAnalysis.", regGraph);
+			colorizerPanel = new ColorizerPanel("interactionAnalysis", regGraph);
 		    mainPanel.add(colorizerPanel, c);
 		}
 		return mainPanel;

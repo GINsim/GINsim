@@ -14,8 +14,8 @@ import org.ginsim.core.graph.view.style.EdgeStyle;
  * @author Lionel Spinelli
  * @author Aurelien Naldi
  *
- * @param <V>
- * @param <E>
+ * @param <V>  vertex
+ * @param <E>  edge
  */
 public interface GraphBackend<V, E extends Edge<V>> {
 
@@ -151,7 +151,7 @@ public interface GraphBackend<V, E extends Edge<V>> {
     
 	/**
 	 * Find the shortest path between the two given vertices
-	 * 
+	 *
 	 * @param source the node at the beginning of the searched path
 	 * @param target the node at the end of the searched path
 	 * @return the list of edges composing the shortest path
@@ -179,6 +179,9 @@ public interface GraphBackend<V, E extends Edge<V>> {
 	 * Trigger a repaint of the damaged areas
 	 */
 	void repaint();
+
+
+	public void updateEvsmap();
 	
 	void setDefaultEdgeStyle(EdgeStyle<V, E> style);
 }

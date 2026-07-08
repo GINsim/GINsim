@@ -41,8 +41,8 @@ public class MaBoSSExportServiceGUI extends AbstractServiceGUI {
 
 	@Override
 	public int getInitialWeight() {
-		return W_EXPORT_SPECIFIC + 50;
-	}
+		return+ 6;
+	} //+ 50  W_EXPORT_SPECIFIC
 }
 
 /**
@@ -56,7 +56,7 @@ class MaBoSSExportAction extends ExportAction<RegulatoryGraph> {
 	private static final FileFormatDescription FORMAT = new FileFormatDescription("MaBoSS", "bnd");
 
 	public MaBoSSExportAction(RegulatoryGraph graph, ServiceGUI serviceGUI) {
-		super(graph, "MaBoSS", "Export to MaBoSS format", serviceGUI);
+		super(graph, "Others/MaBoSS", "Export to MaBoSS format", serviceGUI);
 	}
 
 	@Override

@@ -7,11 +7,15 @@ import java.awt.Component;
  * 
  * @author Aurelien Naldi
  *
- * @param <T>
+ * @param <T>  extend T
  */
 public interface GUIEditor<T> {
 
 	void setEditedItem(T item);
-	
+
+	/**
+	 * component getter
+	 * @return component
+	 */
 	Component getComponent();
 }

@@ -59,7 +59,7 @@ public class RegulatoryAnimator extends AbstractListModel implements GraphGUILis
     
     /**
      * @param frame
-     * @param graph
+     * @param dynGraph
      */
     public static void animate(JFrame frame, DynamicGraph dynGraph) {
     	RegulatoryGraph regGraph = null;
@@ -177,10 +177,12 @@ public class RegulatoryAnimator extends AbstractListModel implements GraphGUILis
     }
     
     private void fillNext() {
-      nextEdges = dynGraph.getOutgoingEdges(path.get(path.size()-1));
-      nextNodes.clear();
-      for (DynamicEdge edge: nextEdges) {
-    	  nextNodes.add(edge.getTarget());
+      if (path.size() > 0) {
+          nextEdges = dynGraph.getOutgoingEdges(path.get(path.size() - 1));
+          nextNodes.clear();
+          for (DynamicEdge edge : nextEdges) {
+              nextNodes.add(edge.getTarget());
+          }
       }
     }
     

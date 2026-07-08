@@ -40,7 +40,7 @@ public class StableStatesServiceGUI extends AbstractServiceGUI {
 
 	@Override
 	public int getInitialWeight() {
-		return W_TOOLS_MAIN + 20;
+		return W_TOOLS_MAIN + 3;
 	}
 
 

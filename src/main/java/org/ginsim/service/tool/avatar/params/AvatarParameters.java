@@ -3,19 +3,16 @@ package org.ginsim.service.tool.avatar.params;
 import java.io.IOException;
 
 import org.colomoto.biolqm.io.avatar.AvatarUtils;
-import org.ginsim.common.application.GsException;
 import org.ginsim.common.xml.XMLWriter;
 import org.ginsim.common.xml.XMLize;
 import org.ginsim.core.graph.regulatorygraph.namedstates.NamedStateList;
 import org.ginsim.core.graph.regulatorygraph.perturbation.ListOfPerturbations;
 import org.ginsim.core.graph.regulatorygraph.perturbation.Perturbation;
 import org.ginsim.core.utils.data.NamedObject;
-import org.ginsim.gui.graph.regulatorygraph.perturbation.PerturbationSelectionPanel;
 import org.ginsim.service.tool.avatar.simulation.AvatarSimulation;
 import org.ginsim.service.tool.avatar.simulation.AvatarSimulation.AvatarStrategy;
 import org.ginsim.service.tool.modelreduction.ListOfReductionConfigs;
 import org.ginsim.service.tool.modelreduction.ReductionConfig;
-import org.ginsim.servicegui.tool.modelreduction.ReductionSelectionPanel;
 import org.ginsim.service.tool.avatar.simulation.FirefrontSimulation;
 import org.ginsim.service.tool.avatar.simulation.MonteCarloSimulation;
 import org.ginsim.service.tool.avatar.simulation.Simulation;
@@ -28,29 +25,139 @@ import org.ginsim.service.tool.avatar.simulation.Simulation;
  */
 public class AvatarParameters implements XMLize, NamedObject {
 
+	/**
+	 * String name
+	 */
 	public String name = "new_parameter";
+	/**
+	 * AvatarStateStore statestore;
+	 */
 	public AvatarStateStore statestore;
-	public boolean[] statesSelected, istatesSelected; // oraclesSelected, ioraclesSelected, enabled, ienabled;
-	public boolean quiet, avaKeepTrans;
-	public int algorithm, avaStrategy;
-	public String avaRuns, avaTau, avaDepth, avaAproxDepth, avaMinTran, avaMinCycle, avaMaxPSize, avaMaxRewiringSize;
-	public String ffMaxExpand, ffDepth, ffAlpha, ffBeta, mcDepth, mcRuns;
+	/**
+	 * boolean array statesSelected,
+	 */
+	public boolean[] statesSelected,
+			/**
+			 * boolean array istatesSelected;
+			 */
+			istatesSelected; // oraclesSelected, ioraclesSelected, enabled, ienabled;
+	/**
+	 * boolean quiet,
+	 */
+	public boolean quiet,
+			/**
+			 * boolean avaKeepTrans
+			 */
+			avaKeepTrans;
+	/**
+	 * the int algorithm
+	 */
+	public int algorithm,
+			/**
+			 * int avaStrategy
+			 */
+			avaStrategy;
+	/**
+	 * String avaRuns
+	 */
+	public String avaRuns,
+			/**
+			 * String avaTau
+			 */
+			avaTau,
+			/**
+			 * String avaDeath
+			 */
+			avaDepth,
+			/**
+			 * String avaAproxDepth
+			 */
+			avaAproxDepth,
+			/**
+			 * string avaMinTran
+			 */
+			avaMinTran,
+			/**
+			 * String avaMinCycle
+			 */
+			avaMinCycle,
+			/**
+			 * String avaMaxPSize
+			 */
+			avaMaxPSize,
+			/**
+			 * String avaMaxRewiringSize
+			 */
+			avaMaxRewiringSize;
+	/**
+	 * String ffMaxExpand
+	 */
+	public String ffMaxExpand,
+			/**
+			 * String ffDepth,
+			 */
+			ffDepth,
+			/**
+			 * String ffAlpha,
+			 */
+			ffAlpha,
+			/**
+			 * String ffBeta
+			 */
+			ffBeta,
+			/**
+			 * String mcDepth,
+			 */
+			mcDepth,
+			/**
+			 * String mcRuns
+			 */
+			mcRuns;
+	/**
+	 * ListOfPerturbations perturbations;
+	 */
 	public ListOfPerturbations perturbations;
+	/**
+	 * ListOfReductionConfigs reductions;
+	 */
 	public ListOfReductionConfigs reductions;
+	/**
+	 * Perturbation perturbation;
+	 */
 	public Perturbation perturbation;
+	/**
+	 * ReductionConfig reduction;
+	 */
 	public ReductionConfig reduction;
 
 	/**
 	 * Creates an empty context
 	 */
 	public AvatarParameters() {
+		this.algorithm = 0;
+		this.quiet = true;
+		this.avaRuns = "1000";
+		this.avaTau = "3";
+		this.avaDepth = "1E6";
+		this.avaAproxDepth = "7";
+		this.avaMinTran = "200";
+		this.avaMinCycle = "4";
+		this.avaMaxPSize = "1E4";
+		this.avaMaxRewiringSize = "1E3";
+		this.avaKeepTrans = true;
+		this.avaStrategy = 0;
+		this.ffMaxExpand = "1E3";
+		this.ffDepth = "1E4";
+		this.ffAlpha = "1E-5";
+		this.ffBeta = "1E-5";
+		this.mcDepth = "1000";
+		this.mcRuns = "1000";
 	}
 
 	/**
 	 * Updates the context with the parameters of a given simulation
 	 * 
-	 * @param sim
-	 *            simulation whose parameters are to be stored
+	 * @param sim simulation whose parameters are to be stored
 	 */
 	public void complete(Simulation sim) {
 		if (sim instanceof AvatarSimulation) {
@@ -138,7 +245,7 @@ public class AvatarParameters implements XMLize, NamedObject {
 		// +="\noracleselection="+AvatarUtils.toString(oraclesSelected)+"\nioracleselection="+AvatarUtils.toString(ioraclesSelected);
 		// result+"\nenabled="+AvatarUtils.toString(enabled)+"\nienabled="+AvatarUtils.toString(ienabled);
 	}
-	
+
 	private String getStates(NamedStateList stateList) {
 		String result = "";
 		for (int i = 0; i < stateList.size(); i++) {
@@ -148,6 +255,7 @@ public class AvatarParameters implements XMLize, NamedObject {
 		}
 		return result;
 	}
+
 	private String getStateNames(NamedStateList stateList) {
 		String result = "";
 		for (int i = 0; i < stateList.size(); i++) {
@@ -162,21 +270,21 @@ public class AvatarParameters implements XMLize, NamedObject {
 	public void toXML(XMLWriter out) throws IOException {
 		out.openTag("parameter");
 		out.addAttr("name", name);
-		out.addAttr("avatarparameters",toFullString());
+		out.addAttr("avatarparameters", toFullString());
 		// System.out.println(toFullString());
 		// State List
-		if(reduction != null) {
+		if (reduction != null) {
 			out.openTag("reduction");
-            reduction.toXML(out);
-            out.closeTag();
+			reduction.toXML(out);
+			out.closeTag();
 		}
-		if(perturbation != null) {
-            out.openTag("perturbation");
-            perturbation.toXML(out);
-            out.closeTag();
-		}            
-		//System.out.println("after perturbations");
-		
+		if (perturbation != null) {
+			out.openTag("perturbation");
+			perturbation.toXML(out);
+			out.closeTag();
+		}
+		// System.out.println("after perturbations");
+
 		out.openTag("stateList");
 		out.addAttr("states", this.getStates(statestore.nstates));
 		out.addAttr("namestates", this.getStates(statestore.nstates));
@@ -187,7 +295,7 @@ public class AvatarParameters implements XMLize, NamedObject {
 		out.addAttr("ostates", this.getStates(statestore.oracles));
 		out.addAttr("onamestates", this.getStates(statestore.oracles));
 		out.closeTag();
-		// 
+		//
 		out.closeTag();
 	}
 

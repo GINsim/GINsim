@@ -10,18 +10,16 @@ import org.ginsim.core.graph.dynamicgraph.DynamicGraph;
 import org.ginsim.core.graph.regulatorygraph.RegulatoryGraph;
 import org.ginsim.core.graph.regulatorygraph.RegulatoryNode;
 
-
-
 /**
  * A simple Table model to display a list of state.
  * 
  */
 public class SimpleStateListTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 7616168924487846012L;
-	private static final int STAR = 10;
-	
+	private static final int STAR = -1;
+
 	private RegulatoryGraph g;
-	
+
 	/**
 	 * A list of state : byte[]
 	 */
@@ -32,17 +30,20 @@ public class SimpleStateListTableModel extends AbstractTableModel {
 	public SimpleStateListTableModel(RegulatoryGraph g) {
 		this(g, false, new ArrayList());
 	}
+
 	public SimpleStateListTableModel(RegulatoryGraph g, List data) {
 		this(g, false, data);
 	}
+
 	public SimpleStateListTableModel(RegulatoryGraph g, boolean isEditable) {
 		this(g, isEditable, new ArrayList());
 	}
+
 	public SimpleStateListTableModel(RegulatoryGraph g, boolean isEditable, List data) {
 		this.g = g;
-		this.isEditable  = isEditable;
+		this.isEditable = isEditable;
 		this.data = data;
-		
+
 		this.statemax = new byte[g.getNodeOrderSize()];
 		int i = 0;
 		for (Iterator it = g.getNodeOrder().iterator(); it.hasNext();) {
@@ -63,11 +64,12 @@ public class SimpleStateListTableModel extends AbstractTableModel {
 		if (data == null) {
 			return 0;
 		}
-		return data.size()+(isEditable?1:0);
+		return data.size() + (isEditable ? 1 : 0);
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		if (rowIndex >= data.size()) return "";
+		if (rowIndex >= data.size())
+			return "";
 
 		byte[] state = (byte[]) data.get(rowIndex);
 		int val = state[columnIndex];
@@ -75,7 +77,7 @@ public class SimpleStateListTableModel extends AbstractTableModel {
 			return "*";
 		}
 		if (val == statemax[columnIndex]) {
-			return "M"+String.valueOf(val);
+			return "M" + String.valueOf(val);
 		}
 		return String.valueOf(val);
 	}
@@ -95,11 +97,11 @@ public class SimpleStateListTableModel extends AbstractTableModel {
 				state[i] = 0;
 			}
 			data.add(state);
-			fireTableRowsInserted(row-1, row);
+			fireTableRowsInserted(row - 1, row);
 		}
 		String v = (String) value;
 		state = (byte[]) data.get(row);
-		if (state != null){
+		if (state != null) {
 			if (v.equals("*")) {
 				state[col] = STAR;
 			} else {
@@ -111,7 +113,7 @@ public class SimpleStateListTableModel extends AbstractTableModel {
 						state[col] = val;
 					}
 				} catch (Exception e) {
-					//Does nothing
+					// Does nothing
 				}
 			}
 			fireTableCellUpdated(row, col);
@@ -122,14 +124,17 @@ public class SimpleStateListTableModel extends AbstractTableModel {
 		if (value.length == g.getNodeOrderSize()) {
 			data.add(value);
 		}
-		fireTableRowsInserted(data.size()-1, data.size());
+		fireTableRowsInserted(data.size() - 1, data.size());
 	}
 
 	public byte[] getState(int row) {
-		if (data.size() == 0) return new byte[statemax.length];
-		if (row >= data.size() || row < 0) return null;
+		if (data.size() == 0)
+			return new byte[statemax.length];
+		if (row >= data.size() || row < 0)
+			return null;
 		return (byte[]) data.get(row);
 	}
+
 	/**
 	 * 
 	 * @return an array of the maxvalues

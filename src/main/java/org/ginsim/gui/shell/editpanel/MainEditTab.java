@@ -52,6 +52,7 @@ public class MainEditTab extends JPanel implements EditTab {
 		switch (selection.getSelectionType()) {
 		case SEL_NONE:
 			activePanel = GRAPH_NAME;
+			mainPanel.setEditedItem(selection.getSelectedNodes());
 			break;
 		case SEL_NODE:
 			activePanel = NODE_NAME;

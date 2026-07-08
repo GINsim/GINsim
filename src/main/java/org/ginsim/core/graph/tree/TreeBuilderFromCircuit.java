@@ -31,7 +31,7 @@ public class TreeBuilderFromCircuit extends TreeBuilder {
 		root = (Integer) getParameter(PARAM_INITIALCIRCUITDESC);
 		nodeOrder = (List<RegulatoryNode>)getParameter(PARAM_NODEORDER);
 
-		widthPerDepth = widthPerDepth_acc = realDetph = null;
+		widthPerDepth = widthPerDepth_acc = realDepth = null;
 		total_levels = max_depth = 0;
 		max_terminal = 3;
 		initRealDepth(root);
@@ -43,14 +43,14 @@ public class TreeBuilderFromCircuit extends TreeBuilder {
 	 * @param root
 	 */
 	public void initRealDepth(int root) {
-		realDetph = new int[nodeOrder.size()+1]; //+1 for the leafs
+		realDepth = new int[nodeOrder.size()+1]; //+1 for the leafs
 		_initRealDepth(root);
 		int next_realDepth = 0;
-		for (int i = 0; i < realDetph.length; i++) {
-			if (realDetph[i] == -1) {
+		for (int i = 0; i < realDepth.length; i++) {
+			if (realDepth[i] == -1) {
 				total_levels++;
-				realDetph[i] = next_realDepth++;
-			} else realDetph[i] = -2;
+				realDepth[i] = next_realDepth++;
+			} else realDepth[i] = -2;
 		}
 	}
 
@@ -59,7 +59,7 @@ public class TreeBuilderFromCircuit extends TreeBuilder {
             return ;
         }
         MDDVariable var = ddmanager.getNodeVariable(o);
-        realDetph[var.order] = -1;
+        realDepth[var.order] = -1;
         for (int i = 0 ; i < var.nbval ; i++) {
             _initRealDepth(ddmanager.getChild(o,i));
         }
@@ -142,7 +142,7 @@ public class TreeBuilderFromCircuit extends TreeBuilder {
 
 			last_real = 0;
 			for (int j = lastLevel+1 ; j < max_depth ; j++) { //For all the missing genes
-				if (realDetph[j] != -2) {
+				if (realDepth[j] != -2) {
 					parents = addChildren(j, mult, parents, childIndex, currentWidthPerDepth, ereader);
 					mult = widthPerDepth[j];
 					last_real = j;
@@ -170,7 +170,7 @@ public class TreeBuilderFromCircuit extends TreeBuilder {
 		last_real = 0;
 		List<TreeNode> skippedParents = parents;
 		for (int j = lastLevel+1 ; j < var.order ; j++) { //For all the missing genes
-			if (realDetph[j] != -2) {
+			if (realDepth[j] != -2) {
 				skippedParents = addChildren(j, mult, skippedParents, childIndex, currentWidthPerDepth, ereader);
 				mult = widthPerDepth[j];
 				last_real = j;

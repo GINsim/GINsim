@@ -50,10 +50,8 @@ public class PRISMEncoder {
 	/**
 	 * Export the graph to a PRISM model description
 	 * 
-	 * @param config
-	 *            the user defined parameters with the model
-	 * @param out
-	 *            the writer receiving the encoded model description
+	 * @param config the user defined parameters with the model
+	 * @param out the writer receiving the encoded model description
 	 */
 	public void write(PRISMConfig config, Writer out) throws IOException,
 			GsException {

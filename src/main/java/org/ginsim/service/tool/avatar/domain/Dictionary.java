@@ -27,7 +27,7 @@ public final class Dictionary {
 	
 	/**
 	 * Loads the hash function: sum of the Cartesian product between the given parameter and a given state
-	 * @param factors the hash function to compute the key of a given state
+	 * @param _factors the hash function to compute the key of a given state
 	 */
 	public static void codingShortStates(long[] _factors){
 		factors = _factors;

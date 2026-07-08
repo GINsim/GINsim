@@ -17,8 +17,9 @@ public class AReg2GPModel extends AbstractTableModel {
 	private boolean[] t_selected;
 	
 	/**
-	 * @param nodeOrder
-	 * @param t_selected
+	 * Constructor AReg2GPModel
+	 * @param nodeOrder node order list
+	 * @param t_selected boolean array
 	 */
 	public AReg2GPModel(List nodeOrder, boolean[] t_selected) {
 		this.nodeOrder = nodeOrder;

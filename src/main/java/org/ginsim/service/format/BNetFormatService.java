@@ -18,6 +18,9 @@ import org.kohsuke.MetaInfServices;
 @ServiceStatus(EStatus.DEVELOPMENT)
 public class BNetFormatService extends FormatSupportService<BNetFormat> {
 
+	/**
+	 * Constructor
+	 */
 	public BNetFormatService() {
 		super(new BNetFormat());
 	}

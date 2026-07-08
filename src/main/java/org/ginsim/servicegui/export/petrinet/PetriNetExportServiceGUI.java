@@ -43,7 +43,7 @@ public class PetriNetExportServiceGUI extends AbstractServiceGUI {
 
 	@Override
 	public int getInitialWeight() {
-		return W_EXPORT_SPECIFIC + 50;
+		return  50; // W_EXPORT_SPECIFIC +
 	}
 
 }

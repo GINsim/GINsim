@@ -7,7 +7,7 @@ import org.ginsim.core.graph.GraphFactory;
 import org.kohsuke.MetaInfServices;
 
 /**
- * 
+ * class  TrapSpaceTreeFactory
  * @author Aurelien Naldi
  */
 @MetaInfServices( GraphFactory.class)

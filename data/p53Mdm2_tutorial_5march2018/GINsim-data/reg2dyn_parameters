@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulationParameters nodeOrder="p53 Mdm2cyt Mdm2nuc DNAdam">
+  <parameter name="parameter" updating="Synchronous" breadthFirst="false" maxdepth="0" maxnodes="0" simulationStrategy="0">
+    <initstates>
+      <row name="damage"/>
+    </initstates>
+  </parameter>
+</simulationParameters>

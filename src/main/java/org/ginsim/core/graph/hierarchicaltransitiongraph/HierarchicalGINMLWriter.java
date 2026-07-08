@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.ginsim.common.xml.XMLWriter;
 import org.ginsim.core.io.parser.GINMLWriter;
+import org.ginsim.service.tool.reg2dyn.SimulationParameters;
+import org.ginsim.service.tool.reg2dyn.SimulationStrategy;
 
 /**
  * Save a HTG in the GINML format.
@@ -26,6 +28,11 @@ public class HierarchicalGINMLWriter extends GINMLWriter<HierarchicalTransitionG
 	@Override
 	public void hook_graphAttribute(XMLWriter out) throws IOException {
 		out.addAttr("nodeorder", str_no);
+		if(this.graph.getSimulationStrategy() == SimulationStrategy.SCCG) {
+			out.addAttr("type", "scc");
+		} else {
+			out.addAttr("type", "htg");
+		}
 		addAttributeTag(out, "isCompact", isCompact);
 	}
 

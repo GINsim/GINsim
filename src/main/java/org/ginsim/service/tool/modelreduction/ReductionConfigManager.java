@@ -50,11 +50,11 @@ public class ReductionConfigManager extends BasicGraphAssociatedManager<ListOfRe
             out.closeTag();
             
             out.openTag("listOfUsers");
-            for (String key: paramList.getOutputStrippingUsers()) {
-                out.openTag("stripOutput");
-                out.addAttr("key", key);
-                out.closeTag();
-            }
+            //for (String key: paramList.getOutputStrippingUsers()) {
+            //    out.openTag("stripOutput");
+            //    out.addAttr("key", key);
+            //    out.closeTag();
+            //}
             for (String key: paramList.getFixedPropagationUsers()) {
                 out.openTag("propagateFixed");
                 out.addAttr("key", key);
@@ -92,7 +92,7 @@ class ReductionConfigParser extends XMLHelper {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         super.startElement(uri, localName, qName, attributes);
         if (qName.equals("simplificationConfig")) {
-        	ReductionConfig cfg = paramList.get(paramList.create());
+        	ReductionConfig cfg = paramList.get(paramList.create(false));
         	cfg.setName(attributes.getValue("name"));
         	String s_strict = attributes.getValue("strict");
         	if (s_strict != null) {
@@ -108,10 +108,11 @@ class ReductionConfigParser extends XMLHelper {
         			}
         		}
         	}
-        } else if (qName.equals("stripOutput")) {
-            String key = attributes.getValue("key");
-            paramList.setStrippingOutput(key, true);
-        } else if (qName.equals("propagateFixed")) {
+        } //else if (qName.equals("stripOutput")) {
+         //   String key = attributes.getValue("key");
+         //   paramList.setStrippingOutput(key, true);
+       // }
+        else if (qName.equals("propagateFixed")) {
             String key = attributes.getValue("key");
             paramList.setPropagateFixed(key, true);
         }

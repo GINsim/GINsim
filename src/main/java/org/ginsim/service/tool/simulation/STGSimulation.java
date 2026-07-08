@@ -11,7 +11,6 @@ import org.ginsim.core.graph.GSGraphManager;
 import org.ginsim.core.graph.dynamicgraph.DynamicGraph;
 import org.ginsim.core.graph.dynamicgraph.DynamicNode;
 
-
 /**
  * Simulation module to construct STG based on the updaters in LogicalModel
  *

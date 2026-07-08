@@ -100,7 +100,6 @@ public class CascadingStyleSheet {
 	/**
 	 * Return a new CSS object from a text.
 	 * @param text
-	 * @return a new CSS object from a text
 	 * @throws CSSSyntaxException
 	 */
 	public void parse(String text) throws CSSSyntaxException {
@@ -111,7 +110,6 @@ public class CascadingStyleSheet {
 
 	/**
 	 * Return a new CSS object from a Reader.
-	 * @param text
 	 * @return a new CSS object from a text
 	 * @throws CSSSyntaxException
 	 */
@@ -176,6 +174,7 @@ class CSSParser {
 	/**
 	 * Parse a css
 	 * @param css the css text
+	 * @param text  corresponding text
 	 * @throws CSSParseException
 	 */
 	protected static void parse(CascadingStyleSheet css, String text) throws CSSSyntaxException {

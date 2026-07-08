@@ -26,6 +26,8 @@ import org.ginsim.core.graph.view.style.StyleManager;
 
 /**
  * A generic nodeAttributeReader showing a unified view of default and node-specific styles (from the graph backend).
+ * @param <V>  the vertex
+ * @param <E> the edge
  */
 public class NodeAttributeReaderImpl<V,E extends Edge<V>> implements NodeAttributesReader<V> {
 
@@ -86,9 +88,9 @@ public class NodeAttributeReaderImpl<V,E extends Edge<V>> implements NodeAttribu
     private SimpleStroke stroke = new SimpleStroke();
 
     /**
-     * @param styleManager
-     * @param backend
-     * @param backend
+     * @param styleManager  the style manager
+     * @param backend the backen graph
+     * @param graph the graph
      */
     public NodeAttributeReaderImpl(StyleManager<V, E> styleManager, Graph<V,E> graph, GraphBackend<V, E> backend) {
     	this.graph = graph;

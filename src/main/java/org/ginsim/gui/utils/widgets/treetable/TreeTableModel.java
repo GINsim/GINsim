@@ -59,34 +59,48 @@ public interface TreeTableModel extends TreeModel
 {
     /**
      * Returns the number of available column.
+     * @return  the column indice
      */
     public int getColumnCount();
 
     /**
      * Returns the name for column number <code>column</code>.
+     * @param column column name
+     * @return the column name
      */
     public String getColumnName(int column);
 
     /**
      * Returns the type for column number <code>column</code>.
+     * @param column column indece
+     * @return the column class
      */
     public Class getColumnClass(int column);
 
     /**
      * Returns the value to be displayed for node <code>node</code>, 
      * at column number <code>column</code>.
+     * @param column the column indice
+     * @param node the node object
+     * @return  Object
      */
     public Object getValueAt(Object node, int column);
 
     /**
      * Indicates whether the the value for node <code>node</code>, 
      * at column number <code>column</code> is editable.
+     * @param node the node object
+     * @param column the column indece
+     * @return boolean if celleditable
      */
     public boolean isCellEditable(Object node, int column);
 
     /**
      * Sets the value for node <code>node</code>, 
      * at column number <code>column</code>.
+     * @param column column indice
+     * @param node the node object
+     * @param aValue value to set
      */
     public void setValueAt(Object aValue, Object node, int column);
 }

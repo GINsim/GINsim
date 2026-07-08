@@ -56,7 +56,7 @@ public class AvaMath {
 	
 	/**
 	 * Returns the sum of a double collection
-	 * @param vector the collection of doubles
+	 * @param values the collection of doubles
 	 * @return the sum of values
 	 */
 	public static double sum(Collection<Double> values) {
@@ -100,7 +100,7 @@ public class AvaMath {
 
 	/**
 	 * Normalizes the columns of a matrix
-	 * @param vector the matrix whose columns are to be normalized
+	 * @param dataset  the matrix whose columns are to be normalized
 	 * @return the matrix with the values normalized per column
 	 */
 	public static double[][] normalizeColumns(double[][] dataset) {

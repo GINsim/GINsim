@@ -15,10 +15,14 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 import org.colomoto.biolqm.LogicalModel;
 import org.colomoto.biolqm.tool.fixpoints.FixpointList;
 import org.colomoto.biolqm.tool.fixpoints.FixpointTask;
+import org.colomoto.biolqm.tool.trapspaces.TrapSpaceList;
+import org.colomoto.biolqm.tool.trapspaces.TrapSpaceTask;
 import org.ginsim.common.application.LogManager;
 import org.ginsim.common.application.Txt;
 import org.ginsim.core.graph.Graph;
@@ -26,6 +30,7 @@ import org.ginsim.core.graph.regulatorygraph.RegulatoryGraph;
 import org.ginsim.core.graph.regulatorygraph.perturbation.Perturbation;
 import org.ginsim.core.graph.regulatorygraph.perturbation.PerturbationStore;
 import org.ginsim.core.service.GSServiceManager;
+import org.ginsim.gui.graph.dynamicgraph.StableTableModel;
 import org.ginsim.gui.graph.regulatorygraph.perturbation.PerturbationSelectionPanel;
 import org.ginsim.gui.graph.view.style.StyleColorizerCheckbox;
 import org.ginsim.gui.utils.data.SimpleStateListTableModel;
@@ -33,13 +38,13 @@ import org.ginsim.gui.utils.dialog.stackdialog.StackDialog;
 import org.ginsim.gui.utils.widgets.EnhancedJTable;
 import org.ginsim.service.tool.stablestates.StableStatesService;
 import org.ginsim.servicegui.tool.regulatorygraphanimation.LRGStateStyleProvider;
-import org.ginsim.gui.graph.dynamicgraph.StableTableModel;
-
+import org.ginsim.servicegui.tool.trapspace.TrapSpaceTableModel;
 
 /**
  * The main frame.
  * 
- * Display a JTabbedPane that contains different TabComponantProvidingAState having a method to get a state
+ * Display a JTabbedPane that contains different TabComponantProvidingAState
+ * having a method to get a state
  *
  */
 public class StateInRegGraphFrame extends StackDialog {
@@ -49,7 +54,7 @@ public class StateInRegGraphFrame extends StackDialog {
 
 	private Container mainPanel;
 	private JTabbedPane tabbedPane;
-	
+
 	private final LRGStateStyleProvider styleProvider;
 
 	private StyleColorizerCheckbox colorizerCheckbox;
@@ -63,6 +68,7 @@ public class StateInRegGraphFrame extends StackDialog {
 
 	private Container getMainPanel() {
 		if (mainPanel == null) {
+			this.setTitle(Txt.t("STR_stateInRegGraph"));
 			mainPanel = new javax.swing.JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			GridBagConstraints c = new GridBagConstraints();
@@ -80,9 +86,10 @@ public class StateInRegGraphFrame extends StackDialog {
 			c.weightx = 1;
 			c.weighty = 1;
 			tabbedPane = new JTabbedPane();
-			tabbedPane.add(Txt.t("STR_stateInRegGraph_state"), new State(regGraph));
+			tabbedPane.add(Txt.t("STR_stateInRegGraph_state"), new State(regGraph, this));
 			tabbedPane.add(Txt.t("STR_stateInRegGraph_stablestate"), new StableState(regGraph, this));
-			tabbedPane.add(Txt.t("STR_stateInRegGraph_maxvalues"), new MaxValues(regGraph));
+			tabbedPane.add(Txt.t("STR_stateInRegGraph_trapspaces"), new TrapSpaces(regGraph, this));
+			tabbedPane.add(Txt.t("STR_stateInRegGraph_maxvalues"), new MaxValues(regGraph, this));
 			mainPanel.add(tabbedPane, c);
 
 			c.gridy++;
@@ -95,13 +102,13 @@ public class StateInRegGraphFrame extends StackDialog {
 			c.ipady = 0;
 			c.fill = GridBagConstraints.CENTER;
 			colorizerCheckbox = new StyleColorizerCheckbox("stateInRegGraph.", regGraph, styleProvider);
-		    mainPanel.add(colorizerCheckbox, c);
+			mainPanel.add(colorizerCheckbox, c);
 		}
 		return mainPanel;
 	}
 
 	protected void run() {
-		byte[] state = ((TabComponantProvidingAState)tabbedPane.getSelectedComponent()).getState();
+		byte[] state = ((TabComponantProvidingAState) tabbedPane.getSelectedComponent()).getState();
 		styleProvider.setState(state);
 		colorizerCheckbox.refresh();
 	}
@@ -109,6 +116,13 @@ public class StateInRegGraphFrame extends StackDialog {
 	public void cancel() {
 		colorizerCheckbox.undoColorize();
 		super.cancel();
+	}
+
+	@Override
+	public void doClose() {
+		colorizerCheckbox.undoColorize();
+		dispose();
+		// super.cancel();
 	}
 }
 
@@ -120,7 +134,13 @@ abstract class TabComponantProvidingAState extends JPanel {
 	protected SimpleStateListTableModel ssl;
 	protected EnhancedJTable table;
 
+	protected StateInRegGraphFrame stateInRegGraphFrame;
+
 	abstract public byte[] getState();
+
+	public TabComponantProvidingAState(StateInRegGraphFrame stateInRegGraphFrame) {
+		this.stateInRegGraphFrame = stateInRegGraphFrame;
+	}
 
 	protected GridBagConstraints initPanel(RegulatoryGraph g, String desckey, boolean isEditable) {
 		setLayout(new GridBagLayout());
@@ -139,31 +159,37 @@ abstract class TabComponantProvidingAState extends JPanel {
 		c.ipady = 0;
 		ssl = new SimpleStateListTableModel(g, isEditable);
 		table = new EnhancedJTable(ssl);
-        table.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-		add(new JScrollPane(table), c);	
+		table.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+		add(new JScrollPane(table), c);
 		return c;
 	}
-
 }
 
 /**
- *  Return the state (1,1,...,1) and display the state (max_1, max_2,..., max_n) where max_i is the max value of the node i.
+ * Return the state (1,1,...,1) and display the state (max_1, max_2,..., max_n)
+ * where max_i is the max value of the node i.
  */
-class MaxValues extends TabComponantProvidingAState {
+class MaxValues extends TabComponantProvidingAState implements ListSelectionListener {
 	private static final long serialVersionUID = -6227864741059321245L;
 	private byte[] state1;
 
-	public MaxValues(RegulatoryGraph g) {
+	public MaxValues(RegulatoryGraph g, StateInRegGraphFrame stateInRegGraphFrame) {
+		super(stateInRegGraphFrame);
 		state1 = new byte[g.getNodeOrderSize()];
 		for (int i = 0; i < g.getNodeOrderSize(); i++) {
 			state1[i] = 1;
 		}
 		initPanel(g, "STR_stateInRegGraph_maxValuesdescr", false);
 		ssl.addState(ssl.getMaxValues());
+		table.getSelectionModel().addListSelectionListener(this);
 	}
 
 	public byte[] getState() {
 		return state1;
+	}
+
+	public void valueChanged(ListSelectionEvent e) {
+		stateInRegGraphFrame.run();
 	}
 }
 
@@ -171,15 +197,26 @@ class MaxValues extends TabComponantProvidingAState {
  * Provide a table to enter a state manually.
  *
  */
-class State extends TabComponantProvidingAState {
+class State extends TabComponantProvidingAState implements ListSelectionListener, TableModelListener {
 	private static final long serialVersionUID = 918581816104803491L;
 
-	public State(RegulatoryGraph g) {
+	public State(RegulatoryGraph g, StateInRegGraphFrame stateInRegGraphFrame) {
+		super(stateInRegGraphFrame);
 		initPanel(g, "STR_stateInRegGraph_statedescr", true);
+		table.getSelectionModel().addListSelectionListener(this);
+		table.getModel().addTableModelListener(this);
 	}
 
 	public byte[] getState() {
 		return ssl.getState(table.getSelectedRow());
+	}
+
+	public void tableChanged(TableModelEvent e) {
+		stateInRegGraphFrame.run();
+	}
+
+	public void valueChanged(ListSelectionEvent e) {
+		stateInRegGraphFrame.run();
 	}
 }
 
@@ -188,20 +225,18 @@ class State extends TabComponantProvidingAState {
  */
 class StableState extends TabComponantProvidingAState {
 	private static final long serialVersionUID = 1301082532863004279L;
-	
+
 	JTable table;
 	private PerturbationSelectionPanel mutantSelectionPanel;
 	private PerturbationStore mutantStore;
 	private RegulatoryGraph g;
 	private JButton computeStableStateButton;
-	
+
 	private StableTableModel tableModel;
 
-	private StateInRegGraphFrame stateInRegGraphFrame;
-
 	public StableState(RegulatoryGraph g, StateInRegGraphFrame stateInRegGraphFrame) {
+		super(stateInRegGraphFrame);
 		this.g = g;
-		this.stateInRegGraphFrame = stateInRegGraphFrame;
 		setMainPanel();
 	}
 
@@ -213,7 +248,7 @@ class StableState extends TabComponantProvidingAState {
 		c.gridy = 0;
 		c.ipady = 8;
 		c.fill = GridBagConstraints.BOTH;
-		add(new JLabel(Txt.t("STR_stateInRegGraph_statedescr")), c);
+		add(new JLabel(Txt.t("STR_stateInRegGraph_stabledescr")), c);
 
 		c.gridy++;
 		c.ipady = 0;
@@ -227,17 +262,17 @@ class StableState extends TabComponantProvidingAState {
 		c.ipady = 0;
 		tableModel = new StableTableModel();
 		tableModel.setResult(null);
-        table = new EnhancedJTable(tableModel);
-        table.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+		table = new EnhancedJTable(tableModel);
+		table.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				if (e.getValueIsAdjusting() == false) {
-					stateInRegGraphFrame.run(); //Colorize the graph when the selection change
-				}				
+					stateInRegGraphFrame.run(); // Colorize the graph when the selection change
+				}
 			}
-        });
-		add(new JScrollPane(table), c);	
-		
+		});
+		add(new JScrollPane(table), c);
+
 		c.gridy++;
 		c.weightx = 0;
 		c.weighty = 0;
@@ -246,7 +281,7 @@ class StableState extends TabComponantProvidingAState {
 		add(computeStableStateButton, c);
 		computeStableStateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				run(); //call run() when the button is clicked
+				run(); // call run() when the button is clicked
 			}
 		});
 	}
@@ -273,8 +308,109 @@ class StableState extends TabComponantProvidingAState {
 			return null;
 		}
 		byte[] ret = new byte[state.length];
-		for (int i=0 ; i<state.length ; i++) {
-			ret[i] = (byte)state[i];
+		for (int i = 0; i < state.length; i++) {
+			ret[i] = (byte) state[i];
+		}
+		return ret;
+	}
+}
+
+/**
+ * Return a state provided by the TrapSpaces plugin.
+ */
+class TrapSpaces extends TabComponantProvidingAState {
+	private static final long serialVersionUID = 1301082532863004279L;
+
+	JTable table;
+	private PerturbationSelectionPanel mutantSelectionPanel;
+	private PerturbationStore mutantStore;
+	private RegulatoryGraph g;
+	private JButton computeTrapStateButton;
+
+	private TrapSpaceTableModel tableModel;
+
+	public TrapSpaces(RegulatoryGraph g, StateInRegGraphFrame stateInRegGraphFrame) {
+		super(stateInRegGraphFrame);
+		this.g = g;
+		setMainPanel();
+	}
+
+	private void setMainPanel() {
+		setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+
+		c.gridx = 0;
+		c.gridy = 0;
+		c.ipady = 8;
+		c.fill = GridBagConstraints.BOTH;
+		add(new JLabel(Txt.t("STR_stateInRegGraph_trapSpacesdescr")), c);
+
+		c.gridy++;
+		c.ipady = 0;
+		mutantStore = new PerturbationStore();
+		mutantSelectionPanel = new PerturbationSelectionPanel(stateInRegGraphFrame, g, mutantStore);
+		add(mutantSelectionPanel, c);
+
+		c.gridy++;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.ipady = 0;
+		tableModel = new TrapSpaceTableModel();
+		tableModel.setSolutions(null);
+		table = new EnhancedJTable(tableModel);
+		table.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if (e.getValueIsAdjusting() == false) {
+					stateInRegGraphFrame.run(); // Colorize the graph when the selection change
+				}
+			}
+		});
+		add(new JScrollPane(table), c);
+
+		c.gridy++;
+		c.weightx = 0;
+		c.weighty = 0;
+		c.fill = GridBagConstraints.CENTER;
+		if (this.g.getModel().isBoolean()) {
+			computeTrapStateButton = new JButton(Txt.t("STR_stateInRegGraph_computeTrapSpaces"));
+			add(computeTrapStateButton, c);
+			computeTrapStateButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					run(); // call run() when the button is clicked
+				}
+			});
+		} else {
+			add(new JLabel("Cannot map Boolean trap spaces on a non-boolean table. Booleanize the model first."), c);
+		}
+	}
+
+	protected void run() {
+		LogicalModel model = g.getModel();
+		Perturbation p = mutantStore.getPerturbation();
+		if (p != null) {
+			p.update(model);
+		}
+
+		TrapSpaceTask task = new TrapSpaceTask(model);
+		TrapSpaceList result = null;
+		try {
+			task.run();
+			result = task.getResult();
+			tableModel.setSolutions(result);
+		} catch (Exception e) {
+			LogManager.error(e);
+		}
+	}
+
+	public byte[] getState() {
+		byte[] state = tableModel.getState(table.getSelectedRow());
+		if (state == null) {
+			return null;
+		}
+		byte[] ret = new byte[state.length];
+		for (int i = 0; i < state.length; i++) {
+			ret[i] = (byte) state[i];
 		}
 		return ret;
 	}

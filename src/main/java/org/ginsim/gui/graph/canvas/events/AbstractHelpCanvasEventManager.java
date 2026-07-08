@@ -7,10 +7,18 @@ import java.awt.Rectangle;
 import org.ginsim.gui.graph.canvas.CanvasEventManager;
 import org.ginsim.gui.graph.canvas.GraphCanvasRenderer;
 
+/**
+ * class abstract AbstractHelpCanvasEventManager
+ */
 abstract public class AbstractHelpCanvasEventManager implements CanvasEventManager {
-
+	/**
+	 *  GraphCanvasRenderer renderer object
+	 */
 	protected final GraphCanvasRenderer renderer;
-
+    /**
+    * Constructor AbstractHelpCanvasEventManager
+	* @param renderer GraphCanvasRenderer object
+	 */
 	public AbstractHelpCanvasEventManager(GraphCanvasRenderer renderer) {
 		this.renderer = renderer;
 	}

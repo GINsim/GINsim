@@ -44,6 +44,44 @@ public abstract class Simulation {
 	protected ChartGNUPlot chart = new ChartGNUPlot();
 	protected int memory;
 
+	private volatile boolean stopRequested = false;
+	private volatile boolean paused = false;
+
+	public void requestStop() {
+		stopRequested = true;
+	}
+
+	public boolean isStopRequested() {
+		return stopRequested;
+	}
+
+	public synchronized void setPaused(boolean paused) {
+		this.paused = paused;
+		if (!paused) {
+			notifyAll();
+		}
+	}
+
+	public boolean isPaused() {
+		return paused;
+	}
+
+	protected synchronized void checkPause() {
+		while (paused) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Add the model function
+	 * 
+	 * @param _model StatefulLogicalModel model
+	 */
 	public void addModel(StatefulLogicalModel _model) {
 		model = _model;
 		List<NodeInfo> components = model.getComponents();
@@ -75,7 +113,7 @@ public abstract class Simulation {
 	 * 
 	 * @return the discovered attractors, their reachability, and remaining
 	 *         contextual information
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	public Result runSimulation() throws Exception {
 		long time = System.currentTimeMillis();
@@ -101,7 +139,7 @@ public abstract class Simulation {
 	 * 
 	 * @return the discovered attractors, their reachability, and remaining
 	 *         contextual information
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	public abstract Result runSim() throws Exception;
 
@@ -112,6 +150,11 @@ public abstract class Simulation {
 	 */
 	public abstract String parametersToString();
 
+	/**
+	 * Name getter
+	 * 
+	 * @return the name as string
+	 */
 	public abstract String getName();
 
 	private String getNodes() {
@@ -125,8 +168,8 @@ public abstract class Simulation {
 	 * Updates a simulation with parameterizations dynamically fixed based on the
 	 * properties of the input model
 	 * 
-	 * @return simulation with updated parameters (values dynamically selected based
-	 *         on the input model)
+	 * simulation with updated parameters (values dynamically selected based
+	 * on the input model)
 	 */
 	public abstract void dynamicUpdateValues();
 
@@ -147,35 +190,33 @@ public abstract class Simulation {
 	/**********************************/
 	/** For dynamically updating GUI **/
 	/**********************************/
-
+	/**
+	 * boolean exit
+	 */
 	protected boolean exit = false;
 	protected Thread t1; // used for heavy tasks from external libraries
 	private JTextArea progress;
 
 	public void exit() {
+		requestStop();
+		setPaused(false); // Resume if paused to allow exit
 		if (t1 != null && t1.isAlive())
-			t1.stop();
+			t1.interrupt();
 	}
 
 	public Result run() throws Exception {
 		final Result[] res = new Result[1];
 		final Exception[] es = new Exception[1];
 		final boolean[] ok = new boolean[] { true };
-		t1 = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					res[0] = runSimulation();
-				} catch (Exception e) {
-					// e.printStackTrace();
-					es[0] = e;
-					ok[0] = false;
-				}
-			}
-		});
-		t1.start();
-		t1.join();
-		t1 = null;
+
+		try {
+			res[0] = runSimulation();
+		} catch (Exception e) {
+			// e.printStackTrace();
+			es[0] = e;
+			ok[0] = false;
+		}
+
 		if (!ok[0])
 			throw es[0];
 		return res[0];
