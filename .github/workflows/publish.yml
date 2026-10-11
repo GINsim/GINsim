@@ -1,6 +1,3 @@
-# This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
 name: Latest pre-release
 
 on:
@@ -12,22 +9,43 @@ permissions:
 
 jobs:
   build:
-    name: "Pre Release"
+    name: Build with Java ${{ matrix.java }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java: ['17', '26']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Java ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+          cache: maven
+      - name: Build and test
+        run: mvn -B -Dmaven.compiler.release=${{ matrix.java }} clean package
+      - name: Upload Java ${{ matrix.java }} jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: ginsim-java${{ matrix.java }}
+          path: target/java${{ matrix.java }}/GINsim-*-jar-with-deps-java${{ matrix.java }}.jar
+          if-no-files-found: error
+
+  release:
+    name: Pre Release
+    needs: build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Java
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '11'
-        cache: 'maven'
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
-    - uses: "marvinpinto/action-automatic-releases@latest"
-      with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest"
-        prerelease: true
-        title: "Development Build"
-        files: target/GINsim-*-jar-with-dependencies.jar
+      - name: Download release jars
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          automatic_release_tag: latest
+          prerelease: true
+          title: Development Build
+          files: dist/*.jar
