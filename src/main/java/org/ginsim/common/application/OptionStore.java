@@ -115,6 +115,7 @@ public class OptionStore extends DefaultHandler {
 		while (recentFiles.size() > 10) {
 			recentFiles.remove(10);
 		}
+        saveOptions();
 	}
 	
 	/**

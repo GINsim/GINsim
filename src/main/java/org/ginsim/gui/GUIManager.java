@@ -102,6 +102,10 @@ public class GUIManager {
 	 * @return a new frame for the given Graph
 	 */
 	public Frame newFrame( Graph graph, boolean can_be_saved) {
+		String graphPath = GSGraphManager.getInstance().getGraphPath(graph);
+		if (graphPath != null) {
+			OptionStore.addRecentFile(graphPath);
+		}
 		
 		GraphGUI graph_gui;
 		try {

@@ -34,6 +34,7 @@ public class FileSelectionHelper {
 	{		
 		lastDirectory = dir;
 		OptionStore.setOption(DIRKEY, dir);
+		OptionStore.saveOptions();
 	}
 	
 	public static String selectSaveFilename( Frame parent, FileFilter file_filter) {
@@ -118,7 +119,7 @@ public class FileSelectionHelper {
 		
 		// change the remembered directory
 		lastDirectory = chooser.getCurrentDirectory().getAbsolutePath();
-		OptionStore.setOption(DIRKEY, lastDirectory);
+		setLastDirectory(lastDirectory);
 		
 		return f.getAbsolutePath();
 	}

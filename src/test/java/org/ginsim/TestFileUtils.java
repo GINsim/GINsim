@@ -13,7 +13,8 @@ import org.ginsim.core.graph.regulatorygraph.RegulatoryGraph;
 public class TestFileUtils {
 
 	// The directory where are stored the predefined files for the tests
-	public static File testFileDirectory = new File(".", "target/test-classes");
+	public static File testFileDirectory = new File(System.getProperty(
+			"ginsim.test.outputDirectory", "target/test-classes"));
 	
 	/**
 	 * Returns the directory where test files are stored

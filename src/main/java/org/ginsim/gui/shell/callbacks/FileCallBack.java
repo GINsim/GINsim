@@ -210,7 +210,6 @@ class OpenAction extends AbstractAction {
 			try {
 				Graph g = GSGraphManager.getInstance().open(path);
 				if( g != null){
-					OptionStore.addRecentFile(path);
 					GUIManager.getInstance().newFrame( g);
 					GraphGUI graph_gui = GUIManager.getInstance().getGraphGUI( g);
 					if( graph_gui != null){
