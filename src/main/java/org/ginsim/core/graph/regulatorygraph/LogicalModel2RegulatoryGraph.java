@@ -100,7 +100,12 @@ public class LogicalModel2RegulatoryGraph {
 			}
 		}
 
-		// FIXME: handle annotations!
+		// annotations are matched by node id as the graph nodes have their own NodeInfo
+		Map<String, NodeInfo> name2node = new HashMap<>();
+		for (RegulatoryNode node: lrg.getNodes()) {
+			name2node.put(node.getId(), node.getNodeInfo());
+		}
+		RegulatoryGraphImpl.importAnnotations(lrg.getAnnotator(), model.getAnnotator().writeAnnotationsInJSON(), name2node);
 	}
 	
 	private RegulatoryGraph getRegulatoryGraph() {

@@ -1,6 +1,7 @@
 package org.ginsim.gui.annotation.classes;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.util.Map;
 
 import javax.swing.*;
@@ -22,8 +23,13 @@ import org.ginsim.common.utils.OpenUtils;
 class ElementsPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private static final Color SELECTED = Color.ORANGE.brighter().brighter();
+	private static final Color SELECTED = new Color(255, 240, 170);
 	private static final Color NORMAL = Color.GRAY.brighter();
+	private static final Color INVALID = new Color(255, 150, 150);
+	private static final String UNSPECIFIED = "(unspecified)";
+	private static final String HEADER_TIP = "<html>Annotation group: annotations sharing the same relation to this element<br>"
+			+ "(e.g. is, isDescribedBy).<br>"
+			+ "Click to select it as the target of new annotations, double-click to rename it.</html>";
 
 	private static final Border SELECTED_BORDER = BorderFactory.createBevelBorder(BevelBorder.RAISED, SELECTED, SELECTED);
 	private static final Border NORMAL_BORDER = BorderFactory.createBevelBorder(BevelBorder.RAISED, NORMAL, NORMAL);
@@ -31,6 +37,8 @@ class ElementsPanel extends JPanel {
 	private final Annotation annotation;
 	private final JPanel content = new JPanel();
 	private final JButton header = new JButton();
+	private final JTextField editor = new JTextField();
+	private final JPanel headerCards = new JPanel(new CardLayout());
 
 	ElementsPanel(AnnotationsComponent parent, Annotation annotation) {
 		this.annotation = annotation;
@@ -39,17 +47,65 @@ class ElementsPanel extends JPanel {
 		// prepare the header
 		header.setBackground(NORMAL);
 		header.setLayout(new GridBagLayout());
+		header.setToolTipText(HEADER_TIP);
 		header.addActionListener(e -> parent.selectBlock(annotation));
+		header.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					startEditing();
+				}
+			}
+		});
+
+		// inline editor for the qualifier name
+		editor.setHorizontalAlignment(JTextField.CENTER);
+		editor.setToolTipText("Enter to validate, Escape to cancel; leave empty for an unspecified qualifier");
+		editor.addActionListener(e -> {
+			String name = editor.getText().trim();
+			if (name.startsWith("@")) {
+				name = name.substring(1);
+			}
+			if (parent.renameBlock(annotation, name)) {
+				return;
+			}
+			editor.setBackground(INVALID);
+		});
+		editor.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					stopEditing();
+				}
+			}
+		});
+		editor.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				stopEditing();
+			}
+		});
+		headerCards.add(header, "label");
+		headerCards.add(editor, "edit");
+
+		CircleButton b_delete = new CircleButton("x", CircleButton.DELETE);
+		b_delete.setToolTipText("Delete this block");
+		b_delete.addActionListener(e -> parent.removeBlock(annotation));
 
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = gbc.gridy = 1;
-		gbc.weightx = 1;
+		gbc.gridx = gbc.gridy = 0;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
 		content.setLayout(new GridBagLayout());
-		this.add(header, gbc);
+		this.add(b_delete, gbc);
+		gbc.gridx++;
+		gbc.weightx = 1;
+		this.add(headerCards, gbc);
+		gbc.gridx = 0;
 		gbc.gridy++;
+		gbc.gridwidth = 2;
+		gbc.weightx = 1;
 		this.add(content, gbc);
 
 		refresh();
@@ -65,11 +121,7 @@ class ElementsPanel extends JPanel {
 		int c = 0;
 
 
-		if (this.annotation.qualifier == null) {
-			this.header.setText("(no qualifier)");
-		} else {
-			this.header.setText(annotation.qualifier.term);
-		}
+		this.header.setText(isUnspecified() ? UNSPECIFIED : annotation.qualifier.term);
 
 		for (URI uri: annotation.uris) {
 			gbc.gridy = c++;
@@ -84,6 +136,22 @@ class ElementsPanel extends JPanel {
 			content.add(ItemLabel.tag(this, tag), gbc);
 		}
 		this.validate();
+	}
+
+	private boolean isUnspecified() {
+		return annotation.qualifier == null || annotation.qualifier.term == null || annotation.qualifier.term.isBlank();
+	}
+
+	private void startEditing() {
+		editor.setText(isUnspecified() ? "" : annotation.qualifier.term);
+		editor.setBackground(Color.WHITE);
+		((CardLayout) headerCards.getLayout()).show(headerCards, "edit");
+		editor.requestFocusInWindow();
+		editor.selectAll();
+	}
+
+	private void stopEditing() {
+		((CardLayout) headerCards.getLayout()).show(headerCards, "label");
 	}
 
 	protected void removeItem(String value) {
@@ -141,6 +209,7 @@ class ItemLabel extends JPanel {
 			label.setBackground(BACKGROUND);
 			label.setForeground(Color.BLUE);
 			label.setBorder(null);
+			label.setHorizontalAlignment(SwingConstants.LEFT);
 			label.addActionListener(e -> {
 				System.err.println("opening link: "+link);
 				OpenUtils.openURI(link);

@@ -684,13 +684,46 @@ public final class RegulatoryGraphImpl  extends AbstractGraph<RegulatoryNode, Re
                 for (RegulatoryNode node: this.getNodes()) {
                     name2node.put(node.getId(), node.getNodeInfo());
                 }
-            	this.getAnnotator().readAnnotationsFromJSON(json, name2node);
-                
+                importAnnotations(this.getAnnotator(), json, name2node);
+
                 is.close();
             } catch (Exception e) {
                 LogManager.error(e);
             }
         }
+    }
+
+    /**
+     * Load annotations from their JSON form, including the notes which bioLQM does not restore.
+     */
+    public static void importAnnotations(Annotator<NodeInfo> annotator, JSONObject json, Map<String, NodeInfo> name2node) {
+        annotator.readAnnotationsFromJSON(json, name2node);
+
+        JSONObject jmodel = json.optJSONObject("model");
+        if (jmodel != null && jmodel.optString("notes", null) != null) {
+            annotator.onModel().setNotes(jmodel.getString("notes"));
+        }
+        JSONObject jnodes = json.optJSONObject("nodes");
+        if (jnodes != null) {
+            for (String key: jnodes.keySet()) {
+                NodeInfo ni = name2node.get(key);
+                String notes = jnodes.getJSONObject(key).optString("notes", null);
+                if (ni != null && notes != null) {
+                    annotator.node(ni).setNotes(notes);
+                }
+            }
+        }
+        JSONObject jedges = json.optJSONObject("edges");
+        if (jedges != null) {
+            for (String key: jedges.keySet()) {
+                String[] ends = key.split(":");
+                String notes = jedges.getJSONObject(key).optString("notes", null);
+                if (ends.length == 2 && notes != null && name2node.containsKey(ends[0]) && name2node.containsKey(ends[1])) {
+                    annotator.edge(name2node.get(ends[0]), name2node.get(ends[1])).setNotes(notes);
+                }
+            }
+        }
+        annotator.onModel();
     }
     
 	/* *****  STATEFUL GRAPH  ***** */

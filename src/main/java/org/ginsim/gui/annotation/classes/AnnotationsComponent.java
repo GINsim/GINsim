@@ -28,6 +28,7 @@ public class AnnotationsComponent<T> extends JSplitPane implements KeyListener, 
 	private static final Color BG_INVALID = new Color(255, 150, 150);
 
 	private final Annotator<T> annotator;
+	private boolean refreshing = false;
 
 	JButton annotation_help = new JButton("?");
 	JTextField annotation_field = new JTextField();
@@ -111,6 +112,10 @@ public class AnnotationsComponent<T> extends JSplitPane implements KeyListener, 
             }
 
             private void updatePanel() {
+            	if (refreshing) {
+            		return;
+            	}
+            	annotator.setNotes(areaNotes.getText());
             	areaNotes.setBackground(Color.ORANGE);
             }
         });
@@ -125,7 +130,12 @@ public class AnnotationsComponent<T> extends JSplitPane implements KeyListener, 
 		if (notes == null) {
 			notes = "";
 		}
-		areaNotes.setText(notes);
+		refreshing = true;
+		try {
+			areaNotes.setText(notes);
+		} finally {
+			refreshing = false;
+		}
 		areaNotes.setBackground(Color.WHITE);
 
 		// Rebuild the annotation blocks
@@ -188,7 +198,25 @@ public class AnnotationsComponent<T> extends JSplitPane implements KeyListener, 
 	}
 
 	public void selectBlock(Annotation annot) {
+		// Skip the rebuild when already selected, it would destroy the header being double-clicked
+		if (annot == this.annotator.getSelectedAnnotation()) {
+			return;
+		}
 		if (this.annotator.selectBlock(annot)) {
+			refresh();
+		}
+	}
+
+	public boolean renameBlock(Annotation annot, String name) {
+		if (!this.annotator.renameBlock(annot, name)) {
+			return false;
+		}
+		refresh();
+		return true;
+	}
+
+	public void removeBlock(Annotation annot) {
+		if (this.annotator.removeBlock(annot)) {
 			refresh();
 		}
 	}
