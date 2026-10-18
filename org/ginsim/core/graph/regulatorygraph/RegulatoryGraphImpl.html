@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":9,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -440,51 +440,60 @@ implements <a href="RegulatoryGraph.html" title="interface in org.ginsim.core.gr
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i30" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#importAnnotations(org.colomoto.biolqm.metadata.Annotator,org.json.JSONObject,java.util.Map)">importAnnotations</a></span>&#8203;(org.colomoto.biolqm.metadata.Annotator&lt;org.colomoto.biolqm.NodeInfo&gt;&nbsp;annotator,
+                 org.json.JSONObject&nbsp;json,
+                 <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;org.colomoto.biolqm.NodeInfo&gt;&nbsp;name2node)</code></th>
+<td class="colLast">
+<div class="block">Load annotations from their JSON form, including the notes which bioLQM does not restore.</div>
+</td>
+</tr>
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isStateful()">isStateful</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Checks whether the graph has states associated</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parseAssociated(java.util.zip.ZipFile,java.lang.String)">parseAssociated</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/zip/ZipFile.html?is-external=true" title="class or interface in java.util.zip" class="externalLink">ZipFile</a>&nbsp;f,
                <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;prefix)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeEdge(org.ginsim.core.graph.regulatorygraph.RegulatoryMultiEdge)">removeEdge</a></span>&#8203;(<a href="RegulatoryMultiEdge.html" title="class in org.ginsim.core.graph.regulatorygraph">RegulatoryMultiEdge</a>&nbsp;edge)</code></th>
 <td class="colLast">
 <div class="block">Remove an edge from the graph.</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeNode(org.ginsim.core.graph.regulatorygraph.RegulatoryNode)">removeNode</a></span>&#8203;(<a href="RegulatoryNode.html" title="class in org.ginsim.core.graph.regulatorygraph">RegulatoryNode</a>&nbsp;obj)</code></th>
 <td class="colLast">
 <div class="block">Remove a node from the graph.</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveAssociated(java.util.zip.ZipOutputStream,java.io.OutputStreamWriter)">saveAssociated</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/zip/ZipOutputStream.html?is-external=true" title="class or interface in java.util.zip" class="externalLink">ZipOutputStream</a>&nbsp;zos,
               <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStreamWriter.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStreamWriter</a>&nbsp;osw)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="RegulatoryNode.html" title="class in org.ginsim.core.graph.regulatorygraph">RegulatoryNode</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#searchNodes(java.lang.String)">searchNodes</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;regexp)</code></th>
 <td class="colLast">
 <div class="block">Search the vertices with ID matching the given regular expression.</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAnnotationModule(org.colomoto.biolqm.metadata.AnnotationModule)">setAnnotationModule</a></span>&#8203;(org.colomoto.biolqm.metadata.AnnotationModule&nbsp;oldAnnotationModule)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAttribute(java.lang.String,java.lang.String)">setAttribute</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
             <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;value)</code></th>
@@ -492,21 +501,21 @@ implements <a href="RegulatoryGraph.html" title="interface in org.ginsim.core.gr
 <div class="block">Setter attribute</div>
 </td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setNodeOrder(java.util.List)">setNodeOrder</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="RegulatoryNode.html" title="class in org.ginsim.core.graph.regulatorygraph">RegulatoryNode</a>&gt;&nbsp;nodeOrder)</code></th>
 <td class="colLast">
 <div class="block">Set a list of class dependent objects representing the order of node as defined by the model</div>
 </td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOracles(java.util.List)">setOracles</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;byte[]&gt;&gt;&nbsp;_oracles)</code></th>
 <td class="colLast">
 <div class="block">Associates a set of oracles to the graph</div>
 </td>
 </tr>
-<tr id="i40" class="altColor">
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStates(java.util.List)">setStates</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;byte[]&gt;&nbsp;states)</code></th>
 <td class="colLast">
@@ -1243,6 +1252,18 @@ implements <a href="RegulatoryGraph.html" title="interface in org.ginsim.core.gr
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../common/application/GsException.html" title="class in org.ginsim.common.application">GsException</a></code></dd>
 </dl>
+</li>
+</ul>
+<a id="importAnnotations(org.colomoto.biolqm.metadata.Annotator,org.json.JSONObject,java.util.Map)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>importAnnotations</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;importAnnotations&#8203;(org.colomoto.biolqm.metadata.Annotator&lt;org.colomoto.biolqm.NodeInfo&gt;&nbsp;annotator,
+                                     org.json.JSONObject&nbsp;json,
+                                     <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;org.colomoto.biolqm.NodeInfo&gt;&nbsp;name2node)</pre>
+<div class="block">Load annotations from their JSON form, including the notes which bioLQM does not restore.</div>
 </li>
 </ul>
 <a id="getStates()">
