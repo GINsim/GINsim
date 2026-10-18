@@ -15,6 +15,7 @@ import org.ginsim.gui.service.GSServiceGUIManager;
 import org.ginsim.gui.shell.AboutDialog;
 import py4j.GatewayServer;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -165,16 +166,23 @@ public class Launcher {
 		}
 		
     	// register OSX callback if appropriate
-        if (CurrentOS.CURRENT_OS == CurrentOS.MACOSX) {
+        if (CurrentOS.CURRENT_OS == CurrentOS.MACOSX && Desktop.isDesktopSupported()) {
             try {
-                // Generate and register the OSXAdapter, passing it a hash of all the methods we wish to
-                // use as delegates for various com.apple.eawt.ApplicationListener methods
-            	GUIManager guiManager = GUIManager.getInstance();
-                OSXAdapter.setQuitHandler(guiManager, guiManager.getClass().getDeclaredMethod("quit", (Class[])null));
-                OSXAdapter.setAboutHandler(guiManager, guiManager.getClass().getDeclaredMethod("about", (Class[])null));
-                OSXAdapter.setFileHandler(guiManager, guiManager.getClass().getDeclaredMethod("loadGINMLfile", new Class[] { String.class }));
+                GUIManager guiManager = GUIManager.getInstance();
+                Desktop desktop = Desktop.getDesktop();
+                desktop.setAboutHandler(e -> guiManager.about());
+                // quit() exits by itself once every window is closed, so always cancel the OS-driven quit
+                desktop.setQuitHandler((e, response) -> {
+                    guiManager.quit();
+                    response.cancelQuit();
+                });
+                desktop.setOpenFileHandler(e -> {
+                    for (File f : e.getFiles()) {
+                        guiManager.loadGINMLfile(f.getAbsolutePath());
+                    }
+                });
             } catch (Exception e) {
-                System.err.println("Error while loading the OSXAdapter:");
+                System.err.println("Error while registering the macOS desktop handlers:");
                 e.printStackTrace();
             }
         }
