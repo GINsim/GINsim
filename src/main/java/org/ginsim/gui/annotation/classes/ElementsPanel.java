@@ -2,6 +2,8 @@ package org.ginsim.gui.annotation.classes;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.*;
@@ -34,15 +36,27 @@ class ElementsPanel extends JPanel {
 	private static final Border SELECTED_BORDER = BorderFactory.createBevelBorder(BevelBorder.RAISED, SELECTED, SELECTED);
 	private static final Border NORMAL_BORDER = BorderFactory.createBevelBorder(BevelBorder.RAISED, NORMAL, NORMAL);
 
+	private final List<Annotation> annotations;
+	private final AnnotationsComponent<?> owner;
 	private final Annotation annotation;
+	private final boolean singleListMode;
 	private final JPanel content = new JPanel();
 	private final JButton header = new JButton();
 	private final JTextField editor = new JTextField();
 	private final JPanel headerCards = new JPanel(new CardLayout());
 
 	ElementsPanel(AnnotationsComponent parent, Annotation annotation) {
-		this.annotation = annotation;
-		this.setBorder(NORMAL_BORDER);
+		this(parent, Collections.singletonList(annotation), false);
+	}
+
+	ElementsPanel(AnnotationsComponent parent, List<Annotation> annotations, boolean singleListMode) {
+		this.owner = parent;
+		this.annotations = annotations;
+		this.annotation = annotations.isEmpty() ? null : annotations.get(0);
+		this.singleListMode = singleListMode;
+		if (!singleListMode) {
+			this.setBorder(NORMAL_BORDER);
+		}
 
 		// prepare the header
 		header.setBackground(NORMAL);
@@ -98,13 +112,15 @@ class ElementsPanel extends JPanel {
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
 		content.setLayout(new GridBagLayout());
-		this.add(b_delete, gbc);
-		gbc.gridx++;
-		gbc.weightx = 1;
-		this.add(headerCards, gbc);
+		if (!singleListMode) {
+			this.add(b_delete, gbc);
+			gbc.gridx++;
+			gbc.weightx = 1;
+			this.add(headerCards, gbc);
+		}
 		gbc.gridx = 0;
 		gbc.gridy++;
-		gbc.gridwidth = 2;
+		gbc.gridwidth = singleListMode ? 1 : 2;
 		gbc.weightx = 1;
 		this.add(content, gbc);
 
@@ -121,21 +137,39 @@ class ElementsPanel extends JPanel {
 		int c = 0;
 
 
-		this.header.setText(isUnspecified() ? UNSPECIFIED : annotation.qualifier.term);
+		if (!singleListMode) {
+			this.header.setText(isUnspecified() ? UNSPECIFIED : annotation.qualifier.term);
+		}
 
-		for (URI uri: annotation.uris) {
-			gbc.gridy = c++;
-			content.add(ItemLabel.uri(this, uri), gbc);
-		}
-		for (Map.Entry<String,String> e: annotation.keyValues.entrySet()) {
-			gbc.gridy = c++;
-			content.add(ItemLabel.key_value(this, e.getKey(), e.getValue()), gbc);
-		}
-		for (String tag: annotation.tags) {
-			gbc.gridy = c++;
-			content.add(ItemLabel.tag(this, tag), gbc);
+		int uriIndex = 1;
+		for (Annotation source: annotations) {
+			for (URI uri: source.uris) {
+				gbc.gridy = c++;
+				content.add(ItemLabel.uri(this, source, uri, singleListMode ? uriIndex : 0), gbc);
+				uriIndex++;
+			}
+			for (Map.Entry<String,String> e: source.keyValues.entrySet()) {
+				gbc.gridy = c++;
+				content.add(ItemLabel.key_value(this, source, e.getKey(), e.getValue()), gbc);
+			}
+			for (String tag: source.tags) {
+				gbc.gridy = c++;
+				content.add(ItemLabel.tag(this, source, tag), gbc);
+			}
 		}
 		this.validate();
+	}
+
+	void updateSelection(Annotation source, Object item) {
+		for (Component component: content.getComponents()) {
+			if (component instanceof ItemLabel) {
+				((ItemLabel) component).updateSelection(source, item);
+			}
+		}
+	}
+
+	AnnotationsComponent<?> getOwner() {
+		return owner;
 	}
 
 	private boolean isUnspecified() {
@@ -154,11 +188,6 @@ class ElementsPanel extends JPanel {
 		((CardLayout) headerCards.getLayout()).show(headerCards, "label");
 	}
 
-	protected void removeItem(String value) {
-		this.annotation.remove(value);
-		this.refresh();
-	}
-
 	protected void setSelection(Annotation select) {
 		if (this.annotation == select) {
 			this.setBorder(SELECTED_BORDER);
@@ -168,54 +197,149 @@ class ElementsPanel extends JPanel {
 			this.header.setBackground(NORMAL);
 		}
 	}
+
+	protected void removeItem(Annotation source, String value) {
+		source.remove(value);
+		this.refresh();
+	}
 }
 
 class ItemLabel extends JPanel {
 
 	private static final Font FONT = new Font("Sans", Font.PLAIN, 12);
 	private static final Color BACKGROUND = new Color(200, 200, 255);
-	protected static ItemLabel tag(ElementsPanel parent, String tag) {
-		return new ItemLabel(parent, null, "#"+tag);
+	private static final Color SELECTED_BACKGROUND = new Color(255, 240, 170);
+	private final AnnotationsComponent<?> owner;
+	private final Annotation source;
+	private final Object item;
+	private final AnnotationsComponent.ItemKind kind;
+	private final String key;
+	private final String value;
+	private final JComponent valueComponent;
+	private final JLabel indexLabel;
+	private boolean selected;
+
+	protected static ItemLabel tag(ElementsPanel parent, Annotation source, String tag) {
+		return new ItemLabel(parent, source, tag, AnnotationsComponent.ItemKind.TAG, null, "#"+tag, null, 0);
 	}
 
-	protected static ItemLabel uri(ElementsPanel parent, URI uri) {
+	protected static ItemLabel uri(ElementsPanel parent, Annotation source, URI uri, int index) {
 		Collection col = uri.getCollection();
 		String link = uri.getLink();
-		if (col == null) {
-			return new ItemLabel(parent, link, uri.getValue());
-		} else {
-			return new ItemLabel(parent, link, col.name + ":" + uri.getValue());
-		}
+		String value = col == null ? uri.getValue() : col.name + ":" + uri.getValue();
+		return new ItemLabel(parent, source, uri, AnnotationsComponent.ItemKind.URI, null, value, link, index);
 	}
 
-	protected static ItemLabel key_value(ElementsPanel parent, String key, String value) {
-		return new ItemLabel(parent, null, key + "=" + value);
+	protected static ItemLabel key_value(ElementsPanel parent, Annotation source, String key, String value) {
+		return new ItemLabel(parent, source, key, AnnotationsComponent.ItemKind.KEY_VALUE, key, value, null, 0);
 	}
 
-	private ItemLabel(ElementsPanel parent, String link, String text) {
+	private ItemLabel(ElementsPanel parent, Annotation source, Object item, AnnotationsComponent.ItemKind kind, String key, String value, String link, int index) {
+		this.owner = parent.getOwner();
+		this.source = source;
+		this.item = item;
+		this.kind = kind;
+		this.key = key;
+		this.value = value;
 		this.setLayout(new BorderLayout());
-		this.setBorder(null);
-		CircleButton b_remove = new CircleButton("x", CircleButton.DELETE);
-		b_remove.addActionListener(actionEvent -> parent.removeItem(text));
-		this.add(b_remove, BorderLayout.WEST);
+		this.setBorder(BorderFactory.createEmptyBorder(1, 2, 1, 2));
+		indexLabel = new JLabel(index > 0 ? "[" + index + "]" : "");
+		indexLabel.setPreferredSize(new Dimension(42, 20));
+		indexLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		indexLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 8));
+		indexLabel.setForeground(Color.DARK_GRAY);
+		if (index > 0) {
+			this.add(indexLabel, BorderLayout.WEST);
+	}
+		if (!owner.isSingleListMode()) {
+			CircleButton b_remove = new CircleButton("x", CircleButton.DELETE);
+			b_remove.addActionListener(e -> parent.removeItem(source, removalText()));
+			this.add(b_remove, BorderLayout.WEST);
+		}
 		if (link == null) {
-			JLabel label = new JLabel(text);
+			JLabel label = new JLabel(value);
 			label.setFont(FONT);
 			label.setBackground(BACKGROUND);
-			this.add(label);
+			valueComponent = label;
+			this.add(label, BorderLayout.CENTER);
 		} else {
-			JButton label = new JButton(text);
+			JLabel label = new JLabel(value);
 			label.setFont(FONT);
 			label.setBackground(BACKGROUND);
 			label.setForeground(Color.BLUE);
-			label.setBorder(null);
-			label.setHorizontalAlignment(SwingConstants.LEFT);
-			label.addActionListener(e -> {
-				System.err.println("opening link: "+link);
-				OpenUtils.openURI(link);
+			label.setCursor(Cursor.getDefaultCursor());
+			valueComponent = label;
+			label.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (isOnLinkText(label, e.getX())) {
+						OpenUtils.openURI(link);
+					} else {
+						select();
+					}
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					label.setCursor(Cursor.getDefaultCursor());
+				}
 			});
-			this.add(label);
+			label.addMouseMotionListener(new MouseMotionAdapter() {
+				@Override
+				public void mouseMoved(MouseEvent e) {
+					label.setCursor(Cursor.getPredefinedCursor(isOnLinkText(label, e.getX()) ? Cursor.HAND_CURSOR : Cursor.DEFAULT_CURSOR));
+				}
+			});
+			this.add(label, BorderLayout.CENTER);
 		}
+		this.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				select();
+			}
+		});
+		indexLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				select();
+			}
+		});
+		if (link == null) {
+			valueComponent.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					select();
+				}
+			});
+		}
+		updateSelection(null, null);
+	}
+
+	private boolean isOnLinkText(JLabel label, int x) {
+		return x >= label.getInsets().left && x <= label.getInsets().left + label.getFontMetrics(label.getFont()).stringWidth(value);
+	}
+
+	private void select() {
+		if (owner.isSingleListMode()) {
+			owner.selectItem(source, item, kind, key, value);
+		}
+	}
+
+	private String removalText() {
+		if (kind == AnnotationsComponent.ItemKind.KEY_VALUE) {
+			return key + "=" + value;
+		}
+		return value;
+	}
+
+	void updateSelection(Annotation source, Object item) {
+		selected = this.source == source && this.item == item;
+		Color background = selected ? SELECTED_BACKGROUND : getParent() instanceof JPanel ? getParent().getBackground() : Color.WHITE;
+		setBackground(background);
+		indexLabel.setBackground(background);
+		indexLabel.setOpaque(selected);
+		valueComponent.setBackground(selected ? SELECTED_BACKGROUND : BACKGROUND);
+		valueComponent.setOpaque(true);
 	}
 
 }

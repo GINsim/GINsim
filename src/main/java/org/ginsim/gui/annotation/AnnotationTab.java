@@ -36,7 +36,7 @@ public class AnnotationTab extends JPanel implements EditTab {
 		this.gbc.gridx = 0;
 		this.gbc.gridy = 0;
 
-		this.annotCpt = new AnnotationsComponent(annotator);
+        this.annotCpt = new AnnotationsComponent(annotator, true);
 		this.add(annotCpt, this.gbc);
 	}
 
@@ -57,7 +57,7 @@ public class AnnotationTab extends JPanel implements EditTab {
 
     @Override
     public String getTitle() {
-        return "Annotation";
+        return "Annotations";
     }
 
     @Override
