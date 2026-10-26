@@ -14,6 +14,7 @@ import javax.swing.text.DocumentFilter;
 import org.colomoto.biolqm.metadata.Annotator;
 import org.colomoto.biolqm.metadata.annotations.Annotation;
 import org.colomoto.biolqm.metadata.annotations.URI;
+import org.colomoto.biolqm.metadata.constants.Collection;
 import org.colomoto.biolqm.metadata.validations.PatternValidator;
 import org.ginsim.gui.utils.widgets.StockButton;
 
@@ -32,6 +33,7 @@ public class AnnotationsComponent<T> extends JSplitPane implements KeyListener, 
 	private static final Color BG_TAG = new Color(170, 170, 255);
 	private static final Color BG_QUALIFIER = new Color(200, 255, 150);
 	private static final Color BG_INVALID = new Color(255, 150, 150);
+	private static final Color BG_NOTES_EDITED = new Color(255, 240, 170);
 
 	private final Annotator<T> annotator;
 	private final boolean singleListMode;
@@ -158,7 +160,9 @@ public class AnnotationsComponent<T> extends JSplitPane implements KeyListener, 
 
 		areaNotes.addFocusListener(new FocusListener() {
 			@Override
-			public void focusGained(FocusEvent e) {}
+			public void focusGained(FocusEvent e) {
+				clearItemSelection();
+			}
 
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -187,7 +191,7 @@ public class AnnotationsComponent<T> extends JSplitPane implements KeyListener, 
             		return;
             	}
             	annotator.setNotes(areaNotes.getText());
-            	areaNotes.setBackground(Color.ORANGE);
+				areaNotes.setBackground(BG_NOTES_EDITED);
             }
         });
 		JScrollPane sp = new JScrollPane();
@@ -295,6 +299,14 @@ public class AnnotationsComponent<T> extends JSplitPane implements KeyListener, 
 		updateItemControls();
 	}
 
+	private void clearItemSelection() {
+		selectedItem = null;
+		if (singleListPanel != null) {
+			singleListPanel.updateSelection(null, null);
+		}
+		updateItemControls();
+	}
+
 	boolean isSelected(Annotation source, Object item) {
 		return selectedItem != null && selectedItem.source == source && selectedItem.item == item;
 	}
@@ -320,6 +332,69 @@ public class AnnotationsComponent<T> extends JSplitPane implements KeyListener, 
 		}
 		selectedItem = null;
 		refresh();
+	}
+
+	boolean editItem(Annotation source, Object item, ItemKind kind, String key, String value, String edited) {
+		if (edited == null || edited.trim().isEmpty()) {
+			return false;
+		}
+		edited = edited.trim();
+		switch (kind) {
+			case URI:
+				URI oldUri = (URI) item;
+				String canonical = normalizeIdentifierPrefix(edited);
+				java.util.regex.Matcher url = java.util.regex.Pattern.compile("^[A-Za-z][A-Za-z0-9+.-]*://.*$").matcher(canonical);
+				URI replacement;
+				if (url.matches()) {
+					replacement = new URI(null, canonical);
+				} else {
+					java.util.Optional<java.util.AbstractMap.SimpleImmutableEntry<String, String>> entry = PatternValidator.asCollectionEntry(canonical);
+					if (entry.isPresent()) {
+						Collection collection = annotator.availableCollections().getCollection(entry.get().getKey());
+						replacement = new URI(collection, entry.get().getValue());
+					} else {
+						replacement = new URI(oldUri.getCollection(), canonical);
+					}
+				}
+				int index = findUriByIdentity(source, item);
+				if (index >= 0) {
+					source.uris.set(index, (URI) replacement);
+				}
+				item = replacement;
+				value = ((URI) replacement).getCollection() == null ? ((URI) replacement).getValue()
+						: ((URI) replacement).getCollection().name + ":" + ((URI) replacement).getValue();
+				break;
+			case TAG:
+				String tag = edited.startsWith("#") ? edited.substring(1) : edited;
+				java.util.Optional<String> validTag = PatternValidator.asTag("#" + tag);
+				if (!validTag.isPresent()) {
+					return false;
+				}
+				source.tags.remove(item);
+				source.tags.add(validTag.get());
+				item = validTag.get();
+				value = "#" + item;
+				break;
+			case KEY_VALUE:
+				int separator = edited.indexOf('=');
+				if (separator <= 0 || separator == edited.length() - 1) {
+					return false;
+				}
+				String newKey = edited.substring(0, separator).trim();
+				String newValue = edited.substring(separator + 1).trim();
+				if (newKey.isEmpty() || newValue.isEmpty()) {
+					return false;
+				}
+				source.keyValues.remove(key, value);
+				source.keyValues.put(newKey, newValue);
+				item = newKey;
+				key = newKey;
+				value = newValue;
+				break;
+		}
+		selectedItem = new AnnotationItem(source, item, kind, key, value);
+		refresh();
+		return true;
 	}
 
 	private void moveSelectedLink(int offset) {

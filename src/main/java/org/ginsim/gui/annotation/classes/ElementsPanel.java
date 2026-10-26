@@ -216,8 +216,10 @@ class ItemLabel extends JPanel {
 	private final String key;
 	private final String value;
 	private final JComponent valueComponent;
+	private final JTextField editField = new JTextField();
 	private final JLabel indexLabel;
 	private boolean selected;
+	private boolean editing;
 
 	protected static ItemLabel tag(ElementsPanel parent, Annotation source, String tag) {
 		return new ItemLabel(parent, source, tag, AnnotationsComponent.ItemKind.TAG, null, "#"+tag, null, 0);
@@ -274,6 +276,8 @@ class ItemLabel extends JPanel {
 				public void mouseClicked(MouseEvent e) {
 					if (isOnLinkText(label, e.getX())) {
 						OpenUtils.openURI(link);
+					} else if (e.getClickCount() == 2) {
+						startEdit();
 					} else {
 						select();
 					}
@@ -294,21 +298,32 @@ class ItemLabel extends JPanel {
 		}
 		this.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
-				select();
+			public void mouseClicked(MouseEvent e) {
+				backgroundClick(e);
+			}
+		});
+		editField.setFont(FONT);
+		editField.setText(value);
+		editField.addActionListener(e -> commitEdit());
+		editField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					cancelEdit();
+				}
 			}
 		});
 		indexLabel.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
-				select();
+			public void mouseClicked(MouseEvent e) {
+				backgroundClick(e);
 			}
 		});
 		if (link == null) {
 			valueComponent.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					select();
+					backgroundClick(e);
 				}
 			});
 		}
@@ -323,6 +338,48 @@ class ItemLabel extends JPanel {
 		if (owner.isSingleListMode()) {
 			owner.selectItem(source, item, kind, key, value);
 		}
+	}
+
+	private void backgroundClick(MouseEvent event) {
+		if (event.getClickCount() == 2) {
+			startEdit();
+		} else {
+			select();
+		}
+	}
+
+	private void startEdit() {
+		if (!owner.isSingleListMode() || editing) {
+			return;
+		}
+		editing = true;
+		editField.setText(value);
+		editField.setBackground(Color.WHITE);
+		remove(valueComponent);
+		add(editField, BorderLayout.CENTER);
+		revalidate();
+		repaint();
+		editField.requestFocusInWindow();
+		editField.selectAll();
+	}
+
+	private void commitEdit() {
+		if (owner.editItem(source, item, kind, key, value, editField.getText())) {
+			return;
+		}
+		editField.setBackground(new Color(255, 150, 150));
+		editField.requestFocusInWindow();
+	}
+
+	private void cancelEdit() {
+		if (!editing) {
+			return;
+		}
+		editing = false;
+		remove(editField);
+		add(valueComponent, BorderLayout.CENTER);
+		revalidate();
+		repaint();
 	}
 
 	private String removalText() {
