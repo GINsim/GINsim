@@ -13,6 +13,8 @@ import java.util.*;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 import org.ginsim.common.application.Txt;
 import org.ginsim.commongui.dialog.GUIMessageUtils;
@@ -20,6 +22,9 @@ import org.ginsim.commongui.utils.ImageLoader;
 import org.ginsim.core.graph.Graph;
 import org.ginsim.core.graph.GraphChangeType;
 import org.ginsim.core.graph.dynamicgraph.DynamicGraph;
+import org.ginsim.core.graph.hierarchicaltransitiongraph.HierarchicalTransitionGraph;
+import org.ginsim.core.graph.reducedgraph.ReducedGraph;
+import org.ginsim.core.graph.regulatorygraph.RegulatoryGraph;
 import org.ginsim.gui.GUIManager;
 import org.ginsim.gui.graph.GraphGUI;
 import org.ginsim.gui.utils.dialog.stackdialog.StackDialog;
@@ -44,11 +49,13 @@ public class PathFindingFrame extends StackDialog implements ActionListener, Res
 
     private JTable constraintTable;
     private PathFindingTableModel constraintModel;
+	private final javax.swing.Timer searchTimer = new javax.swing.Timer(250, e -> startAutomaticSearch());
+	private int searchGeneration = 0;
 	
 	
 	public PathFindingFrame( Graph graph) {
 		super(GUIManager.getInstance().getFrame(graph), "pathFinding", 420, 260);
-        setTitle("Search a path");
+		setTitle("Find path in " + getGraphTypeName(graph));
 		this.setMinimumSize(new Dimension(300, 300));
 		this.graph = graph;
 		if (graph instanceof DynamicGraph) {
@@ -102,6 +109,31 @@ public class PathFindingFrame extends StackDialog implements ActionListener, Res
         mainPanel.add(getResultPanel(), c);
 
         setMainPanel(mainPanel);
+		brun.setVisible(false);
+		constraintModel.addTableModelListener(new TableModelListener() {
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				constraintsChanged();
+			}
+		});
+		searchTimer.setRepeats(false);
+		constraintsChanged();
+	}
+
+	private static String getGraphTypeName(Graph graph) {
+		if (graph instanceof DynamicGraph) {
+			return "STG";
+		}
+		if (graph instanceof RegulatoryGraph) {
+			return "LRG";
+		}
+		if (graph instanceof HierarchicalTransitionGraph) {
+			return "HTG";
+		}
+		if (graph instanceof ReducedGraph) {
+			return "SCC";
+		}
+		return "graph";
 	}
 
 	private Component getProgressionPanel() {
@@ -151,7 +183,7 @@ public class PathFindingFrame extends StackDialog implements ActionListener, Res
 		if (b_selectFromGraph == null) {
             b_selectFromGraph = new JButton(ImageLoader.getImageIcon("pick.png"));
             b_selectFromGraph.addActionListener(this);
-            b_selectFromGraph.setToolTipText("get the selected node");
+			b_selectFromGraph.setToolTipText("Use selected graph nodes as path endpoints");
 		}
 		return b_selectFromGraph;
 	}
@@ -223,22 +255,53 @@ public class PathFindingFrame extends StackDialog implements ActionListener, Res
 	}
 
 	protected void run() {
-		if (isColorized  ) {
+		searchTimer.stop();
+		startAutomaticSearch();
+	}
+
+	private void constraintsChanged() {
+		searchGeneration++;
+		if (isColorized) {
 			undoColorize();
 		}
-
-        progressionPanel.setVisible(true);
-        List nodes = constraintModel.getNodes();
-
-        if (nodes == null) {
-            setProgressionText("Search could not start! Invalid selection?");
-            return;
-        }
-
-		setProgressionText("searching...");
-		new PathFinding(this, graph, nodes).start();
+		path = null;
+		pathList.setListData(new Object[0]);
+		resultsPanel.setVisible(true);
+		getCopyButton().setEnabled(false);
+		getColorizeButton().setEnabled(false);
+		List nodes = constraintModel.getNodes();
+		if (nodes == null) {
+			searchTimer.stop();
+			progressBar.setIndeterminate(false);
+			progressionPanel.setVisible(true);
+			setProgressionText("Enter/select valid graph nodes/states to find a path.");
+			return;
+		}
+		progressionPanel.setVisible(true);
+		progressBar.setIndeterminate(false);
+		setProgressionText("Path will update automatically...");
+		searchTimer.restart();
 	}
-	
+
+	private void startAutomaticSearch() {
+		final int generation = searchGeneration;
+		List nodes = constraintModel.getNodes();
+		if (nodes == null) {
+			return;
+		}
+		if (isColorized) {
+			undoColorize();
+		}
+		progressionPanel.setVisible(true);
+		progressBar.setIndeterminate(true);
+		setProgressionText("searching...");
+		new PathFinding(result -> SwingUtilities.invokeLater(() -> {
+			if (generation == searchGeneration) {
+				setPath(result);
+			}
+		}), graph, new ArrayList(nodes)).start();
+	}
+
 	public void setProgressionText(String text) {
 		getProgressionLabel().setText(text);
 	}
@@ -246,15 +309,22 @@ public class PathFindingFrame extends StackDialog implements ActionListener, Res
 	public void setPath(List<Object> path) {
 		this.path = path;
 		if (path == null) {
-			int r = 0;
-			setProgressionText("There is no path between "+constraintModel.getValueAt(r, 1)+" and "+constraintModel.getValueAt(r+1, 1));
-			resultsPanel.setVisible(false);
+			pathList.setListData(new Object[0]);
+			getCopyButton().setEnabled(false);
+			getColorizeButton().setEnabled(false);
+			progressBar.setIndeterminate(false);
+			progressionPanel.setVisible(true);
+			setProgressionText("No path found for the current constraints.");
+			resultsPanel.setVisible(true);
 			return;
 		}
 
+		progressBar.setIndeterminate(false);
 		progressionPanel.setVisible(false);
 		setProgressionText("Path found...");
 		pathList.setListData(path.toArray(new Object[path.size()]));
+		getCopyButton().setEnabled(true);
+		getColorizeButton().setEnabled(true);
 		resultsPanel.setVisible(true);
 		progressionPanel.setVisible(false);
 		doColorize();
@@ -281,6 +351,7 @@ public class PathFindingFrame extends StackDialog implements ActionListener, Res
 				constraintModel.add( constraintModel.getRowCount()-1);
 			}
 			b_del.setEnabled( constraintModel.getRowCount() > 2);
+			constraintsChanged();
 		} else if (e.getSource() == b_del) {
 			del();
 		}
@@ -297,6 +368,7 @@ public class PathFindingFrame extends StackDialog implements ActionListener, Res
     	}
 
 		b_del.setEnabled( constraintModel.getRowCount() > 2);
+		constraintsChanged();
 	}
 	
 	
@@ -307,10 +379,17 @@ public class PathFindingFrame extends StackDialog implements ActionListener, Res
 		if (selected == null || selected.size() < 1) {
 			return;
 		}
-
-        // apply the selection
-		Object node = selected.iterator().next();
-        constraintModel.setNode(node, constraintTable.getSelectedRows());
+		List<?> nodes = new ArrayList<>(selected);
+		if (nodes.size() >= 2) {
+			constraintModel.setNode(nodes.get(0), new int[] {0});
+			constraintModel.setNode(nodes.get(nodes.size() - 1), new int[] {constraintModel.getRowCount() - 1});
+			return;
+		}
+		int[] rows = constraintTable.getSelectedRows();
+		if (rows.length == 0) {
+			rows = new int[] {0};
+		}
+		constraintModel.setNode(nodes.get(0), rows);
 	}
 
 	/**
@@ -386,6 +465,8 @@ public class PathFindingFrame extends StackDialog implements ActionListener, Res
 	}
 	
 	public void cancel() {
+		searchTimer.stop();
+		searchGeneration++;
 		undoColorize();
 		super.cancel();
 	}
@@ -395,7 +476,7 @@ class ConstraintSelectionModel<N> extends AbstractTableModel implements PathFind
 
     private final Graph graph;
     private final List<String> constraints = new ArrayList<String>(2);
-    private final Map<String, N> m_constraint2node = new HashMap<String, N>();
+	private final List<N> resolvedNodes = new ArrayList<>(2);
 
     @Override
 	public String getColumnName(int column) {
@@ -406,6 +487,8 @@ class ConstraintSelectionModel<N> extends AbstractTableModel implements PathFind
         this.graph = graph;
         constraints.add("");
         constraints.add("");
+		resolvedNodes.add(null);
+		resolvedNodes.add(null);
     }
 
     @Override
@@ -414,6 +497,7 @@ class ConstraintSelectionModel<N> extends AbstractTableModel implements PathFind
 			return false;
 		}
 		constraints.remove(index);
+		resolvedNodes.remove(index);
 		fireTableDataChanged();
 		return true;
 	}
@@ -448,14 +532,10 @@ class ConstraintSelectionModel<N> extends AbstractTableModel implements PathFind
             return;
         }
         
-        String old = constraints.get(row);
         String lookup = aValue.toString();
         constraints.set(row, lookup);
-
-        if (!constraints.contains(old)) {
-            m_constraint2node.remove(old);
-        }
-        findInGraph(lookup);
+		resolvedNodes.set(row, findInGraph(lookup));
+		fireTableCellUpdated(row, col);
 
     }
     
@@ -463,28 +543,40 @@ class ConstraintSelectionModel<N> extends AbstractTableModel implements PathFind
     public void add(int index) {
     	String s = constraints.get(index);
     	constraints.add(index, s);
+		resolvedNodes.add(index, resolvedNodes.get(index));
     	fireTableDataChanged();
     }
 
-    private void findInGraph(String lookup) {
-        if (m_constraint2node.containsKey(lookup)) {
-            return;
-        }
+    private N findInGraph(String lookup) {
+		List<N> exactMatches = new ArrayList<>();
+		for (Object node: graph.getNodes()) {
+			if (lookup.equals(node.toString())) {
+				exactMatches.add((N) node);
+			}
+		}
+		if (exactMatches.size() == 1) {
+			return exactMatches.get(0);
+		}
+		if (exactMatches.size() > 1) {
+			return null;
+		}
 
-        List<N> foundNodes = graph.searchNodes( lookup);
-        if (foundNodes == null || foundNodes.size() < 1) {
-            return;
+		try {
+			List<N> foundNodes = graph.searchNodes(lookup);
+			if (foundNodes != null && !foundNodes.isEmpty()) {
+				return foundNodes.get(0);
+			}
+		} catch (IllegalArgumentException e) {
+			return null;
         }
-
-        m_constraint2node.put(lookup, foundNodes.get(0));
+		return null;
     }
 
     @Override
     public List<N> getNodes() {
 
         List<N> nodes = new ArrayList<N>();
-        for (String s:constraints) {
-            N n = m_constraint2node.get(s);
+		for (N n:resolvedNodes) {
             if (n == null) {
                 return null;
             }
@@ -502,8 +594,11 @@ class ConstraintSelectionModel<N> extends AbstractTableModel implements PathFind
     public void setNode(N node, int[] selectedRows) {
         String txt = node.toString();
         for (int i: selectedRows) {
-            setValueAt(txt, i, 1);
+			if (i >= 0 && i < constraints.size()) {
+				constraints.set(i, txt);
+				resolvedNodes.set(i, node);
+				fireTableRowsUpdated(i, i);
+			}
         }
-        fireTableDataChanged();
     }
 }

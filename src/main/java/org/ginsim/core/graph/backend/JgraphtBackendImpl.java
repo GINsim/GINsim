@@ -159,6 +159,9 @@ public class JgraphtBackendImpl<V, E extends Edge<V>> extends DefaultListenableG
 	@Override
     public List<E> getShortestPath(V source, V target) {
 		GraphPath<V,E> shortest = DijkstraShortestPath.findPathBetween( this, source, target);
+		if (shortest == null) {
+			return null;
+		}
 		return shortest.getEdgeList();
     }
 
