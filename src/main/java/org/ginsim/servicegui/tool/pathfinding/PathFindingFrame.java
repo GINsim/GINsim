@@ -465,10 +465,17 @@ public class PathFindingFrame extends StackDialog implements ActionListener, Res
 	}
 	
 	public void cancel() {
+		super.cancel();
+	}
+
+	@Override
+	public void doClose() {
 		searchTimer.stop();
 		searchGeneration++;
-		undoColorize();
-		super.cancel();
+		if (isColorized) {
+			undoColorize();
+		}
+		super.doClose();
 	}
 }
 
