@@ -59,4 +59,5 @@ Thumbs.db
 *.cld
 *.iml
 .idea
+.vscode
 /.apt_generated/
