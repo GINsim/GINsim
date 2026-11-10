@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.colomoto.biolqm.NodeInfo;
 import org.colomoto.biolqm.metadata.Annotator;
+import org.colomoto.biolqm.metadata.annotations.URI;
 import org.ginsim.common.application.GsException;
 import org.ginsim.common.application.LogManager;
 import org.ginsim.common.xml.XMLWriter;
@@ -339,13 +340,7 @@ public final class RegulatoryParser extends GsXMLHelper {
             	break; // POS_GRAPH_NOTES
             case POS_GRAPH_NOTES_LINKLIST:
                 if (qName.equals("link")) {
-                    try {
-						String uriString = attributes.getValue("xlink:href");
-						annotator.annotate( uriString);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+                    readLegacyLink(attributes);
                 }
                 break; // POS_GRAPH_NOTES_LINKLIST
                 
@@ -411,11 +406,21 @@ public final class RegulatoryParser extends GsXMLHelper {
             case POS_VERTEX_NOTES_LINKLIST:
 			case POS_EDGE_NOTES_LINKLIST:
                 if (qName.equals("link")) {
-                    String uriString = attributes.getValue("xlink:href");
-					annotator.annotate(uriString);
+                    readLegacyLink(attributes);
                 }
                 break; // POS_VERTEX_NOTES || POS_EDGE_NOTES
         }
+    }
+
+    private void readLegacyLink(Attributes attributes) throws SAXException {
+        String link = attributes.getValue("xlink:href");
+        if (link == null) {
+            link = attributes.getValue("http://www.w3.org/1999/xlink", "href");
+        }
+        if (link == null || link.isEmpty()) {
+            throw new SAXException("Missing annotation link href");
+        }
+        annotator.openBlock("").getSelectedAnnotation().uris.add(new URI(null, link));
     }
 
     private void storeMaxValueForCheck(RegulatoryEdge key, byte maxvalue) {
@@ -621,4 +626,3 @@ public final class RegulatoryParser extends GsXMLHelper {
         return graph;
     }
 }
-

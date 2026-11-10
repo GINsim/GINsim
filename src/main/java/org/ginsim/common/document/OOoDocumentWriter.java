@@ -4,12 +4,15 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Locale;
 import java.util.TreeMap;
+import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
@@ -38,7 +41,7 @@ public class OOoDocumentWriter extends DocumentWriter {
 	List<OOoTable> v_table = new ArrayList();
 	OOoTable curTable = null;
 	
-	Map m_files = new TreeMap();
+	Map<String, BufferedImage> m_files = new TreeMap<>();
 	
 	public OOoDocumentWriter() {
 		NEW_LINE = "<text:line-break/>";
@@ -48,18 +51,15 @@ public class OOoDocumentWriter extends DocumentWriter {
 		zo = new ZipOutputStream(output);
 		writer = new OutputStreamWriter(zo, "UTF-8");
 		
-		zo.putNextEntry(new ZipEntry("META-INF/manifest.xml"));
-		writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-				"<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">\n" +
-				"<manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:full-path=\"/\"/>\n" +
-				"<manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"content.xml\"/>\n" +
-				"</manifest:manifest>");
-		writer.flush();
-		zo.closeEntry();
-		
-		zo.putNextEntry(new ZipEntry("mimetype"));
-		writer.write("application/vnd.oasis.opendocument.text");
-		writer.flush();
+		byte[] mime = "application/vnd.oasis.opendocument.text".getBytes(StandardCharsets.US_ASCII);
+		ZipEntry mimeEntry = new ZipEntry("mimetype");
+		mimeEntry.setMethod(ZipEntry.STORED);
+		mimeEntry.setSize(mime.length);
+		CRC32 crc = new CRC32();
+		crc.update(mime);
+		mimeEntry.setCrc(crc.getValue());
+		zo.putNextEntry(mimeEntry);
+		zo.write(mime);
 		zo.closeEntry();
 
 		zo.putNextEntry(new ZipEntry("content.xml"));
@@ -75,7 +75,7 @@ public class OOoDocumentWriter extends DocumentWriter {
 		xmlw.addAttr("xmlns:dc","http://purl.org/dc/elements/1.1/");
 		xmlw.addAttr("xmlns:meta","urn:oasis:names:tc:opendocument:xmlns:meta:1.0");
 		xmlw.addAttr("xmlns:number","urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0");
-		xmlw.addAttr("xmlns:svg","urn:oasis:names:tc:opendocument:xmlns:svgcompatible:1.0");
+		xmlw.addAttr("xmlns:svg","urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
 		xmlw.addAttr("xmlns:chart","urn:oasis:names:tc:opendocument:xmlns:chart:1.0");
 		xmlw.addAttr("xmlns:dr3d","urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0");
 		xmlw.addAttr("xmlns:math","http://www.w3.org/1998/Math/MathML");
@@ -238,19 +238,34 @@ public class OOoDocumentWriter extends DocumentWriter {
 		writer.flush();
 		zo.closeEntry();
 		
-		Iterator it = m_files.entrySet().iterator();
-		while (it.hasNext()) {
-			Entry e = (Entry)it.next();
-			Object o = e.getValue();
-			if (o instanceof BufferedImage) {
-				zo.putNextEntry(new ZipEntry("Pictures/"+e.getKey()));
-				BufferedImage img = (BufferedImage)o;
-				ImageIO.write(img, "png", zo);
-				zo.closeEntry();
+		for (Entry<String, BufferedImage> entry : m_files.entrySet()) {
+			zo.putNextEntry(new ZipEntry("Pictures/" + entry.getKey()));
+			if (!ImageIO.write(entry.getValue(), "png", zo)) {
+				throw new IOException("No PNG image writer available");
 			}
+			zo.closeEntry();
 		}
-		
+
+		zo.putNextEntry(new ZipEntry("META-INF/manifest.xml"));
+		XMLWriter manifest = new XMLWriter(writer);
+		manifest.openTag("manifest:manifest");
+		manifest.addAttr("xmlns:manifest", "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0");
+		addManifestEntry(manifest, "/", "application/vnd.oasis.opendocument.text");
+		addManifestEntry(manifest, "content.xml", "text/xml");
+		for (String name : m_files.keySet()) {
+			addManifestEntry(manifest, "Pictures/" + name, "image/png");
+		}
+		manifest.closeTag();
+		writer.flush();
+		zo.closeEntry();
 		zo.close();
+	}
+
+	private void addManifestEntry(XMLWriter manifest, String path, String mediaType) throws IOException {
+		manifest.openTag("manifest:file-entry");
+		manifest.addAttr("manifest:media-type", mediaType);
+		manifest.addAttr("manifest:full-path", path);
+		manifest.closeTag();
 	}
 
 	protected void doCloseParagraph() throws IOException {
@@ -305,9 +320,13 @@ public class OOoDocumentWriter extends DocumentWriter {
 	}
 
 	protected void doAddImage(BufferedImage img, String name) throws IOException {
-		// TODO image size is missing
+		ensureParagraph();
+		double scale = Math.min(1.0, Math.min(16.0 * 96 / 2.54 / img.getWidth(),
+				20.0 * 96 / 2.54 / img.getHeight()));
 		xmlw.openTag("draw:frame");
-		xmlw.addAttr("text:anchor-type", "paragraph");
+		xmlw.addAttr("text:anchor-type", "as-char");
+		xmlw.addAttr("svg:width", String.format(Locale.ROOT, "%.3fcm", img.getWidth() * scale * 2.54 / 96));
+		xmlw.addAttr("svg:height", String.format(Locale.ROOT, "%.3fcm", img.getHeight() * scale * 2.54 / 96));
 		xmlw.openTag("draw:image");
 		xmlw.addAttr("xlink:href", "Pictures/"+name);
 		xmlw.addAttr("xlink:type", "simple");

@@ -5,7 +5,7 @@ of biological interaction networks.
 For more info see https://ginsim.github.io/
 
 
-## Build and I nstall
+## Build and Install
 
 GINsim uses maven: ```mvn package``` will compile it and prepare a jar
 (executable Java archive) as well as dependancies into the ```target``` folder.
@@ -19,6 +19,11 @@ Run GINsim using with ```java -jar GINsim.jar``` command.
 
 User documentation is available on the [GINsim website](https://ginsim.github.io/doc/).
 
+For an open regulatory model, use **Export > ModelDoc/HTML** or **ModelDoc/ODT**
+to export its graph, logical functions, and model, node, and interaction annotations.
+The HTML export saves the graph image in a companion `<filename>_FILES` folder;
+keep that folder alongside the exported page. The ODT export embeds the image.
+
 Generate javadoc (in the "target/site" folder) using "mvn javadoc:javadoc".
 	
 
@@ -29,4 +34,3 @@ Most features in GINsim are implemented as internal extensions and declared usin
 See the developer documentation for more details.
 Note that out-of-tree plugins (i.e. plugins distributed as separate jar files) are not
 supported, but supporting such plugins should be easy if needed.
-

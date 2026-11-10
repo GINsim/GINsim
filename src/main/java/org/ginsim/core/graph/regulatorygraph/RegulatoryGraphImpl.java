@@ -14,6 +14,8 @@ import org.colomoto.biolqm.*;
 import org.colomoto.biolqm.metadata.AnnotationModule;
 import org.colomoto.biolqm.metadata.Annotator;
 import org.colomoto.biolqm.metadata.annotations.JsonReader;
+import org.colomoto.biolqm.metadata.annotations.URI;
+import org.colomoto.biolqm.metadata.validations.PatternValidator;
 import org.colomoto.mddlib.MDDManager;
 import org.colomoto.mddlib.MDDManagerFactory;
 import org.colomoto.mddlib.MDDVariableFactory;
@@ -30,6 +32,7 @@ import org.ginsim.core.io.parser.GINMLWriter;
 import org.ginsim.core.notification.NotificationManager;
 import org.ginsim.core.notification.resolvable.NotificationResolution;
 import org.json.JSONObject;
+import org.json.JSONArray;
 
 /**
  * Implementation of the RegulatoryGraph interface.
@@ -694,15 +697,27 @@ public final class RegulatoryGraphImpl  extends AbstractGraph<RegulatoryNode, Re
     }
 
     /**
-     * Load annotations from their JSON form, including the notes which bioLQM does not restore.
+     * Load annotations from their JSON form, preserving notes, untyped URIs, and key/value pairs.
      */
     public static void importAnnotations(Annotator<NodeInfo> annotator, JSONObject json, Map<String, NodeInfo> name2node) {
-        annotator.readAnnotationsFromJSON(json, name2node);
+        // bioLQM can reinterpret untyped URIs and key/value pairs as different annotation types.
+        JSONObject imported = new JSONObject(json.toString());
+        removeReinterpretedData(imported.optJSONObject("model"));
+        for (String section : new String[] {"nodes", "edges"}) {
+            JSONObject elements = imported.optJSONObject(section);
+            if (elements != null) {
+                for (String key : elements.keySet()) {
+                    removeReinterpretedData(elements.getJSONObject(key));
+                }
+            }
+        }
+        annotator.readAnnotationsFromJSON(imported, name2node);
 
         JSONObject jmodel = json.optJSONObject("model");
         if (jmodel != null && jmodel.optString("notes", null) != null) {
             annotator.onModel().setNotes(jmodel.getString("notes"));
         }
+        restoreAnnotationData(annotator.onModel(), jmodel);
         JSONObject jnodes = json.optJSONObject("nodes");
         if (jnodes != null) {
             for (String key: jnodes.keySet()) {
@@ -710,6 +725,9 @@ public final class RegulatoryGraphImpl  extends AbstractGraph<RegulatoryNode, Re
                 String notes = jnodes.getJSONObject(key).optString("notes", null);
                 if (ni != null && notes != null) {
                     annotator.node(ni).setNotes(notes);
+                }
+                if (ni != null) {
+                    restoreAnnotationData(annotator.node(ni), jnodes.getJSONObject(key));
                 }
             }
         }
@@ -721,9 +739,72 @@ public final class RegulatoryGraphImpl  extends AbstractGraph<RegulatoryNode, Re
                 if (ends.length == 2 && notes != null && name2node.containsKey(ends[0]) && name2node.containsKey(ends[1])) {
                     annotator.edge(name2node.get(ends[0]), name2node.get(ends[1])).setNotes(notes);
                 }
+                if (ends.length == 2 && name2node.containsKey(ends[0]) && name2node.containsKey(ends[1])) {
+                    restoreAnnotationData(annotator.edge(name2node.get(ends[0]), name2node.get(ends[1])), jedges.getJSONObject(key));
+                }
             }
         }
         annotator.onModel();
+    }
+
+    private static void removeReinterpretedData(JSONObject metadata) {
+        if (metadata == null) {
+            return;
+        }
+        JSONArray blocks = metadata.optJSONArray("annotation");
+        if (blocks == null) {
+            return;
+        }
+        for (int i = 0; i < blocks.length(); i++) {
+            JSONObject block = blocks.getJSONObject(i);
+            block.remove("keysvalues");
+            JSONArray uris = block.optJSONArray("uris");
+            if (uris != null) {
+                for (int j = uris.length() - 1; j >= 0; j--) {
+                    if (uris.getJSONObject(j).optString("type", "").isEmpty()) {
+                        uris.remove(j);
+                    }
+                }
+            }
+        }
+    }
+
+    private static void restoreAnnotationData(Annotator<NodeInfo> annotator, JSONObject metadata) {
+        if (metadata == null) {
+            return;
+        }
+        JSONArray blocks = metadata.optJSONArray("annotation");
+        if (blocks == null) {
+            return;
+        }
+        for (int i = 0; i < blocks.length(); i++) {
+            JSONObject block = blocks.getJSONObject(i);
+            JSONObject keyValues = block.optJSONObject("keysvalues");
+            if (keyValues != null) {
+                annotator.openBlock(block.optString("qualifier", ""));
+                for (String key : keyValues.keySet()) {
+                    String value = keyValues.getString(key);
+                    String input = key + "=" + value;
+                    if (PatternValidator.asKeyValue(input).isPresent()) {
+                        annotator.annotate(input);
+                    } else {
+                        annotator.getSelectedAnnotation().keyValues.put(key, value);
+                    }
+                }
+            }
+            JSONArray uris = block.optJSONArray("uris");
+            if (uris == null) {
+                continue;
+            }
+            for (int j = 0; j < uris.length(); j++) {
+                JSONObject uri = uris.getJSONObject(j);
+                if (uri.optString("type", "").isEmpty()) {
+                    List<URI> restored = annotator.openBlock(block.optString("qualifier", ""))
+                            .getSelectedAnnotation().uris;
+                    restored.add(Math.min(j, restored.size()), new URI(null, uri.getString("content")));
+                }
+            }
+        }
     }
     
 	/* *****  STATEFUL GRAPH  ***** */

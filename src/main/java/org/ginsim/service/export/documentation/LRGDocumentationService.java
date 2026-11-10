@@ -10,12 +10,12 @@ import org.kohsuke.MetaInfServices;
 
 @MetaInfServices( Service.class)
 @Alias("documentation")
-@ServiceStatus(EStatus.DEPRECATED)
+@ServiceStatus(EStatus.RELEASED)
 public class LRGDocumentationService implements Service {
 
 	public void run(RegulatoryGraph graph, GenericDocumentFormat format, String filename) throws Exception {
-//		LRGDocumentationWriter writer = new LRGDocumentationWriter(graph);
-//		writer.export(format, filename);
+		LRGDocumentationWriter writer = new LRGDocumentationWriter(graph);
+		writer.export(format, filename);
 	}
 	
 	public void export(RegulatoryGraph graph, String filename) throws Exception {

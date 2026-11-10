@@ -264,10 +264,14 @@ public class AnnotationsComponent<T> extends JSplitPane implements KeyListener, 
 				if (canonical == null) {
 					continue;
 				}
+				Collection collection = annotator.availableCollections().getCollection(canonical);
+				if (collection == null) {
+					continue;
+				}
 				if (uri.getCollection() == null) {
 					value = value.substring(value.indexOf(':') + 1);
 				}
-				annotation.uris.set(i, new URI(annotator.availableCollections().getCollection(canonical), value));
+				annotation.uris.set(i, new URI(collection, value));
 			}
 		}
 	}
@@ -351,7 +355,8 @@ public class AnnotationsComponent<T> extends JSplitPane implements KeyListener, 
 					java.util.Optional<java.util.AbstractMap.SimpleImmutableEntry<String, String>> entry = PatternValidator.asCollectionEntry(canonical);
 					if (entry.isPresent()) {
 						Collection collection = annotator.availableCollections().getCollection(entry.get().getKey());
-						replacement = new URI(collection, entry.get().getValue());
+						replacement = collection == null ? new URI(null, canonical)
+								: new URI(collection, entry.get().getValue());
 					} else {
 						replacement = new URI(oldUri.getCollection(), canonical);
 					}

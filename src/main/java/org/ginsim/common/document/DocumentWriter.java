@@ -98,7 +98,11 @@ public abstract class DocumentWriter {
 		this.dirPrefix = null;
 	}
 	public void setOutput(File file) throws FileNotFoundException {
-		this.output = new FileOutputStream(file);
+		setOutput(file, new FileOutputStream(file));
+	}
+
+	public void setOutput(File file, OutputStream output) {
+		this.output = output;
 		this.dirPrefix  = file.getName()+"_FILES";
 		this.outputDir = new File(file.getParentFile(), dirPrefix);
 	}

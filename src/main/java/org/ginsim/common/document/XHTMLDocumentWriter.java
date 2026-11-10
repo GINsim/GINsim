@@ -5,6 +5,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -284,13 +287,17 @@ public class XHTMLDocumentWriter extends DocumentWriter {
 	protected void doAddImage(BufferedImage img, String name) throws IOException {
 		// TODO Auto-generated method stub
 		if (outputDir != null) {
-			if (!outputDir.exists()) {
-				outputDir.mkdir();
-			}
+			Files.createDirectories(outputDir.toPath());
 			File fout = new File(outputDir, name);
-			ImageIO.write(img, "png", fout);
+			if (!ImageIO.write(img, "png", fout)) {
+				throw new IOException("No PNG image writer available");
+			}
 			xmlw.openTag("img");
-			xmlw.addAttr("src", dirPrefix == null ? name : dirPrefix+"/"+name);
+			try {
+				xmlw.addAttr("src", new URI(null, null, "./" + dirPrefix + "/" + name, null).toASCIIString());
+			} catch (URISyntaxException e) {
+				throw new IOException("Invalid image path", e);
+			}
 			xmlw.closeTag();
 		} else {
 			// TODO: add an error message ?
